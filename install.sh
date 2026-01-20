@@ -213,13 +213,15 @@ for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
 
         if [ "$UPDATE_MODE" = true ]; then
             # Update mode: always overwrite skills
-            rm -rf "$target_skill"
-            cp -r "$skill_dir" "$TARGET_CLAUDE/skills/"
+            rm -rf "$target_skill" 2>/dev/null || true
+            mkdir -p "$target_skill"
+            cp -r "$skill_dir"/* "$target_skill/" 2>/dev/null || cp -r "$skill_dir"/. "$target_skill/" 2>/dev/null || true
             echo -e "   ${CYAN}🔄 $skill_name${NC}"
         elif [ -d "$target_skill" ] && [ "$MERGE_MODE" = true ]; then
             echo -e "   ${YELLOW}⚠️  Skipping $skill_name (already exists)${NC}"
         else
-            cp -r "$skill_dir" "$TARGET_CLAUDE/skills/"
+            mkdir -p "$target_skill"
+            cp -r "$skill_dir"/* "$target_skill/" 2>/dev/null || cp -r "$skill_dir"/. "$target_skill/" 2>/dev/null || true
             echo -e "   ${GREEN}✅ $skill_name${NC}"
         fi
     fi
@@ -280,13 +282,15 @@ if [ -d "$SOURCE_CLAUDE/examples" ]; then
 
             if [ "$UPDATE_MODE" = true ]; then
                 # Update mode: always overwrite examples
-                rm -rf "$target_example"
-                cp -r "$example_dir" "$TARGET_CLAUDE/examples/"
+                rm -rf "$target_example" 2>/dev/null || true
+                mkdir -p "$target_example"
+                cp -r "$example_dir"/* "$target_example/" 2>/dev/null || cp -r "$example_dir"/. "$target_example/" 2>/dev/null || true
                 echo -e "   ${CYAN}🔄 $example_name${NC}"
             elif [ -d "$target_example" ] && [ "$MERGE_MODE" = true ]; then
                 echo -e "   ${YELLOW}⚠️  Skipping $example_name (already exists)${NC}"
             else
-                cp -r "$example_dir" "$TARGET_CLAUDE/examples/"
+                mkdir -p "$target_example"
+                cp -r "$example_dir"/* "$target_example/" 2>/dev/null || cp -r "$example_dir"/. "$target_example/" 2>/dev/null || true
                 echo -e "   ${GREEN}✅ $example_name${NC}"
             fi
         fi
