@@ -4,6 +4,10 @@
 # D-EPCT+R Workflow v2.4 Installer
 # Install Claude Code skills + RALPH Mode + 35+ Knowledge Files
 # Structure BMAD-inspired avec Activation, Principes, Règles
+#
+# Usage:
+#   curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- .
+#   ./install.sh /path/to/project
 # ============================================================
 
 set -e
@@ -17,12 +21,12 @@ CYAN='\033[0;36m'
 MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
-# Get script directory (where the repo is)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SOURCE_CLAUDE="$SCRIPT_DIR/.claude"
+REPO_URL="https://github.com/elsolal/Skillz-Claude.git"
+REPO_NAME="Skillz-Claude"
 
 # Default target is current directory
 TARGET_DIR="${1:-.}"
+TARGET_DIR="$(cd "$TARGET_DIR" 2>/dev/null && pwd)" || TARGET_DIR="$(pwd)/${1:-.}"
 TARGET_CLAUDE="$TARGET_DIR/.claude"
 TARGET_DOCS="$TARGET_DIR/docs"
 
@@ -37,9 +41,35 @@ echo "║   STRUCTURE:    Skills BMAD-inspired (Activation, Principes, Règles) 
 echo "╚═══════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
+# Determine source directory
+# If run via curl pipe, we need to clone the repo first
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" 2>/dev/null)" 2>/dev/null && pwd)" || SCRIPT_DIR=""
+
+if [ -z "$SCRIPT_DIR" ] || [ ! -d "$SCRIPT_DIR/.claude" ]; then
+    # Running via curl pipe or .claude not found - need to clone
+    echo -e "${BLUE}📥 Downloading D-EPCT+R workflow from GitHub...${NC}"
+
+    TEMP_DIR=$(mktemp -d)
+    trap "rm -rf $TEMP_DIR" EXIT
+
+    if command -v git &> /dev/null; then
+        git clone --depth 1 --quiet "$REPO_URL" "$TEMP_DIR/$REPO_NAME"
+    else
+        echo -e "${RED}❌ Error: git is required but not installed${NC}"
+        exit 1
+    fi
+
+    SOURCE_CLAUDE="$TEMP_DIR/$REPO_NAME/.claude"
+    echo -e "${GREEN}✅ Downloaded successfully${NC}"
+    echo ""
+else
+    # Running from cloned repo
+    SOURCE_CLAUDE="$SCRIPT_DIR/.claude"
+fi
+
 # Check source exists
 if [ ! -d "$SOURCE_CLAUDE" ]; then
-    echo -e "${RED}❌ Error: .claude directory not found in $SCRIPT_DIR${NC}"
+    echo -e "${RED}❌ Error: .claude directory not found${NC}"
     exit 1
 fi
 
@@ -58,7 +88,7 @@ else
     MERGE_MODE=false
 fi
 
-echo -e "${BLUE}📦 Installing D-EPCT+R workflow v2.4...${NC}"
+echo -e "${BLUE}📦 Installing D-EPCT+R workflow v2.4 to $TARGET_DIR...${NC}"
 echo ""
 
 # Create directories if needed
@@ -87,13 +117,13 @@ if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
     # Copy testing knowledge (32 files)
     if [ -d "$SOURCE_CLAUDE/knowledge/testing" ]; then
         cp -r "$SOURCE_CLAUDE/knowledge/testing/"* "$TARGET_CLAUDE/knowledge/testing/" 2>/dev/null || true
-        testing_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/testing/"*.md 2>/dev/null | wc -l)
+        testing_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/testing/"*.md 2>/dev/null | wc -l | tr -d ' ')
         echo -e "   ${GREEN}✅ testing/ ($testing_count files)${NC}"
     fi
     # Copy workflows knowledge
     if [ -d "$SOURCE_CLAUDE/knowledge/workflows" ]; then
         cp -r "$SOURCE_CLAUDE/knowledge/workflows/"* "$TARGET_CLAUDE/knowledge/workflows/" 2>/dev/null || true
-        workflows_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/workflows/"* 2>/dev/null | wc -l)
+        workflows_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/workflows/"* 2>/dev/null | wc -l | tr -d ' ')
         echo -e "   ${GREEN}✅ workflows/ ($workflows_count files)${NC}"
     fi
     # Copy index
