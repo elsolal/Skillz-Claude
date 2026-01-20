@@ -1,4 +1,4 @@
-# D-EPCT+R Workflow v2.4
+# D-EPCT+R Workflow v2.5
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
@@ -6,6 +6,7 @@
 > ✅ **Mode RALPH** - Boucle autonome jusqu'à complétion
 > ✅ **35+ fichiers Knowledge** - Base de connaissances testing & workflows
 > ✅ **Structure BMAD-inspired** - Skills avec Activation, Principes, Règles
+> ✅ **UX/UI Design** - Skills optionnels auto-triggered pour le design
 
 ## Installation
 
@@ -111,6 +112,14 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 │  │Brainstorm│ →  │   PRD    │ →  │  Archi   │ →  │ Stories  │ → GitHub     │
 │  │ +Research│    │FULL/LIGHT│    │          │    │+Readiness│              │
 │  └──────────┘    └──────────┘    └──────────┘    └──────────┘              │
+│        │              │                                                     │
+│        ▼              ▼                                                     │
+│  ┌──────────┐    ┌──────────┐   (optionnel, auto-triggered)                │
+│  │   🎨     │ →  │   🖌️     │                                              │
+│  │UX Design │    │UI Design │                                              │
+│  │ personas │    │  tokens  │                                              │
+│  │ journeys │    │components│                                              │
+│  └──────────┘    └──────────┘                                              │
 │                                                                             │
 │  DÉVELOPPEMENT                                                              │
 │  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────┐  │
@@ -159,20 +168,27 @@ Boucle automatique jusqu'à complétion - inspiré du [protocole RALPH](https://
 
 ---
 
-## Skills (10)
+## Skills (12)
 
 ### Phase Planning
 
-| Skill | Rôle | Fonctionnalités v2.4 |
+| Skill | Rôle | Fonctionnalités v2.5 |
 |-------|------|----------------------|
-| `idea-brainstorm` | Exploration créative | Mode **Creative** ou **Research-first**, SCAMPER, Five Whys |
-| `pm-prd` | Product Requirements | Mode **FULL/LIGHT** auto-détecté, templates |
+| `idea-brainstorm` | Exploration créative | Mode **Creative** ou **Research-first**, SCAMPER, Five Whys, **auto-trigger UX/UI** |
+| `pm-prd` | Product Requirements | Mode **FULL/LIGHT** auto-détecté, templates, **auto-trigger UX/UI** |
 | `architect` | Architecture technique | Stack, structure, data model, APIs, ADRs |
 | `pm-stories` | Epics + Stories | INVEST, Given/When/Then, **Readiness Check /15** |
 
+### Phase Design (optionnelle, auto-triggered)
+
+| Skill | Rôle | Fonctionnalités v2.5 |
+|-------|------|----------------------|
+| `ux-designer` | Expérience utilisateur | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen |
+| `ui-designer` | Design system | **Tokens** (couleurs, typo, spacing), composants UI, guidelines accessibilité |
+
 ### Phase Développement
 
-| Skill | Rôle | Fonctionnalités v2.4 |
+| Skill | Rôle | Fonctionnalités v2.5 |
 |-------|------|----------------------|
 | `github-issue-reader` | Lecture d'issues | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), G/W/T |
 | `codebase-explainer` | Analyse du code | **Impact mapping**, patterns, flux, risques |
@@ -183,7 +199,7 @@ Boucle automatique jusqu'à complétion - inspiré du [protocole RALPH](https://
 
 ---
 
-## Structure SKILL.md (v2.4)
+## Structure SKILL.md (v2.5)
 
 Chaque skill suit une structure standardisée inspirée de [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD) :
 
@@ -250,9 +266,11 @@ knowledge:
 │       ├── prd-template.md
 │       ├── domain-complexity.csv
 │       └── project-types.csv
-└── skills/                          # 10 skills
+└── skills/                          # 12 skills
     ├── idea-brainstorm/
     ├── pm-prd/
+    ├── ux-designer/                 # NEW - UX Design
+    ├── ui-designer/                 # NEW - UI Design
     ├── architect/
     ├── pm-stories/
     ├── github-issue-reader/
@@ -265,7 +283,9 @@ knowledge:
 docs/                                # Output documents
 ├── planning/
 │   ├── brainstorms/
+│   ├── ux/                          # NEW - UX docs
 │   ├── prd/
+│   ├── ui/                          # NEW - UI docs
 │   └── architecture/
 ├── stories/
 │   └── EPIC-{num}-{slug}/
@@ -312,7 +332,9 @@ docs/                                # Output documents
 | Checkpoint | Skill | Gate |
 |------------|-------|------|
 | Brainstorm | `idea-brainstorm` | Synthèse validée |
+| *UX Design* | `ux-designer` | *(optionnel)* Personas et journeys validés |
 | PRD | `pm-prd` | Scope défini |
+| *UI Design* | `ui-designer` | *(optionnel)* Tokens et composants validés |
 | Architecture | `architect` | Stack approuvé |
 | **Readiness** | `pm-stories` | **Score ≥ 13/15** |
 
@@ -328,16 +350,23 @@ docs/                                # Output documents
 
 ---
 
-## Fonctionnalités v2.4
+## Fonctionnalités v2.5
 
 ### Nouvelles fonctionnalités
 
 | Skill | Feature | Description |
 |-------|---------|-------------|
-| `idea-brainstorm` | **Research-first** | Valider hypothèses avant brainstorm |
-| `pm-stories` | **Readiness Check** | Score /15 obligatoire avant GitHub |
-| `test-runner` | **Mode ATDD** | Tests AVANT code (Red-Green-Refactor) |
-| `code-implementer` | **Validation stricte** | Lint/types obligatoires par étape |
+| `ux-designer` | **NEW** | Personas, user journeys, wireframes textuels, heuristiques Nielsen |
+| `ui-designer` | **NEW** | Design tokens, composants UI specs, guidelines accessibilité |
+| `idea-brainstorm` | **Auto-trigger UX/UI** | Évalue et recommande automatiquement les phases design |
+| `pm-prd` | **Auto-trigger UX/UI** | Évalue et recommande automatiquement les phases design |
+
+### Déclenchement automatique UX/UI
+
+| Skill | Critères de déclenchement | Mots-clés |
+|-------|--------------------------|-----------|
+| `ux-designer` | 3+ écrans, parcours multi-étapes, onboarding | "parcours", "navigation", "UX" |
+| `ui-designer` | 5+ composants, pas de design system existant | "design", "composants", "style" |
 
 ### Structure enrichie
 
@@ -350,6 +379,12 @@ Tous les skills ont maintenant :
 ---
 
 ## Changelog
+
+### v2.5.0
+- **NEW: UX Designer** : Personas, user journeys, wireframes textuels, heuristiques Nielsen
+- **NEW: UI Designer** : Design tokens, composants UI specs, guidelines accessibilité
+- **Auto-trigger UX/UI** : Brainstorm et PRD évaluent et recommandent automatiquement les phases design
+- **Workflow enrichi** : Phase design optionnelle intégrée entre Planning et Architecture
 
 ### v2.4.1
 - **Skills dev enrichis** : github-issue-reader, codebase-explainer, implementation-planner
