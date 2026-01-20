@@ -211,17 +211,27 @@ for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
         skill_name=$(basename "$skill_dir")
         target_skill="$TARGET_CLAUDE/skills/$skill_name"
 
+        # Skip if source and target are the same location
+        SOURCE_REAL="$(cd "$skill_dir" && pwd)"
+        TARGET_REAL="$TARGET_CLAUDE/skills/$skill_name"
+        if [ -d "$TARGET_REAL" ]; then
+            TARGET_REAL="$(cd "$TARGET_REAL" && pwd)"
+        fi
+
+        if [ "$SOURCE_REAL" = "$TARGET_REAL" ]; then
+            echo -e "   ${GREEN}✅ $skill_name (already in place)${NC}"
+            continue
+        fi
+
         if [ "$UPDATE_MODE" = true ]; then
             # Update mode: always overwrite skills
-            rm -rf "$target_skill" 2>/dev/null || true
-            mkdir -p "$target_skill"
-            cp -r "$skill_dir"/* "$target_skill/" 2>/dev/null || cp -r "$skill_dir"/. "$target_skill/" 2>/dev/null || true
+            rm -rf "$target_skill"
+            cp -R "$skill_dir" "$TARGET_CLAUDE/skills/"
             echo -e "   ${CYAN}🔄 $skill_name${NC}"
         elif [ -d "$target_skill" ] && [ "$MERGE_MODE" = true ]; then
             echo -e "   ${YELLOW}⚠️  Skipping $skill_name (already exists)${NC}"
         else
-            mkdir -p "$target_skill"
-            cp -r "$skill_dir"/* "$target_skill/" 2>/dev/null || cp -r "$skill_dir"/. "$target_skill/" 2>/dev/null || true
+            cp -R "$skill_dir" "$TARGET_CLAUDE/skills/"
             echo -e "   ${GREEN}✅ $skill_name${NC}"
         fi
     fi
@@ -280,17 +290,27 @@ if [ -d "$SOURCE_CLAUDE/examples" ]; then
             example_name=$(basename "$example_dir")
             target_example="$TARGET_CLAUDE/examples/$example_name"
 
+            # Skip if source and target are the same location
+            SOURCE_REAL="$(cd "$example_dir" && pwd)"
+            TARGET_REAL="$TARGET_CLAUDE/examples/$example_name"
+            if [ -d "$TARGET_REAL" ]; then
+                TARGET_REAL="$(cd "$TARGET_REAL" && pwd)"
+            fi
+
+            if [ "$SOURCE_REAL" = "$TARGET_REAL" ]; then
+                echo -e "   ${GREEN}✅ $example_name (already in place)${NC}"
+                continue
+            fi
+
             if [ "$UPDATE_MODE" = true ]; then
                 # Update mode: always overwrite examples
-                rm -rf "$target_example" 2>/dev/null || true
-                mkdir -p "$target_example"
-                cp -r "$example_dir"/* "$target_example/" 2>/dev/null || cp -r "$example_dir"/. "$target_example/" 2>/dev/null || true
+                rm -rf "$target_example"
+                cp -R "$example_dir" "$TARGET_CLAUDE/examples/"
                 echo -e "   ${CYAN}🔄 $example_name${NC}"
             elif [ -d "$target_example" ] && [ "$MERGE_MODE" = true ]; then
                 echo -e "   ${YELLOW}⚠️  Skipping $example_name (already exists)${NC}"
             else
-                mkdir -p "$target_example"
-                cp -r "$example_dir"/* "$target_example/" 2>/dev/null || cp -r "$example_dir"/. "$target_example/" 2>/dev/null || true
+                cp -R "$example_dir" "$TARGET_CLAUDE/examples/"
                 echo -e "   ${GREEN}✅ $example_name${NC}"
             fi
         fi
