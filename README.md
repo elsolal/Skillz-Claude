@@ -163,9 +163,9 @@ Boucle automatique jusqu'à complétion - inspiré du [protocole RALPH](https://
 
 | Skill | Rôle | Fonctionnalités v2.4 |
 |-------|------|----------------------|
-| `github-issue-reader` | Lecture d'issues | Parse et structure les issues |
-| `codebase-explainer` | Analyse du code | Architecture, patterns, conventions |
-| `implementation-planner` | Planification | Plan step-by-step, estimation |
+| `github-issue-reader` | Lecture d'issues | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), G/W/T |
+| `codebase-explainer` | Analyse du code | **Impact mapping**, patterns, flux, risques |
+| `implementation-planner` | Planification | **Complexité S/M/L**, étapes atomiques, timeline |
 | `code-implementer` | Implémentation | **Lint/types obligatoires** par étape |
 | `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3 |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
@@ -339,6 +339,12 @@ Tous les skills ont maintenant :
 ---
 
 ## Changelog
+
+### v2.4.1
+- **Skills dev enrichis** : github-issue-reader, codebase-explainer, implementation-planner
+- **Ambiguïtés classifiées** (🔴/🟡/🟢) dans issue-reader
+- **Impact mapping** et flux de données dans codebase-explainer
+- **Matrice complexité S/M/L** et timeline dans implementation-planner
 
 ### v2.4.0
 - **Structure SKILL.md enrichie** inspirée BMAD agents

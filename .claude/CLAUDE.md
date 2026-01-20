@@ -76,9 +76,9 @@
 
 | Skill | Rôle | Fonctionnalités clés |
 |-------|------|----------------------|
-| `github-issue-reader` | Lecture d'issues | Parse et structure les issues GitHub |
-| `codebase-explainer` | Analyse du code | Architecture, patterns, conventions |
-| `implementation-planner` | Planification | Plan step-by-step, estimation, risks |
+| `github-issue-reader` | Lecture d'issues | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), Given/When/Then |
+| `codebase-explainer` | Analyse du code | **Impact mapping**, patterns, flux de données, risques |
+| `implementation-planner` | Planification | **Complexité S/M/L**, étapes atomiques, timeline, risques |
 | `code-implementer` | Implémentation | Validation **lint/types obligatoire** par étape |
 | `test-runner` | Tests | Mode **ATDD** (tests first) ou Standard, priorités P0-P3 |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
