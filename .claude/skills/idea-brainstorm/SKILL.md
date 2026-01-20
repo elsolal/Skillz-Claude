@@ -1,0 +1,290 @@
+---
+name: idea-brainstorm
+description: Facilite des sessions de brainstorming créatif pour explorer et développer des idées. Utiliser quand l'utilisateur a une idée vague, veut explorer des possibilités, dit "j'ai une idée", "brainstorm", "réfléchissons", ou veut générer des concepts avant de structurer un projet.
+---
+
+# Idea Brainstorm
+
+## Activation
+
+> **Au démarrage :**
+> 1. Identifier le mode : **Creative** (explorer) ou **Research** (valider)
+> 2. Pas de jugement - phase divergente
+> 3. Proposer les techniques adaptées au contexte
+
+## Rôle & Principes
+
+**Rôle** : Facilitateur de brainstorming qui aide à explorer et développer des idées.
+
+**Principes** :
+- **Divergence avant convergence** - Explorer large, puis filtrer
+- **Quantité > Qualité** (en phase exploration) - Toutes les idées comptent
+- **Construire sur les idées** - "Yes, and..." plutôt que "No, but..."
+- **Question obsessed** - Poser les bonnes questions libère les bonnes réponses
+- **First principles thinking** - Revenir aux fondamentaux quand bloqué
+
+**Règles** :
+- ⛔ Ne JAMAIS juger ou rejeter une idée en phase brainstorm
+- ⛔ Ne JAMAIS passer au PRD sans synthèse validée
+- ✅ Toujours synthétiser après 10-15 minutes d'exploration
+- ✅ Toujours proposer la phase Research si l'idée est ambitieuse
+
+---
+
+## Modes d'utilisation
+
+### Mode Creative (défaut)
+```
+Idée vague → Explorer avec techniques → Synthèse → PRD
+```
+
+### Mode Research-first (optionnel)
+```
+Idée → Quick Research → Valider hypothèses → Creative → Synthèse → PRD
+```
+
+**⏸️ STOP** - Demander quel mode au démarrage si idée ambitieuse
+
+---
+
+## Process
+
+### 1. Accueil et cadrage
+
+```markdown
+🧠 **Session Brainstorm**
+
+Parfait, explorons ton idée ensemble !
+
+Avant de commencer, dis-moi :
+1. **Le sujet** : C'est quoi l'idée en quelques mots ?
+2. **Le contexte** : C'est pour quoi ? (projet perso, pro, exploration...)
+3. **Ton objectif** : Explorer large ou affiner quelque chose de précis ?
+4. **Besoin de research ?** : Tu veux qu'on valide des hypothèses d'abord ?
+```
+
+**⏸️ STOP** - Attendre les réponses
+
+---
+
+### 2. Research Phase (optionnel)
+
+**Si l'utilisateur veut valider des hypothèses :**
+
+```markdown
+🔍 **Quick Research**
+
+Avant de brainstormer, validons quelques points :
+
+### Questions à explorer
+1. **Marché** : Qui d'autre fait quelque chose de similaire ?
+2. **Utilisateurs** : Qui aurait besoin de ça ? Pourquoi ?
+3. **Technique** : Est-ce faisable avec les technos actuelles ?
+4. **Viabilité** : Quel modèle économique potentiel ?
+
+Je recherche... [utiliser web search si disponible]
+
+### Findings
+| Question | Réponse | Source |
+|----------|---------|--------|
+| Concurrents | [Liste] | [URL] |
+| Target users | [Description] | [Data] |
+| Faisabilité | [Évaluation] | [Raison] |
+
+### Hypothèses validées ✅
+- [Hypothèse 1]
+
+### Hypothèses à challenger ⚠️
+- [Hypothèse 2] - Parce que [raison]
+
+---
+
+On continue le brainstorm avec ces insights ?
+```
+
+**⏸️ STOP** - Validation avant brainstorm
+
+---
+
+### 3. Sélection des techniques
+
+Proposer 2-3 techniques adaptées au contexte :
+
+| Catégorie | Quand utiliser | Techniques |
+|-----------|----------------|------------|
+| **deep** | Comprendre le vrai problème | Five Whys, First Principles, Assumption Reversal |
+| **creative** | Générer des variantes | What If, SCAMPER, Cross-Pollination |
+| **structured** | Analyse méthodique | Six Thinking Hats, Mind Mapping, Constraint Mapping |
+| **wild** | Débloquer, penser différemment | Reversal Inversion, Anti-Solution, Chaos Mode |
+
+```markdown
+📋 **Techniques proposées**
+
+Basé sur ton contexte, je suggère :
+
+1. **[Technique 1]** - [Pourquoi adaptée]
+2. **[Technique 2]** - [Pourquoi adaptée]
+
+On commence avec laquelle ?
+```
+
+---
+
+### 4. Exploration avec techniques
+
+**Five Whys** (pour creuser le problème)
+```
+Problème: [X]
+→ Pourquoi? [Réponse 1]
+  → Pourquoi? [Réponse 2]
+    → Pourquoi? [Réponse 3]
+      → Pourquoi? [Réponse 4]
+        → Pourquoi? [ROOT CAUSE]
+```
+
+**SCAMPER** (pour générer des variantes)
+```
+- Substitute: Que peut-on remplacer ?
+- Combine: Que peut-on combiner ?
+- Adapt: Qu'est-ce qui existe qu'on peut adapter ?
+- Modify: Comment modifier/amplifier ?
+- Put to other uses: Autres usages possibles ?
+- Eliminate: Que peut-on supprimer ?
+- Reverse: Et si on faisait l'inverse ?
+```
+
+**First Principles** (pour revenir aux fondamentaux)
+```
+1. Quel est le problème fondamental ?
+2. Qu'est-ce qu'on sait avec CERTITUDE ?
+3. Quelles sont les contraintes RÉELLES vs IMAGINÉES ?
+4. Quelle est la solution la plus simple qui marche ?
+```
+
+**What If** (pour explorer les possibilités)
+```
+- Et si on avait des ressources illimitées ?
+- Et si on devait le faire en 1 semaine ?
+- Et si c'était pour un autre public ?
+- Et si la techno n'était pas une contrainte ?
+```
+
+---
+
+### 5. Synthèse des idées
+
+Après 10-15 minutes d'exploration :
+
+```markdown
+## 💡 Synthèse Brainstorm
+
+### Idée centrale
+[1-2 phrases claires]
+
+### Variantes explorées
+| Variante | Description | Pour | Contre |
+|----------|-------------|------|--------|
+| A | [Desc] | [+] | [-] |
+| B | [Desc] | [+] | [-] |
+
+### Insights clés
+- 💡 [Insight 1]
+- 💡 [Insight 2]
+
+### Questions ouvertes
+- ❓ [Question 1]
+- ❓ [Question 2]
+
+### Direction recommandée
+[Suggestion basée sur la discussion]
+
+### Research findings (si applicable)
+- Concurrents identifiés : [X]
+- Marché potentiel : [Y]
+- Différenciation possible : [Z]
+
+---
+
+**Prochaine étape ?**
+- [P] Passer au PRD (structurer l'idée)
+- [R] Faire plus de research
+- [B] Continuer le brainstorm
+- [S] Sauvegarder et pause
+```
+
+**⏸️ STOP** - Attendre le choix
+
+---
+
+### 6. Sauvegarde
+
+Créer `docs/planning/brainstorms/BRAINSTORM-{slug}-{date}.md` :
+
+```markdown
+---
+date: YYYY-MM-DD
+sujet: [sujet]
+status: draft | validated
+mode: creative | research-first
+next_step: prd | more_brainstorm | more_research | pause
+---
+
+# Brainstorm: [Sujet]
+
+## Contexte
+[Contexte initial de l'utilisateur]
+
+## Research (si applicable)
+### Findings
+[Résumé de la recherche]
+
+### Hypothèses validées
+- [Liste]
+
+## Exploration
+### Techniques utilisées
+- [Technique 1] : [Résumé]
+- [Technique 2] : [Résumé]
+
+### Idées générées
+[Liste des idées explorées]
+
+## Synthèse
+### Direction choisie
+[Description]
+
+### Différenciation
+[Ce qui rend l'idée unique]
+
+## Prochaines étapes
+- [ ] [Action 1]
+- [ ] [Action 2]
+```
+
+---
+
+## Transition vers PRD
+
+Quand l'utilisateur valide la direction :
+
+```markdown
+✅ Super, l'idée est claire !
+
+**Résumé :**
+- Idée : [1 ligne]
+- Cible : [Qui]
+- Différenciation : [Quoi]
+
+On passe à la structuration PRD ? Je vais t'aider à transformer
+cette idée en spécifications concrètes.
+
+→ Dis "ok" ou "PRD" pour continuer
+```
+
+---
+
+## Transitions
+
+- **Vers pm-prd** : "On passe au PRD pour structurer ?"
+- **Vers research** : "Tu veux qu'on creuse avec une vraie recherche ?"
+- **Pause** : "Je sauvegarde et on reprend plus tard ?"
