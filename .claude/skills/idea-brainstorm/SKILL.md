@@ -1,6 +1,16 @@
 ---
 name: idea-brainstorm
 description: Facilite des sessions de brainstorming créatif pour explorer et développer des idées. Utiliser quand l'utilisateur a une idée vague, veut explorer des possibilités, dit "j'ai une idée", "brainstorm", "réfléchissons", ou veut générer des concepts avant de structurer un projet.
+triggers_ux_ui:
+  auto: true
+  criteria:
+    ux_designer:
+      - has_user_interface: true
+      - screens_count: ">= 3"
+      - keywords: ["parcours", "navigation", "onboarding", "tunnel", "UX", "utilisateur"]
+    ui_designer:
+      - needs_design_system: true
+      - keywords: ["design", "composants", "couleurs", "style", "UI", "visuel"]
 ---
 
 # Idea Brainstorm
@@ -263,6 +273,53 @@ next_step: prd | more_brainstorm | more_research | pause
 
 ---
 
+## Évaluation UX/UI (auto-trigger)
+
+Après la synthèse, évaluer si le projet nécessite une phase UX/UI :
+
+```markdown
+## 🎨 Évaluation Design
+
+**Critères détectés :**
+
+### UX Designer
+| Critère | Détecté | Poids |
+|---------|---------|-------|
+| Interface utilisateur | [Oui/Non] | +2 |
+| 3+ écrans/pages | [Oui/Non] | +2 |
+| Parcours multi-étapes | [Oui/Non] | +2 |
+| Onboarding/tunnel | [Oui/Non] | +1 |
+| Mots-clés UX | [Oui/Non] | +1 |
+| **Score UX** | **[X]/8** | Seuil: 4 |
+
+### UI Designer
+| Critère | Détecté | Poids |
+|---------|---------|-------|
+| Besoin design system | [Oui/Non] | +2 |
+| 5+ composants UI | [Oui/Non] | +2 |
+| Branding nécessaire | [Oui/Non] | +1 |
+| Mots-clés UI | [Oui/Non] | +1 |
+| **Score UI** | **[X]/6** | Seuil: 3 |
+
+---
+
+**Recommandation :**
+[Si Score UX ≥ 4] → 🟢 UX Designer recommandé
+[Si Score UI ≥ 3] → 🟢 UI Designer recommandé
+[Sinon] → ⚪ Phases UX/UI optionnelles
+
+**Options :**
+- [X] Activer UX Designer (auto-recommandé / manuel)
+- [U] Activer UI Designer (auto-recommandé / manuel)
+- [B] Activer les deux UX + UI
+- [S] Skip → Direct au PRD
+- [?] Expliquer la différence
+```
+
+**⏸️ STOP** - Attendre le choix
+
+---
+
 ## Transition vers PRD
 
 Quand l'utilisateur valide la direction :
@@ -274,17 +331,27 @@ Quand l'utilisateur valide la direction :
 - Idée : [1 ligne]
 - Cible : [Qui]
 - Différenciation : [Quoi]
+- **Phase UX** : [Activée / Skippée]
+- **Phase UI** : [Activée / Skippée]
 
-On passe à la structuration PRD ? Je vais t'aider à transformer
-cette idée en spécifications concrètes.
+[Si UX activé]
+→ On commence par l'UX Design pour définir les parcours utilisateurs.
 
-→ Dis "ok" ou "PRD" pour continuer
+[Si UI activé sans UX]
+→ On passe à l'UI Design pour le design system.
+
+[Si skip UX/UI]
+→ On passe à la structuration PRD.
+
+Dis "ok" pour continuer.
 ```
 
 ---
 
 ## Transitions
 
+- **Vers ux-designer** : "On définit l'expérience utilisateur d'abord ?"
+- **Vers ui-designer** : "On crée le design system ?"
 - **Vers pm-prd** : "On passe au PRD pour structurer ?"
 - **Vers research** : "Tu veux qu'on creuse avec une vraie recherche ?"
 - **Pause** : "Je sauvegarde et on reprend plus tard ?"

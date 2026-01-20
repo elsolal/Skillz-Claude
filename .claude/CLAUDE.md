@@ -1,4 +1,4 @@
-# D-EPCT+R Workflow v2.4
+# D-EPCT+R Workflow v2.5
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -15,6 +15,14 @@
 │  │Brainstorm│ →  │   PRD    │ →  │  Archi   │ →  │ Stories  │ → GitHub     │
 │  │ +Research│    │FULL/LIGHT│    │          │    │+Readiness│              │
 │  └──────────┘    └──────────┘    └──────────┘    └──────────┘              │
+│        │              │                                                     │
+│        ▼              ▼                                                     │
+│  ┌──────────┐    ┌──────────┐   (optionnel, auto-triggered)                │
+│  │   🎨     │ →  │   🖌️     │                                              │
+│  │UX Design │    │UI Design │                                              │
+│  │ personas │    │  tokens  │                                              │
+│  │ journeys │    │components│                                              │
+│  └──────────┘    └──────────┘                                              │
 │                                                                             │
 │  DÉVELOPPEMENT                                                              │
 │  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────┐  │
@@ -61,16 +69,23 @@
 
 ---
 
-## Skills (10)
+## Skills (12)
 
 ### Phase Planning
 
 | Skill | Rôle | Fonctionnalités clés |
 |-------|------|----------------------|
-| `idea-brainstorm` | Exploration créative | Mode **Creative** ou **Research-first**, techniques SCAMPER/Five Whys |
-| `pm-prd` | Product Requirements | Mode **FULL** (complet) ou **LIGHT** (simplifié), auto-détection |
+| `idea-brainstorm` | Exploration créative | Mode **Creative** ou **Research-first**, techniques SCAMPER/Five Whys, **auto-trigger UX/UI** |
+| `pm-prd` | Product Requirements | Mode **FULL** (complet) ou **LIGHT** (simplifié), auto-détection, **auto-trigger UX/UI** |
 | `architect` | Architecture technique | Stack, structure, data model, APIs, ADRs |
 | `pm-stories` | Epics + Stories | INVEST, Given/When/Then, **Implementation Readiness Check** (score /15) |
+
+### Phase Design (optionnelle, auto-triggered)
+
+| Skill | Rôle | Fonctionnalités clés |
+|-------|------|----------------------|
+| `ux-designer` | Expérience utilisateur | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen |
+| `ui-designer` | Design system | **Tokens** (couleurs, typo, spacing), composants UI, guidelines accessibilité |
 
 ### Phase Développement
 
@@ -168,7 +183,8 @@ knowledge:
 
 **Workflow** :
 ```
-Brainstorm → PRD complet → Architecture → Stories → Readiness Check → GitHub
+Brainstorm → [UX Design] → PRD complet → [UI Design] → Architecture → Stories → GitHub
+              (auto/manual)              (auto/manual)
 ```
 
 ### Mode LIGHT (feature simple)
@@ -182,6 +198,39 @@ PRD simplifié → Stories → GitHub
 
 ---
 
+## Déclenchement UX/UI (auto-trigger)
+
+Les skills `ux-designer` et `ui-designer` peuvent être déclenchés automatiquement ou manuellement.
+
+### Critères de déclenchement automatique
+
+| Skill | Critères (seuil de score) | Mots-clés détectés |
+|-------|--------------------------|-------------------|
+| `ux-designer` | Interface UI (3+ écrans), parcours multi-étapes, onboarding | "parcours", "navigation", "tunnel", "UX" |
+| `ui-designer` | 5+ composants UI, pas de design system existant, branding | "design", "composants", "couleurs", "style" |
+
+### Modes de déclenchement
+
+| Mode | Comportement |
+|------|--------------|
+| **auto** | Le PM évalue et recommande automatiquement si score ≥ seuil |
+| **manual** | L'utilisateur demande explicitement `/ux-designer` ou `/ui-designer` |
+| **skip** | L'utilisateur refuse la recommandation → passage direct à l'étape suivante |
+
+### Points de déclenchement
+
+1. **Après Brainstorm** → Évaluation UX/UI avant PRD
+2. **Après PRD** → Évaluation UX/UI avant Architecture
+
+### Output des skills UX/UI
+
+| Skill | Documents générés | Emplacement |
+|-------|------------------|-------------|
+| `ux-designer` | Personas, journeys, wireframes | `docs/planning/ux/UX-{slug}.md` |
+| `ui-designer` | Tokens, composants, guidelines | `docs/planning/ui/UI-{slug}.md`, `tokens.css` |
+
+---
+
 ## Checkpoints obligatoires
 
 ### Planning
@@ -189,7 +238,9 @@ PRD simplifié → Stories → GitHub
 | Checkpoint | Skill | Validation |
 |------------|-------|------------|
 | Brainstorm validé | `idea-brainstorm` | Synthèse acceptée |
+| *UX Design validé* | `ux-designer` | *(optionnel)* Personas et journeys approuvés |
 | PRD validé | `pm-prd` | Mode choisi, scope défini |
+| *UI Design validé* | `ui-designer` | *(optionnel)* Tokens et composants approuvés |
 | Architecture validée | `architect` | Stack et structure approuvés |
 | **Readiness Check** | `pm-stories` | Score ≥ 13/15 |
 
@@ -227,7 +278,9 @@ PRD simplifié → Stories → GitHub
 | Type | Emplacement |
 |------|-------------|
 | Brainstorms | `docs/planning/brainstorms/` |
+| UX Design | `docs/planning/ux/` |
 | PRD | `docs/planning/prd/` |
+| UI Design | `docs/planning/ui/` |
 | Architecture | `docs/planning/architecture/` |
 | Stories | `docs/stories/EPIC-{num}-{slug}/` |
 | Logs RALPH | `docs/ralph-logs/` |

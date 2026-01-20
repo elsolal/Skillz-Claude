@@ -7,6 +7,17 @@ knowledge:
   data:
     - ../../knowledge/workflows/domain-complexity.csv
     - ../../knowledge/workflows/project-types.csv
+triggers_ux_ui:
+  auto: true
+  criteria:
+    ux_designer:
+      - has_user_interface: true
+      - user_journey_defined: false
+      - keywords: ["parcours", "navigation", "écrans", "pages", "interface"]
+    ui_designer:
+      - has_ui_components: true
+      - design_system_exists: false
+      - keywords: ["design", "composants", "visuel", "style"]
 ---
 
 # PM-PRD (Product Requirements Document)
@@ -246,6 +257,64 @@ J'ai créé le PRD dans `docs/planning/prd/PRD-{slug}.md`
 
 ---
 
+### 5. Évaluation UX/UI (auto-trigger)
+
+Après validation du PRD, évaluer si une phase UX/UI est nécessaire :
+
+```markdown
+## 🎨 Évaluation Design
+
+**Analyse du PRD :**
+
+### Indicateurs UX
+| Critère | Détecté dans PRD | Score |
+|---------|-----------------|-------|
+| Features UI listées | [Oui/Non] | +2 |
+| Personas définis mais sans journey | [Oui/Non] | +2 |
+| Parcours multi-étapes mentionné | [Oui/Non] | +2 |
+| Mots-clés UX ("navigation", "écran"...) | [Oui/Non] | +1 |
+| **Total UX** | **[X]/7** | Seuil: 4 |
+
+### Indicateurs UI
+| Critère | Détecté dans PRD | Score |
+|---------|-----------------|-------|
+| Composants UI mentionnés | [Oui/Non] | +2 |
+| Pas de design system existant | [Oui/Non] | +2 |
+| Besoin de cohérence visuelle | [Oui/Non] | +1 |
+| Mots-clés UI ("boutons", "formulaires"...) | [Oui/Non] | +1 |
+| **Total UI** | **[X]/6** | Seuil: 3 |
+
+---
+
+**Recommandation :**
+[Score UX ≥ 4] → 🟢 Je recommande de passer par l'UX Designer
+[Score UI ≥ 3] → 🟢 Je recommande de passer par l'UI Designer
+[Sinon] → ⚪ Phases UX/UI optionnelles pour ce projet
+
+**Workflow suggéré :**
+[Si UX + UI recommandés]
+PRD ✅ → **UX Design** → **UI Design** → Architecture → Stories
+
+[Si UX seul recommandé]
+PRD ✅ → **UX Design** → Architecture → Stories
+
+[Si aucun recommandé]
+PRD ✅ → Architecture → Stories
+
+---
+
+**Options :**
+- [X] Activer UX Designer
+- [U] Activer UI Designer
+- [B] Activer UX + UI (recommandé si les deux scores sont atteints)
+- [A] Skip design → Direct à l'Architecture
+- [S] Skip design → Direct aux Stories
+```
+
+**⏸️ STOP** - Attendre le choix
+
+---
+
 ## Règles
 
 - **Clarifier avant de rédiger** : Poser les questions d'abord
@@ -256,5 +325,7 @@ J'ai créé le PRD dans `docs/planning/prd/PRD-{slug}.md`
 
 ## Transition
 
+- **Vers ux-designer** : "On définit l'expérience utilisateur ?"
+- **Vers ui-designer** : "On crée le design system ?"
 - **Vers Architect** : "On passe à l'architecture technique ?"
 - **Vers Stories** : "On crée les User Stories ?"
