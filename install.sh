@@ -184,6 +184,38 @@ if [ -d "$SOURCE_CLAUDE/hooks" ]; then
     done
 fi
 
+# Copy examples
+echo -e "${GREEN}📁 Installing examples (3 projects)...${NC}"
+mkdir -p "$TARGET_CLAUDE/examples"
+if [ -d "$SOURCE_CLAUDE/examples" ]; then
+    for example_dir in "$SOURCE_CLAUDE/examples"/*; do
+        if [ -d "$example_dir" ]; then
+            example_name=$(basename "$example_dir")
+            target_example="$TARGET_CLAUDE/examples/$example_name"
+
+            if [ -d "$target_example" ] && [ "$MERGE_MODE" = true ]; then
+                echo -e "   ${YELLOW}⚠️  Skipping $example_name (already exists)${NC}"
+            else
+                cp -r "$example_dir" "$TARGET_CLAUDE/examples/"
+                echo -e "   ${GREEN}✅ $example_name${NC}"
+            fi
+        fi
+    done
+fi
+
+# Copy mcp.json
+echo -e "${GREEN}📄 Installing mcp.json...${NC}"
+if [ -f "$SOURCE_CLAUDE/mcp.json" ]; then
+    if [ -f "$TARGET_CLAUDE/mcp.json" ] && [ "$MERGE_MODE" = true ]; then
+        echo -e "   ${YELLOW}⚠️  mcp.json exists - creating mcp.d-epct.json${NC}"
+        cp "$SOURCE_CLAUDE/mcp.json" "$TARGET_CLAUDE/mcp.d-epct.json"
+        echo -e "   ${YELLOW}📝 NOTE: Merge mcp.d-epct.json into your existing mcp.json${NC}"
+    else
+        cp "$SOURCE_CLAUDE/mcp.json" "$TARGET_CLAUDE/"
+        echo -e "   ${GREEN}✅ mcp.json${NC}"
+    fi
+fi
+
 # Copy settings.json
 echo -e "${GREEN}📄 Installing settings.json...${NC}"
 if [ -f "$SOURCE_CLAUDE/settings.json" ]; then
@@ -227,6 +259,16 @@ echo -e "${BLUE}  📚 Knowledge Base (35+ files):${NC}"
 echo "    testing/     32 files (test levels, priorities, factories, fixtures...)"
 echo "    workflows/   3 files (PRD template, complexity matrix, project types)"
 echo ""
+echo -e "${BLUE}  📂 Examples (3 projects):${NC}"
+echo "    simple-api/      API REST simple (mode LIGHT)"
+echo "    blog-nextjs/     Blog Next.js (mode FULL)"
+echo "    saas-dashboard/  Dashboard SaaS (mode RALPH)"
+echo ""
+echo -e "${BLUE}  🔌 MCP Servers (3):${NC}"
+echo "    context7         Documentation up-to-date"
+echo "    figma            Extraction designs"
+echo "    chrome-devtools  Tests UI automatisés"
+echo ""
 echo -e "${BLUE}  Skills (10):${NC}"
 echo "    Planning:  idea-brainstorm, pm-prd, architect, pm-stories"
 echo "    Dev:       github-issue-reader, codebase-explainer,"
@@ -261,8 +303,9 @@ echo ""
 echo "  Planning:  🧠 Brainstorm → 📋 PRD → 🏗️ Architecture → 📝 Stories"
 echo "  Dev:       🔍 Explain → 📝 Plan → 💻 Code → 🧪 Test → 🔄 Review ×3"
 echo ""
-echo -e "${CYAN}Knowledge disponible:${NC}"
+echo -e "${CYAN}Documentation:${NC}"
 echo ""
 echo "  Les skills chargent automatiquement le knowledge pertinent."
 echo "  Voir .claude/knowledge/tea-index.csv pour l'index complet."
+echo "  Voir .claude/examples/ pour des projets exemples complets."
 echo ""
