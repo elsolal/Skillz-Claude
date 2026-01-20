@@ -15,6 +15,14 @@
 curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- .
 ```
 
+### Mise à jour
+
+```bash
+# Met à jour skills, commands, hooks, knowledge, examples
+# Préserve tes customisations: CLAUDE.md, settings.json, mcp.json
+curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- . --update
+```
+
 ### Installation manuelle
 
 ```bash
@@ -24,6 +32,9 @@ git clone https://github.com/elsolal/Skillz-Claude.git
 # Installer dans ton projet
 cd Skillz-Claude
 ./install.sh /chemin/vers/ton-projet
+
+# Ou mettre à jour
+./install.sh /chemin/vers/ton-projet --update
 ```
 
 ---

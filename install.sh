@@ -1,13 +1,18 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v2.4 Installer
+# D-EPCT+R Workflow v2.4.1 Installer
 # Install Claude Code skills + RALPH Mode + 35+ Knowledge Files
 # Structure BMAD-inspired avec Activation, Principes, Règles
 #
 # Usage:
+#   # Fresh install
 #   curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- .
 #   ./install.sh /path/to/project
+#
+#   # Update existing installation (preserves CLAUDE.md, settings.json, mcp.json)
+#   curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- . --update
+#   ./install.sh /path/to/project --update
 # ============================================================
 
 set -e
@@ -24,15 +29,37 @@ NC='\033[0m' # No Color
 REPO_URL="https://github.com/elsolal/Skillz-Claude.git"
 REPO_NAME="Skillz-Claude"
 
+# Parse arguments
+UPDATE_MODE=false
+TARGET_DIR=""
+
+for arg in "$@"; do
+    case $arg in
+        --update)
+            UPDATE_MODE=true
+            ;;
+        *)
+            if [ -z "$TARGET_DIR" ]; then
+                TARGET_DIR="$arg"
+            fi
+            ;;
+    esac
+done
+
 # Default target is current directory
-TARGET_DIR="${1:-.}"
-TARGET_DIR="$(cd "$TARGET_DIR" 2>/dev/null && pwd)" || TARGET_DIR="$(pwd)/${1:-.}"
+TARGET_DIR="${TARGET_DIR:-.}"
+TARGET_DIR="$(cd "$TARGET_DIR" 2>/dev/null && pwd)" || TARGET_DIR="$(pwd)/${TARGET_DIR}"
 TARGET_CLAUDE="$TARGET_DIR/.claude"
 TARGET_DOCS="$TARGET_DIR/docs"
 
+# Display header
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
-echo "║               D-EPCT+R Workflow v2.4 Installer                        ║"
+if [ "$UPDATE_MODE" = true ]; then
+echo "║             D-EPCT+R Workflow v2.4.1 Updater                          ║"
+else
+echo "║             D-EPCT+R Workflow v2.4.1 Installer                        ║"
+fi
 echo "║                                                                       ║"
 echo "║   MODE MANUEL:  Validation humaine à chaque étape                     ║"
 echo "║   MODE RALPH:   Boucle autonome jusqu'à complétion                    ║"
@@ -40,6 +67,14 @@ echo "║   KNOWLEDGE:    35+ fichiers (testing, workflows, PRD)                
 echo "║   STRUCTURE:    Skills BMAD-inspired (Activation, Principes, Règles)  ║"
 echo "╚═══════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
+
+# Update mode info
+if [ "$UPDATE_MODE" = true ]; then
+    echo -e "${CYAN}🔄 Mode UPDATE activé${NC}"
+    echo -e "   → Skills, commands, hooks, examples, knowledge seront mis à jour"
+    echo -e "   → CLAUDE.md, settings.json, mcp.json seront préservés"
+    echo ""
+fi
 
 # Determine source directory
 # If run via curl pipe, we need to clone the repo first
@@ -73,22 +108,35 @@ if [ ! -d "$SOURCE_CLAUDE" ]; then
     exit 1
 fi
 
-# Check if target already has .claude
+# Check if target already has .claude (for non-update mode)
+MERGE_MODE=false
 if [ -d "$TARGET_CLAUDE" ]; then
-    echo -e "${YELLOW}⚠️  Warning: .claude directory already exists in $TARGET_DIR${NC}"
-    echo ""
-    read -p "Do you want to merge? (y/n): " -n 1 -r
-    echo ""
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${RED}❌ Installation cancelled${NC}"
-        exit 1
+    if [ "$UPDATE_MODE" = true ]; then
+        # Update mode - no confirmation needed
+        echo -e "${BLUE}📦 Updating D-EPCT+R workflow in $TARGET_DIR...${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Warning: .claude directory already exists in $TARGET_DIR${NC}"
+        echo ""
+        echo -e "   Pour mettre à jour, utilisez: ${CYAN}--update${NC}"
+        echo ""
+        read -p "Do you want to merge (skip existing files)? (y/n): " -n 1 -r
+        echo ""
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            echo -e "${RED}❌ Installation cancelled${NC}"
+            exit 1
+        fi
+        MERGE_MODE=true
     fi
-    MERGE_MODE=true
 else
-    MERGE_MODE=false
+    if [ "$UPDATE_MODE" = true ]; then
+        echo -e "${YELLOW}⚠️  No existing installation found. Running fresh install...${NC}"
+        UPDATE_MODE=false
+    fi
 fi
 
-echo -e "${BLUE}📦 Installing D-EPCT+R workflow v2.4 to $TARGET_DIR...${NC}"
+if [ "$UPDATE_MODE" != true ] && [ "$MERGE_MODE" != true ]; then
+    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v2.4.1 to $TARGET_DIR...${NC}"
+fi
 echo ""
 
 # Create directories if needed
@@ -111,25 +159,37 @@ echo -e "   ${GREEN}✅ docs/planning/architecture/${NC}"
 echo -e "   ${GREEN}✅ docs/stories/${NC}"
 echo -e "   ${GREEN}✅ docs/ralph-logs/${NC}"
 
-# Copy knowledge base
+# Copy knowledge base (always update in UPDATE_MODE)
 echo -e "${GREEN}📚 Installing Knowledge Base (35+ files)...${NC}"
 if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
     # Copy testing knowledge (32 files)
     if [ -d "$SOURCE_CLAUDE/knowledge/testing" ]; then
         cp -r "$SOURCE_CLAUDE/knowledge/testing/"* "$TARGET_CLAUDE/knowledge/testing/" 2>/dev/null || true
         testing_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/testing/"*.md 2>/dev/null | wc -l | tr -d ' ')
-        echo -e "   ${GREEN}✅ testing/ ($testing_count files)${NC}"
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 testing/ ($testing_count files)${NC}"
+        else
+            echo -e "   ${GREEN}✅ testing/ ($testing_count files)${NC}"
+        fi
     fi
     # Copy workflows knowledge
     if [ -d "$SOURCE_CLAUDE/knowledge/workflows" ]; then
         cp -r "$SOURCE_CLAUDE/knowledge/workflows/"* "$TARGET_CLAUDE/knowledge/workflows/" 2>/dev/null || true
         workflows_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/workflows/"* 2>/dev/null | wc -l | tr -d ' ')
-        echo -e "   ${GREEN}✅ workflows/ ($workflows_count files)${NC}"
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 workflows/ ($workflows_count files)${NC}"
+        else
+            echo -e "   ${GREEN}✅ workflows/ ($workflows_count files)${NC}"
+        fi
     fi
     # Copy index
     if [ -f "$SOURCE_CLAUDE/knowledge/tea-index.csv" ]; then
         cp "$SOURCE_CLAUDE/knowledge/tea-index.csv" "$TARGET_CLAUDE/knowledge/"
-        echo -e "   ${GREEN}✅ tea-index.csv${NC}"
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 tea-index.csv${NC}"
+        else
+            echo -e "   ${GREEN}✅ tea-index.csv${NC}"
+        fi
     fi
 fi
 
@@ -140,7 +200,12 @@ for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
         skill_name=$(basename "$skill_dir")
         target_skill="$TARGET_CLAUDE/skills/$skill_name"
 
-        if [ -d "$target_skill" ] && [ "$MERGE_MODE" = true ]; then
+        if [ "$UPDATE_MODE" = true ]; then
+            # Update mode: always overwrite skills
+            rm -rf "$target_skill"
+            cp -r "$skill_dir" "$TARGET_CLAUDE/skills/"
+            echo -e "   ${CYAN}🔄 $skill_name${NC}"
+        elif [ -d "$target_skill" ] && [ "$MERGE_MODE" = true ]; then
             echo -e "   ${YELLOW}⚠️  Skipping $skill_name (already exists)${NC}"
         else
             cp -r "$skill_dir" "$TARGET_CLAUDE/skills/"
@@ -156,7 +221,11 @@ for cmd_file in "$SOURCE_CLAUDE/commands"/*.md; do
         cmd_name=$(basename "$cmd_file")
         target_cmd="$TARGET_CLAUDE/commands/$cmd_name"
 
-        if [ -f "$target_cmd" ] && [ "$MERGE_MODE" = true ]; then
+        if [ "$UPDATE_MODE" = true ]; then
+            # Update mode: always overwrite commands
+            cp "$cmd_file" "$TARGET_CLAUDE/commands/"
+            echo -e "   ${CYAN}🔄 $cmd_name${NC}"
+        elif [ -f "$target_cmd" ] && [ "$MERGE_MODE" = true ]; then
             echo -e "   ${YELLOW}⚠️  Skipping $cmd_name (already exists)${NC}"
         else
             cp "$cmd_file" "$TARGET_CLAUDE/commands/"
@@ -173,7 +242,12 @@ if [ -d "$SOURCE_CLAUDE/hooks" ]; then
             hook_name=$(basename "$hook_file")
             target_hook="$TARGET_CLAUDE/hooks/$hook_name"
 
-            if [ -f "$target_hook" ] && [ "$MERGE_MODE" = true ]; then
+            if [ "$UPDATE_MODE" = true ]; then
+                # Update mode: always overwrite hooks
+                cp "$hook_file" "$TARGET_CLAUDE/hooks/"
+                chmod +x "$TARGET_CLAUDE/hooks/$hook_name"
+                echo -e "   ${CYAN}🔄 $hook_name${NC}"
+            elif [ -f "$target_hook" ] && [ "$MERGE_MODE" = true ]; then
                 echo -e "   ${YELLOW}⚠️  Skipping $hook_name (already exists)${NC}"
             else
                 cp "$hook_file" "$TARGET_CLAUDE/hooks/"
@@ -193,7 +267,12 @@ if [ -d "$SOURCE_CLAUDE/examples" ]; then
             example_name=$(basename "$example_dir")
             target_example="$TARGET_CLAUDE/examples/$example_name"
 
-            if [ -d "$target_example" ] && [ "$MERGE_MODE" = true ]; then
+            if [ "$UPDATE_MODE" = true ]; then
+                # Update mode: always overwrite examples
+                rm -rf "$target_example"
+                cp -r "$example_dir" "$TARGET_CLAUDE/examples/"
+                echo -e "   ${CYAN}🔄 $example_name${NC}"
+            elif [ -d "$target_example" ] && [ "$MERGE_MODE" = true ]; then
                 echo -e "   ${YELLOW}⚠️  Skipping $example_name (already exists)${NC}"
             else
                 cp -r "$example_dir" "$TARGET_CLAUDE/examples/"
@@ -203,39 +282,51 @@ if [ -d "$SOURCE_CLAUDE/examples" ]; then
     done
 fi
 
-# Copy mcp.json
+# Copy mcp.json (PRESERVE in update mode)
 echo -e "${GREEN}📄 Installing mcp.json...${NC}"
 if [ -f "$SOURCE_CLAUDE/mcp.json" ]; then
-    if [ -f "$TARGET_CLAUDE/mcp.json" ] && [ "$MERGE_MODE" = true ]; then
-        echo -e "   ${YELLOW}⚠️  mcp.json exists - creating mcp.d-epct.json${NC}"
-        cp "$SOURCE_CLAUDE/mcp.json" "$TARGET_CLAUDE/mcp.d-epct.json"
-        echo -e "   ${YELLOW}📝 NOTE: Merge mcp.d-epct.json into your existing mcp.json${NC}"
+    if [ -f "$TARGET_CLAUDE/mcp.json" ]; then
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${GREEN}✅ mcp.json (preserved - your config)${NC}"
+        else
+            echo -e "   ${YELLOW}⚠️  mcp.json exists - creating mcp.d-epct.json${NC}"
+            cp "$SOURCE_CLAUDE/mcp.json" "$TARGET_CLAUDE/mcp.d-epct.json"
+            echo -e "   ${YELLOW}📝 NOTE: Merge mcp.d-epct.json into your existing mcp.json${NC}"
+        fi
     else
         cp "$SOURCE_CLAUDE/mcp.json" "$TARGET_CLAUDE/"
         echo -e "   ${GREEN}✅ mcp.json${NC}"
     fi
 fi
 
-# Copy settings.json
+# Copy settings.json (PRESERVE in update mode)
 echo -e "${GREEN}📄 Installing settings.json...${NC}"
 if [ -f "$SOURCE_CLAUDE/settings.json" ]; then
-    if [ -f "$TARGET_CLAUDE/settings.json" ] && [ "$MERGE_MODE" = true ]; then
-        echo -e "   ${YELLOW}⚠️  settings.json exists - creating settings.ralph.json${NC}"
-        cp "$SOURCE_CLAUDE/settings.json" "$TARGET_CLAUDE/settings.ralph.json"
-        echo -e "   ${YELLOW}📝 NOTE: Merge settings.ralph.json into your existing settings.json${NC}"
+    if [ -f "$TARGET_CLAUDE/settings.json" ]; then
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${GREEN}✅ settings.json (preserved - your config)${NC}"
+        else
+            echo -e "   ${YELLOW}⚠️  settings.json exists - creating settings.ralph.json${NC}"
+            cp "$SOURCE_CLAUDE/settings.json" "$TARGET_CLAUDE/settings.ralph.json"
+            echo -e "   ${YELLOW}📝 NOTE: Merge settings.ralph.json into your existing settings.json${NC}"
+        fi
     else
         cp "$SOURCE_CLAUDE/settings.json" "$TARGET_CLAUDE/"
         echo -e "   ${GREEN}✅ settings.json${NC}"
     fi
 fi
 
-# Handle CLAUDE.md
+# Handle CLAUDE.md (PRESERVE in update mode)
 echo -e "${GREEN}📄 Installing CLAUDE.md...${NC}"
-if [ -f "$TARGET_CLAUDE/CLAUDE.md" ] && [ "$MERGE_MODE" = true ]; then
-    echo -e "   ${YELLOW}⚠️  CLAUDE.md exists - creating CLAUDE.d-epct.md instead${NC}"
-    cp "$SOURCE_CLAUDE/CLAUDE.md" "$TARGET_CLAUDE/CLAUDE.d-epct.md"
-    echo ""
-    echo -e "${YELLOW}📝 NOTE: Merge the content of CLAUDE.d-epct.md into your existing CLAUDE.md${NC}"
+if [ -f "$TARGET_CLAUDE/CLAUDE.md" ]; then
+    if [ "$UPDATE_MODE" = true ]; then
+        echo -e "   ${GREEN}✅ CLAUDE.md (preserved - your customizations)${NC}"
+    else
+        echo -e "   ${YELLOW}⚠️  CLAUDE.md exists - creating CLAUDE.d-epct.md instead${NC}"
+        cp "$SOURCE_CLAUDE/CLAUDE.md" "$TARGET_CLAUDE/CLAUDE.d-epct.md"
+        echo ""
+        echo -e "${YELLOW}📝 NOTE: Merge the content of CLAUDE.d-epct.md into your existing CLAUDE.md${NC}"
+    fi
 else
     cp "$SOURCE_CLAUDE/CLAUDE.md" "$TARGET_CLAUDE/"
     echo -e "   ${GREEN}✅ CLAUDE.md${NC}"
@@ -249,6 +340,23 @@ touch "$TARGET_DOCS/stories/.gitkeep"
 touch "$TARGET_DOCS/ralph-logs/.gitkeep"
 
 echo ""
+if [ "$UPDATE_MODE" = true ]; then
+echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════════════╗"
+echo -e "║                       ✅ Update Complete!                            ║"
+echo -e "╚═══════════════════════════════════════════════════════════════════════╝${NC}"
+echo ""
+echo -e "${CYAN}Updated components:${NC}"
+echo -e "   ${CYAN}🔄 Skills (10)${NC}"
+echo -e "   ${CYAN}🔄 Commands (6)${NC}"
+echo -e "   ${CYAN}🔄 Hooks${NC}"
+echo -e "   ${CYAN}🔄 Knowledge Base (35+ files)${NC}"
+echo -e "   ${CYAN}🔄 Examples (3 projects)${NC}"
+echo ""
+echo -e "${GREEN}Preserved (your customizations):${NC}"
+echo -e "   ${GREEN}✅ CLAUDE.md${NC}"
+echo -e "   ${GREEN}✅ settings.json${NC}"
+echo -e "   ${GREEN}✅ mcp.json${NC}"
+else
 echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════════════╗"
 echo -e "║                     ✅ Installation Complete!                         ║"
 echo -e "╚═══════════════════════════════════════════════════════════════════════╝${NC}"
@@ -284,6 +392,7 @@ echo "    /auto-loop \"prompt\"  Boucle générique"
 echo "    /auto-discovery      Planning autonome"
 echo "    /auto-feature #123   Dev autonome"
 echo "    /cancel-ralph        Arrêter la boucle"
+fi
 echo ""
 echo -e "${CYAN}Usage:${NC}"
 echo ""
@@ -298,6 +407,7 @@ echo -e "  ${MAGENTA}# Mode RALPH (autonome)${NC}"
 echo "  /auto-discovery \"Je veux créer une app de todo\""
 echo "  /auto-feature #123 --max 50"
 echo ""
+if [ "$UPDATE_MODE" != true ]; then
 echo -e "${CYAN}Workflow:${NC}"
 echo ""
 echo "  Planning:  🧠 Brainstorm → 📋 PRD → 🏗️ Architecture → 📝 Stories"
@@ -308,4 +418,10 @@ echo ""
 echo "  Les skills chargent automatiquement le knowledge pertinent."
 echo "  Voir .claude/knowledge/tea-index.csv pour l'index complet."
 echo "  Voir .claude/examples/ pour des projets exemples complets."
+echo ""
+fi
+echo -e "${CYAN}Update:${NC}"
+echo ""
+echo "  # Pour mettre à jour vers la dernière version:"
+echo "  curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- . --update"
 echo ""
