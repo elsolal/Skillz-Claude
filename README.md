@@ -28,6 +28,65 @@ cd Skillz-Claude
 
 ---
 
+## Quick Start (5 minutes)
+
+### 1. Installer dans ton projet
+```bash
+cd mon-projet
+curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- .
+```
+
+### 2. Lancer Claude Code
+```bash
+claude
+```
+
+### 3. Démarrer un workflow
+
+**Option A : Planning complet (nouvelle idée)**
+```
+/discovery
+> Décris ton idée : "Une app de suivi de dépenses personnelles"
+```
+
+**Option B : Implémenter une feature (issue existante)**
+```
+/feature #123
+```
+
+**Option C : Mode autonome RALPH**
+```
+/auto-discovery "App de gestion de budget personnel"
+# Claude travaille seul jusqu'à créer toutes les issues GitHub
+```
+
+### 4. Suivre le workflow
+
+Le workflow te guidera à travers :
+1. **Brainstorm** → Explorer l'idée
+2. **PRD** → Définir les requirements
+3. **Architecture** → Choisir le stack
+4. **Stories** → Créer les issues GitHub
+5. **Code** → Implémenter
+6. **Test** → Valider
+7. **Review** → 3 passes de relecture
+
+Chaque étape demande ta validation (sauf en mode RALPH).
+
+### Exemples complets
+
+Voir le dossier [`examples/`](./examples/) avec 3 projets documentés :
+- [`simple-api/`](./examples/simple-api/) - API REST simple (mode LIGHT)
+- [`blog-nextjs/`](./examples/blog-nextjs/) - Blog Next.js (mode FULL)
+- [`saas-dashboard/`](./examples/saas-dashboard/) - Dashboard SaaS (mode RALPH)
+
+### Besoin d'aide ?
+
+- [Troubleshooting Guide](./docs/TROUBLESHOOTING.md)
+- [Guide Complet](./docs/GUIDE-COMPLET.md)
+
+---
+
 ## Architecture
 
 ```
