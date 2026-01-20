@@ -75,10 +75,10 @@ Chaque étape demande ta validation (sauf en mode RALPH).
 
 ### Exemples complets
 
-Voir le dossier [`examples/`](./examples/) avec 3 projets documentés :
-- [`simple-api/`](./examples/simple-api/) - API REST simple (mode LIGHT)
-- [`blog-nextjs/`](./examples/blog-nextjs/) - Blog Next.js (mode FULL)
-- [`saas-dashboard/`](./examples/saas-dashboard/) - Dashboard SaaS (mode RALPH)
+Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets documentés :
+- [`simple-api/`](./.claude/examples/simple-api/) - API REST simple (mode LIGHT)
+- [`blog-nextjs/`](./.claude/examples/blog-nextjs/) - Blog Next.js (mode FULL)
+- [`saas-dashboard/`](./.claude/examples/saas-dashboard/) - Dashboard SaaS (mode RALPH)
 
 ### Besoin d'aide ?
 
