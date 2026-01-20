@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v2.4.1 Installer
+# D-EPCT+R Workflow v2.5 Installer
 # Install Claude Code skills + RALPH Mode + 35+ Knowledge Files
 # Structure BMAD-inspired avec Activation, Principes, Règles
+# NEW: UX Designer + UI Designer skills with auto-trigger
 #
 # Usage:
 #   # Fresh install
@@ -56,15 +57,15 @@ TARGET_DOCS="$TARGET_DIR/docs"
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
 if [ "$UPDATE_MODE" = true ]; then
-echo "║             D-EPCT+R Workflow v2.4.1 Updater                          ║"
+echo "║             D-EPCT+R Workflow v2.5 Updater                            ║"
 else
-echo "║             D-EPCT+R Workflow v2.4.1 Installer                        ║"
+echo "║             D-EPCT+R Workflow v2.5 Installer                          ║"
 fi
 echo "║                                                                       ║"
 echo "║   MODE MANUEL:  Validation humaine à chaque étape                     ║"
 echo "║   MODE RALPH:   Boucle autonome jusqu'à complétion                    ║"
 echo "║   KNOWLEDGE:    35+ fichiers (testing, workflows, PRD)                ║"
-echo "║   STRUCTURE:    Skills BMAD-inspired (Activation, Principes, Règles)  ║"
+echo "║   UX/UI:        Skills design optionnels avec auto-trigger            ║"
 echo "╚═══════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
@@ -135,7 +136,7 @@ else
 fi
 
 if [ "$UPDATE_MODE" != true ] && [ "$MERGE_MODE" != true ]; then
-    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v2.4.1 to $TARGET_DIR...${NC}"
+    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v2.5 to $TARGET_DIR...${NC}"
 fi
 echo ""
 
@@ -149,12 +150,16 @@ mkdir -p "$TARGET_CLAUDE/knowledge/workflows"
 # Create docs structure
 echo -e "${GREEN}📁 Creating docs structure...${NC}"
 mkdir -p "$TARGET_DOCS/planning/brainstorms"
+mkdir -p "$TARGET_DOCS/planning/ux"
 mkdir -p "$TARGET_DOCS/planning/prd"
+mkdir -p "$TARGET_DOCS/planning/ui"
 mkdir -p "$TARGET_DOCS/planning/architecture"
 mkdir -p "$TARGET_DOCS/stories"
 mkdir -p "$TARGET_DOCS/ralph-logs"
 echo -e "   ${GREEN}✅ docs/planning/brainstorms/${NC}"
+echo -e "   ${GREEN}✅ docs/planning/ux/${NC}"
 echo -e "   ${GREEN}✅ docs/planning/prd/${NC}"
+echo -e "   ${GREEN}✅ docs/planning/ui/${NC}"
 echo -e "   ${GREEN}✅ docs/planning/architecture/${NC}"
 echo -e "   ${GREEN}✅ docs/stories/${NC}"
 echo -e "   ${GREEN}✅ docs/ralph-logs/${NC}"
@@ -182,19 +187,25 @@ if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
             echo -e "   ${GREEN}✅ workflows/ ($workflows_count files)${NC}"
         fi
     fi
-    # Copy index
+    # Copy index (only if source != destination)
     if [ -f "$SOURCE_CLAUDE/knowledge/tea-index.csv" ]; then
-        cp "$SOURCE_CLAUDE/knowledge/tea-index.csv" "$TARGET_CLAUDE/knowledge/"
-        if [ "$UPDATE_MODE" = true ]; then
-            echo -e "   ${CYAN}🔄 tea-index.csv${NC}"
+        SOURCE_INDEX="$(cd "$(dirname "$SOURCE_CLAUDE/knowledge/tea-index.csv")" && pwd)/tea-index.csv"
+        TARGET_INDEX="$TARGET_CLAUDE/knowledge/tea-index.csv"
+        if [ "$SOURCE_INDEX" != "$TARGET_INDEX" ]; then
+            cp "$SOURCE_CLAUDE/knowledge/tea-index.csv" "$TARGET_CLAUDE/knowledge/"
+            if [ "$UPDATE_MODE" = true ]; then
+                echo -e "   ${CYAN}🔄 tea-index.csv${NC}"
+            else
+                echo -e "   ${GREEN}✅ tea-index.csv${NC}"
+            fi
         else
-            echo -e "   ${GREEN}✅ tea-index.csv${NC}"
+            echo -e "   ${GREEN}✅ tea-index.csv (already in place)${NC}"
         fi
     fi
 fi
 
 # Copy skills
-echo -e "${GREEN}📁 Installing skills (10)...${NC}"
+echo -e "${GREEN}📁 Installing skills (12)...${NC}"
 for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
     if [ -d "$skill_dir" ]; then
         skill_name=$(basename "$skill_dir")
@@ -334,7 +345,9 @@ fi
 
 # Create .gitkeep files to preserve empty directories
 touch "$TARGET_DOCS/planning/brainstorms/.gitkeep"
+touch "$TARGET_DOCS/planning/ux/.gitkeep"
 touch "$TARGET_DOCS/planning/prd/.gitkeep"
+touch "$TARGET_DOCS/planning/ui/.gitkeep"
 touch "$TARGET_DOCS/planning/architecture/.gitkeep"
 touch "$TARGET_DOCS/stories/.gitkeep"
 touch "$TARGET_DOCS/ralph-logs/.gitkeep"
@@ -346,7 +359,7 @@ echo -e "║                       ✅ Update Complete!                         
 echo -e "╚═══════════════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${CYAN}Updated components:${NC}"
-echo -e "   ${CYAN}🔄 Skills (10)${NC}"
+echo -e "   ${CYAN}🔄 Skills (12 including UX/UI designers)${NC}"
 echo -e "   ${CYAN}🔄 Commands (6)${NC}"
 echo -e "   ${CYAN}🔄 Hooks${NC}"
 echo -e "   ${CYAN}🔄 Knowledge Base (35+ files)${NC}"
@@ -377,8 +390,9 @@ echo "    context7         Documentation up-to-date"
 echo "    figma            Extraction designs"
 echo "    chrome-devtools  Tests UI automatisés"
 echo ""
-echo -e "${BLUE}  Skills (10):${NC}"
+echo -e "${BLUE}  Skills (12):${NC}"
 echo "    Planning:  idea-brainstorm, pm-prd, architect, pm-stories"
+echo "    Design:    ux-designer, ui-designer (auto-triggered)"
 echo "    Dev:       github-issue-reader, codebase-explainer,"
 echo "               implementation-planner, code-implementer,"
 echo "               test-runner, code-reviewer"
