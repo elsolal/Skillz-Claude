@@ -427,7 +427,3 @@ Tu es libre d'utiliser, copier et adapter ce workflow pour tes propres projets.
 
 - **[BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD)** - 32 fichiers knowledge + structure agents
 - **[RALPH Protocol](https://ghuntley.com/ralph/)** - Mode autonome
-
-## License
-
-MIT
