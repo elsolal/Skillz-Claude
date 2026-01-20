@@ -415,6 +415,14 @@ Tous les skills ont maintenant :
 
 ---
 
+## Contributing
+
+Ce projet est partagé en **lecture seule**. Les Pull Requests et Issues ne sont pas acceptées.
+
+Tu es libre d'utiliser, copier et adapter ce workflow pour tes propres projets.
+
+---
+
 ## Credits
 
 - **[BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD)** - 32 fichiers knowledge + structure agents
