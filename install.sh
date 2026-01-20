@@ -79,10 +79,22 @@ fi
 
 # Determine source directory
 # If run via curl pipe, we need to clone the repo first
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" 2>/dev/null)" 2>/dev/null && pwd)" || SCRIPT_DIR=""
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-}"
+SCRIPT_DIR=""
 
-if [ -z "$SCRIPT_DIR" ] || [ ! -d "$SCRIPT_DIR/.claude" ]; then
-    # Running via curl pipe or .claude not found - need to clone
+# Only set SCRIPT_DIR if we have a real file path (not stdin/pipe)
+if [ -n "$SCRIPT_SOURCE" ] && [ "$SCRIPT_SOURCE" != "/dev/stdin" ] && [ -f "$SCRIPT_SOURCE" ]; then
+    SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" 2>/dev/null && pwd)" || SCRIPT_DIR=""
+fi
+
+# Check if running from the actual Skillz-Claude repo (has install.sh AND .claude/skills/)
+IS_REPO=false
+if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/install.sh" ] && [ -d "$SCRIPT_DIR/.claude/skills" ]; then
+    IS_REPO=true
+fi
+
+if [ "$IS_REPO" = false ]; then
+    # Running via curl pipe or not from repo - need to clone
     echo -e "${BLUE}📥 Downloading D-EPCT+R workflow from GitHub...${NC}"
 
     TEMP_DIR=$(mktemp -d)
@@ -99,7 +111,7 @@ if [ -z "$SCRIPT_DIR" ] || [ ! -d "$SCRIPT_DIR/.claude" ]; then
     echo -e "${GREEN}✅ Downloaded successfully${NC}"
     echo ""
 else
-    # Running from cloned repo
+    # Running from cloned Skillz-Claude repo
     SOURCE_CLAUDE="$SCRIPT_DIR/.claude"
 fi
 
