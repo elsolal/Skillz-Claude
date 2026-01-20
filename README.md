@@ -9,12 +9,20 @@
 
 ## Installation
 
+### Installation en une ligne
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- .
+```
+
+### Installation manuelle
+
 ```bash
 # Cloner le repo
-git clone https://github.com/ton-user/d-epct-workflow.git
+git clone https://github.com/elsolal/Skillz-Claude.git
 
 # Installer dans ton projet
-cd d-epct-workflow
+cd Skillz-Claude
 ./install.sh /chemin/vers/ton-projet
 ```
 
