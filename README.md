@@ -1,12 +1,13 @@
-# D-EPCT+R Workflow v2.8
+# D-EPCT+R Workflow v2.9
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
 > ✅ **Mode Manuel** - Validation humaine à chaque étape
 > ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
+> ✅ **API Designer** - OpenAPI 3.1, REST/GraphQL, versioning (NEW v2.9)
+> ✅ **Dashboard /metrics** - Health score, coverage, issues (NEW v2.9)
+> ✅ **PR Templates** - Templates GitHub pour PRs (NEW v2.9)
 > ✅ **Security Auditor** - Audit OWASP, dépendances, secrets
-> ✅ **GitHub Actions** - Templates CI/CD prêts à l'emploi
-> ✅ **Changelog auto** - Génération depuis commits/issues
 > ✅ **35+ fichiers Knowledge** - Base de connaissances testing & workflows
 > ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
@@ -138,7 +139,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Commandes (15)
+## Commandes (16)
 
 ### Mode Manuel (avec validation)
 
@@ -165,7 +166,8 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /quick-fix "desc"       # Fix rapide sans workflow complet
 /refactor <file>        # Refactoring ciblé avec review
 /docs [type]            # Génère documentation (readme|api|guide|all)
-/changelog [version]    # Génère CHANGELOG.md (NEW v2.8)
+/changelog [version]    # Génère CHANGELOG.md
+/metrics                # Dashboard métriques projet (NEW v2.9)
 ```
 
 ### Configuration RALPH
@@ -180,7 +182,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Skills (13)
+## Skills (14)
 
 ### Phase Planning
 
@@ -190,6 +192,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `pm-prd` | Product Requirements | Mode **FULL/LIGHT** auto-détecté, templates, **auto-trigger UX/UI** |
 | `architect` | Architecture technique | Stack, structure, data model, APIs, ADRs |
 | `pm-stories` | Epics + Stories | INVEST, Given/When/Then, **Readiness Check /15** |
+| `api-designer` | Design d'API (NEW) | **OpenAPI 3.1**, REST/GraphQL, versioning, rate limiting |
 
 ### Phase Design (optionnelle, auto-triggered)
 
@@ -209,6 +212,49 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité (NEW) | **OWASP Top 10**, dépendances, secrets, scoring |
+
+---
+
+## Fonctionnalités v2.9
+
+### Skill api-designer
+
+Nouveau skill pour concevoir des APIs REST/GraphQL :
+
+```bash
+/api-designer user-management    # Design API
+/api-designer --type graphql     # API GraphQL
+```
+
+**Fonctionnalités** :
+- **OpenAPI 3.1** : Spec complète avec exemples
+- **REST Best Practices** : CRUD, pagination, filtres
+- **Error Handling** : Format standard, codes d'erreur
+- **Versioning** : URL path, headers, deprecation policy
+- **Rate Limiting** : Headers, quotas
+
+### Commande /metrics
+
+Dashboard des métriques projet :
+
+```bash
+/metrics                # Dashboard standard
+/metrics --full         # Toutes les métriques
+/metrics --compare main # Compare avec une branche
+```
+
+**Métriques** : Codebase, Tests, GitHub, Dependencies, RALPH
+**Health Score** : `Coverage + Tests + Docs + Security + Activity`
+
+### PR Template GitHub
+
+Template standard pour les Pull Requests :
+
+```
+.claude/templates/github/PULL_REQUEST_TEMPLATE.md
+```
+
+**Installation** : `cp .claude/templates/github/PULL_REQUEST_TEMPLATE.md .github/`
 
 ---
 
@@ -406,7 +452,7 @@ knowledge:
 ├── settings.json                    # Config hooks RALPH
 ├── hooks/
 │   └── stop-hook.sh                 # Hook RALPH (intercepte exit)
-├── commands/                        # 15 commandes
+├── commands/                        # 16 commandes
 │   ├── discovery.md
 │   ├── feature.md
 │   ├── auto-loop.md
@@ -419,14 +465,16 @@ knowledge:
 │   ├── quick-fix.md
 │   ├── refactor.md
 │   ├── docs.md
-│   └── changelog.md                 # NEW v2.8
-├── templates/                       # NEW v2.8
-│   └── github-actions/
-│       ├── ci.yml
-│       ├── release.yml
-│       ├── security.yml
-│       ├── deploy.yml
-│       └── dependabot.yml
+│   ├── changelog.md
+│   └── metrics.md                   # NEW v2.9
+├── templates/
+│   ├── github-actions/              # CI/CD templates
+│   │   ├── ci.yml
+│   │   ├── release.yml
+│   │   ├── security.yml
+│   │   ├── deploy.yml
+│   │   └── dependabot.yml
+│   └── github/                      # NEW v2.9
 ├── knowledge/                       # 35+ fichiers
 │   ├── tea-index.csv                # Index des fragments
 │   ├── testing/                     # 32 fichiers
@@ -442,7 +490,7 @@ knowledge:
 │       ├── prd-template.md
 │       ├── domain-complexity.csv
 │       └── project-types.csv
-└── skills/                          # 13 skills
+└── skills/                          # 14 skills
     ├── idea-brainstorm/
     ├── pm-prd/
     ├── ux-designer/
@@ -455,7 +503,8 @@ knowledge:
     ├── code-implementer/
     ├── test-runner/
     ├── code-reviewer/
-    └── security-auditor/            # NEW v2.8
+    ├── security-auditor/
+    └── api-designer/                # NEW v2.9
 
 docs/                                # Output documents
 ├── planning/
@@ -536,7 +585,26 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v2.8.0 (Current)
+### v2.9.0 (Current)
+
+**Skill api-designer**
+- Nouveau skill pour concevoir des APIs REST/GraphQL
+- Génération de specs OpenAPI 3.1 complètes avec exemples
+- Best practices : CRUD, pagination, error handling, versioning
+- Rate limiting et deprecation policy
+
+**Commande /metrics**
+- Dashboard des métriques projet en ASCII art
+- Health Score combinant Coverage, Tests, Docs, Security, Activity
+- Mode `--full` pour détails complets
+- Mode `--compare <branch>` pour comparaison
+
+**PR Template GitHub**
+- Template standard pour Pull Requests
+- Sections : Summary, Changes, Type, Testing, Screenshots
+- Installation simple vers `.github/`
+
+### v2.8.0
 
 **Security Auditor**
 - Nouveau skill `security-auditor` pour audit de sécurité

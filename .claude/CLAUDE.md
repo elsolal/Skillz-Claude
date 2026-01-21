@@ -1,4 +1,4 @@
-# D-EPCT+R Workflow v2.8
+# D-EPCT+R Workflow v2.9
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -39,7 +39,7 @@
 
 ---
 
-## Commandes (15)
+## Commandes (16)
 
 ### Mode Manuel (avec validation)
 
@@ -66,7 +66,8 @@
 /quick-fix "desc"       # Fix rapide sans workflow complet
 /refactor <file>        # Refactoring ciblé avec review
 /docs [type]            # Génère documentation (readme|api|guide|all)
-/changelog [version]    # Génère CHANGELOG.md (NEW v2.8)
+/changelog [version]    # Génère CHANGELOG.md
+/metrics                # Dashboard métriques projet (NEW v2.9)
 ```
 
 ### Configuration RALPH
@@ -81,7 +82,7 @@
 
 ---
 
-## Skills (13)
+## Skills (14)
 
 ### Phase Planning
 
@@ -91,6 +92,7 @@
 | `pm-prd` | Product Requirements | Mode **FULL** (complet) ou **LIGHT** (simplifié), auto-détection, **auto-trigger UX/UI** |
 | `architect` | Architecture technique | Stack, structure, data model, APIs, ADRs |
 | `pm-stories` | Epics + Stories | INVEST, Given/When/Then, **Implementation Readiness Check** (score /15) |
+| `api-designer` | Design d'API (NEW v2.9) | **OpenAPI 3.1**, REST/GraphQL, versioning, rate limiting |
 
 ### Phase Design (optionnelle, auto-triggered)
 
@@ -110,6 +112,61 @@
 | `test-runner` | Tests | Mode **ATDD** (tests first) ou Standard, priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité (NEW v2.8) | **OWASP Top 10**, dépendances, secrets, scoring |
+
+---
+
+## Fonctionnalités avancées (v2.9)
+
+### Skill api-designer
+
+Nouveau skill pour concevoir des APIs REST/GraphQL :
+
+```bash
+/api-designer user-management    # Design API
+/api-designer --type graphql     # API GraphQL
+```
+
+**Fonctionnalités** :
+- **OpenAPI 3.1** : Spec complète avec exemples
+- **REST Best Practices** : CRUD, pagination, filtres
+- **Error Handling** : Format standard, codes d'erreur
+- **Versioning** : URL path, headers, deprecation policy
+- **Rate Limiting** : Headers, quotas
+
+### Commande /metrics
+
+Dashboard des métriques projet :
+
+```bash
+/metrics                # Dashboard standard
+/metrics --full         # Toutes les métriques
+/metrics --compare main # Compare avec une branche
+```
+
+**Métriques affichées** :
+- **Codebase** : Files, lines, commits
+- **Tests** : Coverage, passing, skipped
+- **GitHub** : Issues, PRs, labels
+- **Dependencies** : Total, outdated, vulnerabilities
+- **Documentation** : PRDs, architecture, stories
+- **RALPH** : Sessions, iterations, completions
+
+**Health Score** : `Coverage + Tests + Docs + Security + Activity`
+
+### PR Template GitHub
+
+Template standard pour les Pull Requests dans `.claude/templates/github/` :
+
+```markdown
+## Summary
+## Changes
+## Type of change
+## Testing
+## Screenshots
+Closes #
+```
+
+**Installation** : `cp .claude/templates/github/PULL_REQUEST_TEMPLATE.md .github/`
 
 ---
 
