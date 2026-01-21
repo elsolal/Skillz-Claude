@@ -8,7 +8,7 @@
 > ✅ **DevContainer** - Docker dev environment (NEW v3.1)
 > ✅ **Performance Auditor** - Core Web Vitals, Lighthouse (NEW v3.1)
 > ✅ **Database Designer** - ERD, migrations, Prisma/Drizzle
-> ✅ **35+ fichiers Knowledge** - Base de connaissances testing & workflows
+> ✅ **42 fichiers Knowledge** - Base de connaissances testing & workflows
 > ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
 ## Installation
@@ -139,7 +139,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Commandes (17)
+## Commandes (15)
 
 ### Mode Manuel (avec validation)
 
@@ -569,7 +569,7 @@ knowledge:
 │       ├── devcontainer.json
 │       ├── Dockerfile
 │       └── docker-compose.yml
-├── knowledge/                       # 35+ fichiers
+├── knowledge/                       # 42 fichiers
 │   ├── tea-index.csv                # Index des fragments
 │   ├── testing/                     # 32 fichiers
 │   │   ├── test-levels-framework.md
@@ -580,8 +580,15 @@ knowledge:
 │   │   ├── network-first.md
 │   │   ├── test-healing-patterns.md
 │   │   └── ... (25 autres)
-│   └── workflows/                   # 3 fichiers
+│   └── workflows/                   # 10 fichiers
 │       ├── prd-template.md
+│       ├── prd-patterns.md
+│       ├── architecture-template.md
+│       ├── stories-template.md
+│       ├── ux-template.md
+│       ├── ui-template.md
+│       ├── estimation-techniques.md
+│       ├── risk-assessment.md
 │       ├── domain-complexity.csv
 │       └── project-types.csv
 └── skills/                          # 16 skills
@@ -626,7 +633,7 @@ docs/                                # Output documents
 | **advanced** | Si complexe | `fixture-architecture.md` |
 | **debugging** | Si problème | `test-healing-patterns.md` |
 
-### Contenu (35+ fichiers)
+### Contenu (42 fichiers)
 
 #### Testing (32 fichiers)
 

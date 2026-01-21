@@ -39,7 +39,7 @@
 
 ---
 
-## Commandes (17)
+## Commandes (15)
 
 ### Mode Manuel (avec validation)
 
