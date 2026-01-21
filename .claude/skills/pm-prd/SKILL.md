@@ -3,7 +3,9 @@ name: pm-prd
 description: Crée un Product Requirements Document (PRD) structuré à partir d'une idée ou d'un brainstorm. Utiliser quand l'utilisateur veut structurer une idée en spécifications, dit "PRD", "spécifications", "requirements", "définir le produit", ou après une session de brainstorm validée.
 context: fork
 agent: Plan
+model: opus
 allowed-tools: Read, Grep, Glob, Write
+argument-hint: <brainstorm-file-or-idea>
 knowledge:
   templates:
     - ../../knowledge/workflows/prd-template.md
@@ -24,6 +26,19 @@ triggers_ux_ui:
 ---
 
 # PM-PRD (Product Requirements Document)
+
+## 📥 Contexte existant chargé automatiquement
+
+### Brainstorms existants
+!`ls -la docs/planning/brainstorms/*.md 2>/dev/null | tail -5 || echo "Aucun brainstorm trouvé"`
+
+### PRDs existants (pour éviter doublons)
+!`ls -la docs/planning/prd/*.md 2>/dev/null | tail -5 || echo "Aucun PRD existant"`
+
+### UX Design existant (si applicable)
+!`ls -la docs/planning/ux/*.md 2>/dev/null | tail -3 || echo "Pas d'UX design existant"`
+
+---
 
 ## Knowledge Base
 

@@ -3,7 +3,9 @@ name: codebase-explainer
 description: Analyse le code source du projet pour comprendre l'architecture, les patterns utilisés et le contexte technique. Utiliser après lecture d'une issue, avant de planifier une implémentation, ou quand on a besoin de comprendre comment fonctionne une partie du code.
 context: fork
 agent: Explore
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
+user-invocable: false
 knowledge:
   core:
     - ../../knowledge/workflows/project-types.csv

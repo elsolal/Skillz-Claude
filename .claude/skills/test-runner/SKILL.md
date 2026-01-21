@@ -1,7 +1,9 @@
 ---
 name: test-runner
 description: Écrit et exécute les tests pour valider l'implémentation. Utiliser après l'implémentation du code, quand on a besoin de vérifier que le code fonctionne, ou avant les code reviews. Peut aussi être utilisé en mode ATDD (tests d'abord).
+model: opus
 allowed-tools: Read, Grep, Glob, Write, Edit, Bash
+argument-hint: <file-or-directory-to-test>
 knowledge:
   core:
     - ../../knowledge/testing/test-levels-framework.md
@@ -19,6 +21,22 @@ knowledge:
 ---
 
 # Test Runner
+
+## 📥 Contexte test chargé automatiquement
+
+### Configuration test détectée
+!`cat jest.config.* vitest.config.* pytest.ini setup.cfg pyproject.toml 2>/dev/null | head -30 || echo "Aucune config test standard trouvée"`
+
+### Tests existants (structure)
+!`find . -name "*.test.*" -o -name "*.spec.*" -o -name "test_*.py" 2>/dev/null | head -20 || echo "Aucun test trouvé"`
+
+### Dernière exécution (si log disponible)
+!`cat test-results.json coverage/coverage-summary.json 2>/dev/null | head -20 || echo "Pas de résultats de tests récents"`
+
+### Package.json scripts test
+!`cat package.json 2>/dev/null | grep -A5 '"scripts"' | grep -i test || echo "Pas de script test trouvé"`
+
+---
 
 ## Activation
 

@@ -3,7 +3,9 @@ name: implementation-planner
 description: Crée un plan d'implémentation détaillé basé sur les requirements et l'analyse du code. Utiliser après l'étape Explain, quand on a besoin de structurer le travail de développement, ou avant de commencer à coder.
 context: fork
 agent: Plan
+model: opus
 allowed-tools: Read, Grep, Glob
+argument-hint: <prd-or-issue-reference>
 knowledge:
   core:
     - ../../knowledge/workflows/domain-complexity.csv
@@ -16,6 +18,22 @@ knowledge:
 ---
 
 # Implementation Planner
+
+## 📥 Contexte chargé automatiquement
+
+### PRD actif (si existant)
+!`ls -la docs/planning/prd/*.md 2>/dev/null | tail -3 || echo "Aucun PRD trouvé"`
+
+### Architecture existante (si applicable)
+!`ls -la docs/planning/architecture/*.md 2>/dev/null | tail -3 || echo "Aucune architecture trouvée"`
+
+### Stories liées (si existantes)
+!`ls -la docs/stories/*/STORY-*.md 2>/dev/null | tail -5 || echo "Aucune story trouvée"`
+
+### Analyse codebase (output de codebase-explainer)
+!`cat docs/planning/codebase-analysis-*.md 2>/dev/null | head -50 || echo "Pas d'analyse codebase récente"`
+
+---
 
 ## Activation
 

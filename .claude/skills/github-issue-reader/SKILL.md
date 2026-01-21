@@ -1,6 +1,7 @@
 ---
 name: github-issue-reader
 description: Lit et analyse une issue GitHub pour extraire les requirements, critères d'acceptance et contexte. Utiliser quand on démarre une feature, quand on mentionne une issue GitHub, ou quand on a besoin de comprendre les specs d'une tâche.
+model: opus
 argument-hint: <issue-number-or-url>
 allowed-tools: Read, Grep, mcp__github__get_issue, mcp__github__list_issues, mcp__github__get_pull_request
 knowledge:

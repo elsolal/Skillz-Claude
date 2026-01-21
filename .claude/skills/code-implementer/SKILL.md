@@ -1,7 +1,13 @@
 ---
 name: code-implementer
 description: Implémente le code selon le plan validé, en respectant les conventions du projet. Utiliser après validation du plan, quand on passe à l'écriture du code, ou pour chaque étape d'implémentation.
+model: opus
 allowed-tools: Read, Grep, Glob, Write, Edit, Bash
+argument-hint: <plan-step-number-or-file>
+hooks:
+  post_tool_call:
+    - matcher: "Edit|Write"
+      command: "npm run lint --fix 2>/dev/null || npm run lint 2>/dev/null || echo 'Lint check skipped'"
 knowledge:
   patterns:
     - ../../knowledge/testing/error-handling.md
@@ -9,6 +15,22 @@ knowledge:
 ---
 
 # Code Implementer
+
+## 📥 Contexte projet chargé automatiquement
+
+### Conventions de code (CLAUDE.md / .eslintrc / etc.)
+!`cat CLAUDE.md .claude/CLAUDE.md 2>/dev/null | head -30 || echo "Pas de CLAUDE.md"`
+
+### ESLint / Prettier config
+!`cat .eslintrc* .prettierrc* 2>/dev/null | head -20 || echo "Pas de config linter trouvée"`
+
+### TypeScript config
+!`cat tsconfig.json 2>/dev/null | head -20 || echo "Pas de tsconfig.json"`
+
+### Plan d'implémentation actif
+!`ls -la docs/planning/implementation-plan-*.md 2>/dev/null | tail -1 || echo "Pas de plan trouvé"`
+
+---
 
 ## Activation
 

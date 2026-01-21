@@ -1,7 +1,9 @@
 ---
 name: code-reviewer
 description: Effectue une revue de code approfondie en 3 passes successives pour optimiser et améliorer le code. Utiliser après les tests, quand on veut améliorer la qualité du code, ou avant de finaliser une feature.
+model: opus
 allowed-tools: Read, Grep, Glob
+argument-hint: <file-or-pr-number>
 knowledge:
   quality:
     - ../../knowledge/testing/test-quality.md
