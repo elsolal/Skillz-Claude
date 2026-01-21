@@ -1,3 +1,20 @@
+<!-- PROJECT-RULES-START -->
+# Project Rules
+
+> **Cette section est préservée lors des updates.** Ajoutez vos règles projet ici.
+
+```markdown
+# Exemple de règles à ajouter :
+# - Stack technique spécifique
+# - Conventions de nommage
+# - Règles métier
+# - Intégrations tierces
+```
+
+<!-- PROJECT-RULES-END -->
+
+---
+
 # D-EPCT+R Workflow v3.1
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.

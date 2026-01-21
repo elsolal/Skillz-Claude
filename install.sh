@@ -447,11 +447,48 @@ if [ -f "$SOURCE_CLAUDE/settings.json" ]; then
     fi
 fi
 
-# Handle CLAUDE.md (PRESERVE in update mode)
+# Handle CLAUDE.md (MERGE in update mode - preserve user's PROJECT-RULES section)
 echo -e "${GREEN}📄 Installing CLAUDE.md...${NC}"
 if [ -f "$TARGET_CLAUDE/CLAUDE.md" ]; then
     if [ "$UPDATE_MODE" = true ]; then
-        echo -e "   ${GREEN}✅ CLAUDE.md (preserved - your customizations)${NC}"
+        # Extract user's PROJECT-RULES section if it exists
+        USER_RULES=""
+        if grep -q "PROJECT-RULES-START" "$TARGET_CLAUDE/CLAUDE.md" 2>/dev/null; then
+            USER_RULES=$(sed -n '/<!-- PROJECT-RULES-START -->/,/<!-- PROJECT-RULES-END -->/p' "$TARGET_CLAUDE/CLAUDE.md")
+        fi
+
+        # Copy new CLAUDE.md
+        cp "$SOURCE_CLAUDE/CLAUDE.md" "$TARGET_CLAUDE/"
+
+        # Restore user's PROJECT-RULES section if they had customizations
+        if [ -n "$USER_RULES" ]; then
+            # Check if user actually customized (not just the default template)
+            if echo "$USER_RULES" | grep -qv "Exemple de règles à ajouter"; then
+                # Replace the default PROJECT-RULES section with user's version
+                # Create a temp file with user's rules
+                TEMP_FILE=$(mktemp)
+                echo "$USER_RULES" > "$TEMP_FILE"
+
+                # Use awk to replace the section
+                awk '
+                    /<!-- PROJECT-RULES-START -->/ {
+                        skip=1
+                        while ((getline line < "'"$TEMP_FILE"'") > 0) print line
+                        next
+                    }
+                    /<!-- PROJECT-RULES-END -->/ { skip=0; next }
+                    !skip { print }
+                ' "$TARGET_CLAUDE/CLAUDE.md" > "$TARGET_CLAUDE/CLAUDE.md.tmp"
+                mv "$TARGET_CLAUDE/CLAUDE.md.tmp" "$TARGET_CLAUDE/CLAUDE.md"
+                rm -f "$TEMP_FILE"
+
+                echo -e "   ${CYAN}🔄 CLAUDE.md (workflow updated, your rules preserved)${NC}"
+            else
+                echo -e "   ${CYAN}🔄 CLAUDE.md (updated)${NC}"
+            fi
+        else
+            echo -e "   ${CYAN}🔄 CLAUDE.md (updated)${NC}"
+        fi
     else
         echo -e "   ${YELLOW}⚠️  CLAUDE.md exists - creating CLAUDE.d-epct.md instead${NC}"
         cp "$SOURCE_CLAUDE/CLAUDE.md" "$TARGET_CLAUDE/CLAUDE.d-epct.md"
@@ -487,7 +524,7 @@ echo -e "   ${CYAN}🔄 Templates (18 files)${NC}"
 echo -e "   ${CYAN}🔄 Examples (3 projects)${NC}"
 echo ""
 echo -e "${GREEN}Preserved (your customizations):${NC}"
-echo -e "   ${GREEN}✅ CLAUDE.md${NC}"
+echo -e "   ${GREEN}✅ CLAUDE.md PROJECT-RULES section${NC}"
 echo -e "   ${GREEN}✅ settings.json${NC}"
 echo -e "   ${GREEN}✅ mcp.json${NC}"
 else
