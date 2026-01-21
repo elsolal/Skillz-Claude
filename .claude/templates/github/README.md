@@ -8,8 +8,9 @@ Templates pour les Pull Requests et Issues GitHub.
 # Créer le dossier .github
 mkdir -p .github
 
-# Copier le template PR
+# Copier tous les templates
 cp .claude/templates/github/PULL_REQUEST_TEMPLATE.md .github/
+cp -r .claude/templates/github/ISSUE_TEMPLATE .github/
 ```
 
 ## Templates disponibles
@@ -27,9 +28,42 @@ Template standard pour les Pull Requests :
 | Screenshots | Pour les changements UI |
 | Closes # | Lien vers l'issue |
 
-### Personnalisation
+### ISSUE_TEMPLATE/
 
-Vous pouvez personnaliser le template selon vos besoins :
+Templates pour les Issues GitHub :
+
+| Template | Description | Label auto |
+|----------|-------------|------------|
+| `bug_report.md` | Rapport de bug | `bug` |
+| `feature_request.md` | Demande de fonctionnalité | `enhancement` |
+| `config.yml` | Configuration (liens, options) | - |
+
+#### bug_report.md
+
+Sections :
+- Description du bug
+- Steps to Reproduce
+- Expected vs Actual Behavior
+- Screenshots
+- Environment (OS, Node, Browser)
+
+#### feature_request.md
+
+Sections :
+- Problem statement
+- Proposed Solution
+- Alternatives Considered
+- Use Case
+
+#### config.yml
+
+Configure les options des issues :
+- `blank_issues_enabled` : Autoriser les issues vides
+- `contact_links` : Liens vers documentation, discussions
+
+## Personnalisation
+
+### PR Template
 
 ```markdown
 ## Summary
@@ -44,7 +78,21 @@ Vous pouvez personnaliser le template selon vos besoins :
 - [ ] Code review demandée
 ```
 
-### Templates multiples
+### Issue Templates
+
+Modifiez les templates selon vos besoins :
+
+```yaml
+---
+name: Custom Template
+about: Description de votre template
+title: '[PREFIX] '
+labels: label1, label2
+assignees: username
+---
+```
+
+### Templates multiples PRs
 
 Pour différents types de PRs, créez un dossier :
 
@@ -57,41 +105,3 @@ Pour différents types de PRs, créez un dossier :
 ```
 
 Les contributeurs pourront choisir le template via `?template=feature.md`.
-
-## Issue Templates (optionnel)
-
-Vous pouvez aussi ajouter des templates d'issues :
-
-```
-.github/
-├── ISSUE_TEMPLATE/
-│   ├── bug_report.md
-│   ├── feature_request.md
-│   └── config.yml
-```
-
-Exemple `bug_report.md` :
-
-```markdown
----
-name: Bug Report
-about: Report a bug
-labels: bug
----
-
-## Description
-<!-- What happened? -->
-
-## Steps to reproduce
-1.
-2.
-3.
-
-## Expected behavior
-<!-- What should have happened? -->
-
-## Environment
-- OS:
-- Node version:
-- Browser:
-```

@@ -1,4 +1,4 @@
-# D-EPCT+R Workflow v2.9
+# D-EPCT+R Workflow v3.0
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -39,7 +39,7 @@
 
 ---
 
-## Commandes (16)
+## Commandes (17)
 
 ### Mode Manuel (avec validation)
 
@@ -67,7 +67,8 @@
 /refactor <file>        # Refactoring ciblé avec review
 /docs [type]            # Génère documentation (readme|api|guide|all)
 /changelog [version]    # Génère CHANGELOG.md
-/metrics                # Dashboard métriques projet (NEW v2.9)
+/metrics                # Dashboard métriques projet
+/init [template]        # Scaffolding projet (NEW v3.0)
 ```
 
 ### Configuration RALPH
@@ -82,7 +83,7 @@
 
 ---
 
-## Skills (14)
+## Skills (15)
 
 ### Phase Planning
 
@@ -92,7 +93,8 @@
 | `pm-prd` | Product Requirements | Mode **FULL** (complet) ou **LIGHT** (simplifié), auto-détection, **auto-trigger UX/UI** |
 | `architect` | Architecture technique | Stack, structure, data model, APIs, ADRs |
 | `pm-stories` | Epics + Stories | INVEST, Given/When/Then, **Implementation Readiness Check** (score /15) |
-| `api-designer` | Design d'API (NEW v2.9) | **OpenAPI 3.1**, REST/GraphQL, versioning, rate limiting |
+| `api-designer` | Design d'API | **OpenAPI 3.1**, REST/GraphQL, versioning, rate limiting |
+| `database-designer` | Design de BDD (NEW v3.0) | **ERD**, migrations, indexes, Prisma/Drizzle |
 
 ### Phase Design (optionnelle, auto-triggered)
 
@@ -112,6 +114,52 @@
 | `test-runner` | Tests | Mode **ATDD** (tests first) ou Standard, priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité (NEW v2.8) | **OWASP Top 10**, dépendances, secrets, scoring |
+
+---
+
+## Fonctionnalités avancées (v3.0)
+
+### Skill database-designer
+
+Nouveau skill pour concevoir des schémas de base de données :
+
+```bash
+/database-designer blog-platform    # Design DB
+/database-designer --orm prisma     # Avec ORM spécifique
+```
+
+**Fonctionnalités** :
+- **ERD** : Diagramme entité-relation en ASCII
+- **Migrations** : SQL, Prisma, ou Drizzle
+- **Indexes** : Stratégie d'indexation optimale
+- **Relations** : 1:1, 1:N, N:M avec FK
+- **Seed Data** : Données de test
+
+### Commande /init
+
+Scaffolding de projet avec templates :
+
+```bash
+/init next              # Next.js 14 + TypeScript
+/init express           # Express.js API
+/init api               # API minimaliste (Hono)
+/init cli               # CLI avec Commander.js
+/init lib               # Library npm
+```
+
+**Options** : `--db postgres`, `--auth`, `--docker`, `--ci`
+
+### Issue Templates GitHub
+
+Templates pour les issues dans `.claude/templates/github/ISSUE_TEMPLATE/` :
+
+| Template | Description | Label |
+|----------|-------------|-------|
+| `bug_report.md` | Rapport de bug | `bug` |
+| `feature_request.md` | Demande de feature | `enhancement` |
+| `config.yml` | Configuration | - |
+
+**Installation** : `cp -r .claude/templates/github/ISSUE_TEMPLATE .github/`
 
 ---
 

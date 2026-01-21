@@ -1,13 +1,13 @@
-# D-EPCT+R Workflow v2.9
+# D-EPCT+R Workflow v3.0
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
 > ✅ **Mode Manuel** - Validation humaine à chaque étape
 > ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
-> ✅ **API Designer** - OpenAPI 3.1, REST/GraphQL, versioning (NEW v2.9)
-> ✅ **Dashboard /metrics** - Health score, coverage, issues (NEW v2.9)
-> ✅ **PR Templates** - Templates GitHub pour PRs (NEW v2.9)
-> ✅ **Security Auditor** - Audit OWASP, dépendances, secrets
+> ✅ **Database Designer** - ERD, migrations, Prisma/Drizzle (NEW v3.0)
+> ✅ **Commande /init** - Scaffolding Next.js, Express, API, CLI (NEW v3.0)
+> ✅ **Issue Templates** - Bug report, feature request (NEW v3.0)
+> ✅ **API Designer** - OpenAPI 3.1, REST/GraphQL, versioning
 > ✅ **35+ fichiers Knowledge** - Base de connaissances testing & workflows
 > ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
@@ -139,7 +139,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Commandes (16)
+## Commandes (17)
 
 ### Mode Manuel (avec validation)
 
@@ -167,7 +167,8 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /refactor <file>        # Refactoring ciblé avec review
 /docs [type]            # Génère documentation (readme|api|guide|all)
 /changelog [version]    # Génère CHANGELOG.md
-/metrics                # Dashboard métriques projet (NEW v2.9)
+/metrics                # Dashboard métriques projet
+/init [template]        # Scaffolding projet (NEW v3.0)
 ```
 
 ### Configuration RALPH
@@ -182,7 +183,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Skills (14)
+## Skills (15)
 
 ### Phase Planning
 
@@ -192,7 +193,8 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `pm-prd` | Product Requirements | Mode **FULL/LIGHT** auto-détecté, templates, **auto-trigger UX/UI** |
 | `architect` | Architecture technique | Stack, structure, data model, APIs, ADRs |
 | `pm-stories` | Epics + Stories | INVEST, Given/When/Then, **Readiness Check /15** |
-| `api-designer` | Design d'API (NEW) | **OpenAPI 3.1**, REST/GraphQL, versioning, rate limiting |
+| `api-designer` | Design d'API | **OpenAPI 3.1**, REST/GraphQL, versioning, rate limiting |
+| `database-designer` | Design de BDD (NEW) | **ERD**, migrations, indexes, Prisma/Drizzle |
 
 ### Phase Design (optionnelle, auto-triggered)
 
@@ -212,6 +214,44 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité (NEW) | **OWASP Top 10**, dépendances, secrets, scoring |
+
+---
+
+## Fonctionnalités v3.0
+
+### Skill database-designer
+
+Design de schémas de base de données :
+
+```bash
+/database-designer blog-platform    # Design DB
+/database-designer --orm prisma     # Avec ORM
+```
+
+**Fonctionnalités** : ERD ASCII, Migrations (SQL/Prisma/Drizzle), Indexes, Relations, Seed data
+
+### Commande /init
+
+Scaffolding de projet :
+
+```bash
+/init next              # Next.js 14 + TypeScript
+/init express           # Express.js API
+/init api               # API minimaliste (Hono)
+/init cli               # CLI avec Commander.js
+/init lib               # Library npm
+```
+
+**Options** : `--db postgres`, `--auth`, `--docker`, `--ci`
+
+### Issue Templates GitHub
+
+Templates pour issues dans `.claude/templates/github/ISSUE_TEMPLATE/` :
+
+| Template | Label |
+|----------|-------|
+| `bug_report.md` | `bug` |
+| `feature_request.md` | `enhancement` |
 
 ---
 
@@ -452,7 +492,7 @@ knowledge:
 ├── settings.json                    # Config hooks RALPH
 ├── hooks/
 │   └── stop-hook.sh                 # Hook RALPH (intercepte exit)
-├── commands/                        # 16 commandes
+├── commands/                        # 17 commandes
 │   ├── discovery.md
 │   ├── feature.md
 │   ├── auto-loop.md
@@ -466,7 +506,8 @@ knowledge:
 │   ├── refactor.md
 │   ├── docs.md
 │   ├── changelog.md
-│   └── metrics.md                   # NEW v2.9
+│   ├── metrics.md
+│   └── init.md                      # NEW v3.0
 ├── templates/
 │   ├── github-actions/              # CI/CD templates
 │   │   ├── ci.yml
@@ -474,7 +515,12 @@ knowledge:
 │   │   ├── security.yml
 │   │   ├── deploy.yml
 │   │   └── dependabot.yml
-│   └── github/                      # NEW v2.9
+│   └── github/
+│       ├── PULL_REQUEST_TEMPLATE.md
+│       └── ISSUE_TEMPLATE/          # NEW v3.0
+│           ├── bug_report.md
+│           ├── feature_request.md
+│           └── config.yml
 ├── knowledge/                       # 35+ fichiers
 │   ├── tea-index.csv                # Index des fragments
 │   ├── testing/                     # 32 fichiers
@@ -490,7 +536,7 @@ knowledge:
 │       ├── prd-template.md
 │       ├── domain-complexity.csv
 │       └── project-types.csv
-└── skills/                          # 14 skills
+└── skills/                          # 15 skills
     ├── idea-brainstorm/
     ├── pm-prd/
     ├── ux-designer/
@@ -504,7 +550,8 @@ knowledge:
     ├── test-runner/
     ├── code-reviewer/
     ├── security-auditor/
-    └── api-designer/                # NEW v2.9
+    ├── api-designer/
+    └── database-designer/           # NEW v3.0
 
 docs/                                # Output documents
 ├── planning/
@@ -585,7 +632,26 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v2.9.0 (Current)
+### v3.0.0 (Current)
+
+**Skill database-designer**
+- Nouveau skill pour concevoir des schémas de base de données
+- Génération ERD en ASCII art
+- Migrations SQL, Prisma, ou Drizzle
+- Stratégie d'indexation automatique
+- Support relations 1:1, 1:N, N:M
+
+**Commande /init**
+- Scaffolding de projets avec 5 templates
+- Next.js, Express, API (Hono), CLI, Library
+- Options : --db, --auth, --docker, --ci
+
+**Issue Templates GitHub**
+- Templates bug_report.md et feature_request.md
+- Configuration config.yml pour liens et options
+- Labels automatiques (bug, enhancement)
+
+### v2.9.0
 
 **Skill api-designer**
 - Nouveau skill pour concevoir des APIs REST/GraphQL
