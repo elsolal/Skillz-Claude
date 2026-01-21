@@ -4,6 +4,10 @@ description: Écrit et exécute les tests pour valider l'implémentation. Utilis
 model: opus
 allowed-tools: Read, Grep, Glob, Write, Edit, Bash
 argument-hint: <file-or-directory-to-test>
+hooks:
+  post_tool_call:
+    - matcher: "Bash.*npm test|Bash.*npm run test|Bash.*jest|Bash.*vitest|Bash.*pytest"
+      command: "npm run coverage 2>/dev/null | tail -10 || echo 'Coverage non disponible'"
 knowledge:
   core:
     - ../../knowledge/testing/test-levels-framework.md

@@ -1,12 +1,13 @@
-# D-EPCT+R Workflow v2.5
+# D-EPCT+R Workflow v2.6
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
 > ✅ **Mode Manuel** - Validation humaine à chaque étape
 > ✅ **Mode RALPH** - Boucle autonome jusqu'à complétion
 > ✅ **35+ fichiers Knowledge** - Base de connaissances testing & workflows
-> ✅ **Structure BMAD-inspired** - Skills avec Activation, Principes, Règles
-> ✅ **UX/UI Design** - Skills optionnels auto-triggered pour le design
+> ✅ **Dynamic Context Injection** - Chargement automatique du contexte pertinent
+> ✅ **Hooks automatiques** - Auto-lint, coverage, auth checks
+> ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
 ## Installation
 
@@ -136,27 +137,34 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## 2 Modes d'exécution
+## Commandes (12)
 
-### Mode Manuel (défaut)
-
-Validation humaine à chaque étape du workflow.
+### Mode Manuel (avec validation)
 
 ```bash
-/discovery              # Planning complet avec validation
-/feature #123           # Développement avec validation
+/discovery              # Planning complet avec validation à chaque étape
+/feature [issue]        # Implémentation avec validation à chaque étape
 ```
 
 ### Mode RALPH (autonome)
 
-Boucle automatique jusqu'à complétion - inspiré du [protocole RALPH](https://ghuntley.com/ralph/).
+```bash
+/auto-loop "prompt"     # Boucle générique sur une tâche
+/auto-discovery "idée"  # Planning complet en autonome
+/auto-feature #123      # Implémentation complète en autonome
+/cancel-ralph           # Arrêter le mode RALPH
+```
+
+### Utilitaires (NEW v2.6)
 
 ```bash
-/auto-loop "prompt"     # Boucle générique
-/auto-discovery "idée"  # Planning autonome
-/auto-feature #123      # Dev autonome
-/cancel-ralph           # Arrêter la boucle
+/pr-review #123         # Review une PR GitHub (3 passes)
+/quick-fix "desc"       # Fix rapide sans workflow complet
+/refactor <file>        # Refactoring ciblé avec review
+/docs [type]            # Génère documentation (readme|api|guide|all)
 ```
+
+### Configuration RALPH
 
 | Commande | Max Iter | Timeout | Completion Promise |
 |----------|----------|---------|-------------------|
@@ -172,7 +180,7 @@ Boucle automatique jusqu'à complétion - inspiré du [protocole RALPH](https://
 
 ### Phase Planning
 
-| Skill | Rôle | Fonctionnalités v2.5 |
+| Skill | Rôle | Fonctionnalités v2.6 |
 |-------|------|----------------------|
 | `idea-brainstorm` | Exploration créative | Mode **Creative** ou **Research-first**, SCAMPER, Five Whys, **auto-trigger UX/UI** |
 | `pm-prd` | Product Requirements | Mode **FULL/LIGHT** auto-détecté, templates, **auto-trigger UX/UI** |
@@ -181,39 +189,107 @@ Boucle automatique jusqu'à complétion - inspiré du [protocole RALPH](https://
 
 ### Phase Design (optionnelle, auto-triggered)
 
-| Skill | Rôle | Fonctionnalités v2.5 |
+| Skill | Rôle | Fonctionnalités v2.6 |
 |-------|------|----------------------|
 | `ux-designer` | Expérience utilisateur | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen |
 | `ui-designer` | Design system | **Tokens** (couleurs, typo, spacing), composants UI, guidelines accessibilité |
 
 ### Phase Développement
 
-| Skill | Rôle | Fonctionnalités v2.5 |
+| Skill | Rôle | Fonctionnalités v2.6 |
 |-------|------|----------------------|
 | `github-issue-reader` | Lecture d'issues | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), G/W/T |
 | `codebase-explainer` | Analyse du code | **Impact mapping**, patterns, flux, risques |
 | `implementation-planner` | Planification | **Complexité S/M/L**, étapes atomiques, timeline |
-| `code-implementer` | Implémentation | **Lint/types obligatoires** par étape |
-| `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3 |
+| `code-implementer` | Implémentation | **Lint/types obligatoires**, **hook auto-lint** |
+| `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 
 ---
 
-## Structure SKILL.md (v2.5)
+## Fonctionnalités v2.6
 
-Chaque skill suit une structure standardisée inspirée de [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD) :
+### Dynamic Context Injection
+
+Tous les skills chargent automatiquement le contexte pertinent au démarrage :
+
+| Skill | Contexte auto-chargé |
+|-------|---------------------|
+| `github-issue-reader` | Issue GitHub, PRs liées |
+| `codebase-explainer` | Structure projet, package.json, CLAUDE.md |
+| `idea-brainstorm` | Brainstorms existants, PRDs |
+| `implementation-planner` | PRD, architecture, stories, analyse codebase |
+| `test-runner` | Config test, tests existants, scripts npm |
+| `code-implementer` | CLAUDE.md, ESLint, tsconfig, plan actif |
+| `pm-prd` | Brainstorms, PRDs existants, UX design |
+| `architect` | PRD actif, stack existant, structure projet |
+| `pm-stories` | PRD, architecture, stories existantes, GitHub repo |
+| `code-reviewer` | Fichiers modifiés, diff git, erreurs lint |
+| `ux-designer` | PRD, brainstorm, UX existant |
+| `ui-designer` | UX design, tokens existants, framework détecté |
+
+### Hooks automatiques
+
+| Skill | Type | Trigger | Action |
+|-------|------|---------|--------|
+| `code-implementer` | post | Edit/Write | Auto-lint |
+| `test-runner` | post | npm test | Affiche coverage |
+| `pm-stories` | pre | create_issue | Vérifie GitHub auth |
+
+### Claude Opus
+
+Tous les skills utilisent **Claude Opus** (`model: opus`) pour une intelligence maximale.
+
+### Argument Hints
+
+Chaque skill affiche un hint pour guider l'utilisateur :
+
+```bash
+/idea-brainstorm <idea-description>
+/github-issue-reader <issue-number-or-url>
+/implementation-planner <prd-or-issue-reference>
+/test-runner <file-or-directory-to-test>
+/code-reviewer <file-or-pr-number>
+```
+
+### Nouvelles commandes utilitaires
+
+| Commande | Description |
+|----------|-------------|
+| `/pr-review #123` | Review une PR GitHub avec les 3 passes (Correctness → Readability → Performance) |
+| `/quick-fix "desc"` | Fix rapide sans workflow complet - idéal pour typos, config, petits bugs |
+| `/refactor <file>` | Refactoring ciblé avec validation des tests avant/après |
+| `/docs [type]` | Génère documentation : `readme`, `api`, `guide`, ou `all` |
+
+---
+
+## Structure SKILL.md (v2.6)
+
+Chaque skill suit une structure standardisée :
 
 ```yaml
 ---
 name: skill-name
 description: Description + triggers
+model: opus                       # Intelligence maximale
+context: fork                     # Exécution isolée
+agent: Plan | Explore             # Type d'agent
+allowed-tools: [tools]            # Outils autorisés
+argument-hint: <hint>             # Guide utilisateur
+user-invocable: true | false      # Appelable directement
+hooks:                            # Hooks automatiques
+  pre_tool_call: [...]
+  post_tool_call: [...]
 knowledge:
-  core: [...]      # Chargé automatiquement
-  advanced: [...]  # Chargé si besoin
-  debugging: [...] # Chargé si problème
+  core: [...]                     # Chargé automatiquement
+  advanced: [...]                 # Chargé si besoin
+  debugging: [...]                # Chargé si problème
 ---
 
 # Skill Name
+
+## 📥 Contexte chargé automatiquement
+!`commande shell pour charger contexte`
 
 ## Activation
 > Checklist de démarrage obligatoire
@@ -240,18 +316,22 @@ knowledge:
 
 ```
 .claude/
-├── CLAUDE.md                        # Instructions projet (ce fichier)
+├── CLAUDE.md                        # Instructions projet
 ├── settings.json                    # Config hooks RALPH
 ├── hooks/
 │   └── stop-hook.sh                 # Hook RALPH (intercepte exit)
-├── commands/                        # 6 commandes
+├── commands/                        # 12 commandes
 │   ├── discovery.md
 │   ├── feature.md
 │   ├── auto-loop.md
 │   ├── auto-discovery.md
 │   ├── auto-feature.md
-│   └── cancel-ralph.md
-├── knowledge/                       # 📚 35+ fichiers
+│   ├── cancel-ralph.md
+│   ├── pr-review.md                 # NEW v2.6
+│   ├── quick-fix.md                 # NEW v2.6
+│   ├── refactor.md                  # NEW v2.6
+│   └── docs.md                      # NEW v2.6
+├── knowledge/                       # 35+ fichiers
 │   ├── tea-index.csv                # Index des fragments
 │   ├── testing/                     # 32 fichiers
 │   │   ├── test-levels-framework.md
@@ -269,8 +349,8 @@ knowledge:
 └── skills/                          # 12 skills
     ├── idea-brainstorm/
     ├── pm-prd/
-    ├── ux-designer/                 # NEW - UX Design
-    ├── ui-designer/                 # NEW - UI Design
+    ├── ux-designer/
+    ├── ui-designer/
     ├── architect/
     ├── pm-stories/
     ├── github-issue-reader/
@@ -283,9 +363,9 @@ knowledge:
 docs/                                # Output documents
 ├── planning/
 │   ├── brainstorms/
-│   ├── ux/                          # NEW - UX docs
+│   ├── ux/
 │   ├── prd/
-│   ├── ui/                          # NEW - UI docs
+│   ├── ui/
 │   └── architecture/
 ├── stories/
 │   └── EPIC-{num}-{slug}/
@@ -350,35 +430,30 @@ docs/                                # Output documents
 
 ---
 
-## Fonctionnalités v2.5
-
-### Nouvelles fonctionnalités
-
-| Skill | Feature | Description |
-|-------|---------|-------------|
-| `ux-designer` | **NEW** | Personas, user journeys, wireframes textuels, heuristiques Nielsen |
-| `ui-designer` | **NEW** | Design tokens, composants UI specs, guidelines accessibilité |
-| `idea-brainstorm` | **Auto-trigger UX/UI** | Évalue et recommande automatiquement les phases design |
-| `pm-prd` | **Auto-trigger UX/UI** | Évalue et recommande automatiquement les phases design |
-
-### Déclenchement automatique UX/UI
-
-| Skill | Critères de déclenchement | Mots-clés |
-|-------|--------------------------|-----------|
-| `ux-designer` | 3+ écrans, parcours multi-étapes, onboarding | "parcours", "navigation", "UX" |
-| `ui-designer` | 5+ composants, pas de design system existant | "design", "composants", "style" |
-
-### Structure enrichie
-
-Tous les skills ont maintenant :
-- `## Activation` - Checklist de démarrage
-- `## Rôle & Principes` - Mindset et frameworks
-- `## Règles` - ⛔ Interdits + ✅ Obligations
-- `## Transitions` - Liens vers skills suivants
-
----
-
 ## Changelog
+
+### v2.6.0 (Current)
+
+**Dynamic Context Injection**
+- Tous les 12 skills chargent automatiquement le contexte pertinent au démarrage
+- Utilisation de la syntaxe `!`shell command`` pour injection dynamique
+
+**Hooks automatiques**
+- `code-implementer` : Auto-lint après chaque Edit/Write
+- `test-runner` : Affiche coverage après npm test
+- `pm-stories` : Vérifie GitHub auth avant create_issue
+
+**Claude Opus partout**
+- Tous les skills utilisent `model: opus` pour une intelligence maximale
+
+**Nouvelles commandes utilitaires**
+- `/pr-review #123` : Review PR GitHub avec 3 passes
+- `/quick-fix "desc"` : Fix rapide sans workflow complet
+- `/refactor <file>` : Refactoring ciblé avec review
+- `/docs [type]` : Génère documentation (readme|api|guide|all)
+
+**Argument Hints**
+- Tous les skills affichent un hint pour guider l'utilisateur
 
 ### v2.5.0
 - **NEW: UX Designer** : Personas, user journeys, wireframes textuels, heuristiques Nielsen

@@ -1,4 +1,4 @@
-# D-EPCT+R Workflow v2.5
+# D-EPCT+R Workflow v2.6
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -39,7 +39,7 @@
 
 ---
 
-## Commandes
+## Commandes (12)
 
 ### Mode Manuel (avec validation)
 
@@ -55,6 +55,15 @@
 /auto-discovery "idée"  # Planning complet en autonome
 /auto-feature #123      # Implémentation complète en autonome
 /cancel-ralph           # Arrêter le mode RALPH
+```
+
+### Utilitaires
+
+```bash
+/pr-review #123         # Review une PR GitHub (3 passes)
+/quick-fix "desc"       # Fix rapide sans workflow complet
+/refactor <file>        # Refactoring ciblé avec review
+/docs [type]            # Génère documentation (readme|api|guide|all)
 ```
 
 ### Configuration RALPH
@@ -94,13 +103,60 @@
 | `github-issue-reader` | Lecture d'issues | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), Given/When/Then |
 | `codebase-explainer` | Analyse du code | **Impact mapping**, patterns, flux de données, risques |
 | `implementation-planner` | Planification | **Complexité S/M/L**, étapes atomiques, timeline, risques |
-| `code-implementer` | Implémentation | Validation **lint/types obligatoire** par étape |
-| `test-runner` | Tests | Mode **ATDD** (tests first) ou Standard, priorités P0-P3 |
+| `code-implementer` | Implémentation | Validation **lint/types obligatoire** par étape, **hook auto-lint** |
+| `test-runner` | Tests | Mode **ATDD** (tests first) ou Standard, priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 
 ---
 
-## Structure des Skills (v2.4)
+## Fonctionnalités avancées (v2.6)
+
+### Dynamic Context Injection
+
+Tous les skills chargent automatiquement le contexte pertinent au démarrage :
+
+| Skill | Contexte auto-chargé |
+|-------|---------------------|
+| `github-issue-reader` | Issue GitHub, PRs liées |
+| `codebase-explainer` | Structure projet, package.json, CLAUDE.md |
+| `idea-brainstorm` | Brainstorms existants, PRDs |
+| `implementation-planner` | PRD, architecture, stories, analyse codebase |
+| `test-runner` | Config test, tests existants, scripts npm |
+| `code-implementer` | CLAUDE.md, ESLint, tsconfig, plan actif |
+| `pm-prd` | Brainstorms, PRDs existants, UX design |
+| `architect` | PRD actif, stack existant, structure projet |
+| `pm-stories` | PRD, architecture, stories existantes, GitHub repo |
+| `code-reviewer` | Fichiers modifiés, diff git, erreurs lint |
+| `ux-designer` | PRD, brainstorm, UX existant |
+| `ui-designer` | UX design, tokens existants, framework détecté |
+
+### Hooks automatiques
+
+| Skill | Type | Trigger | Action |
+|-------|------|---------|--------|
+| `code-implementer` | post | Edit/Write | Auto-lint |
+| `test-runner` | post | npm test | Affiche coverage |
+| `pm-stories` | pre | create_issue | Vérifie GitHub auth |
+
+### Model Opus
+
+Tous les skills utilisent **Claude Opus** pour une intelligence maximale.
+
+### Argument Hints
+
+Chaque skill affiche un hint pour guider l'utilisateur :
+
+```bash
+/idea-brainstorm <idea-description>
+/github-issue-reader <issue-number-or-url>
+/implementation-planner <prd-or-issue-reference>
+/test-runner <file-or-directory-to-test>
+/code-reviewer <file-or-pr-number>
+```
+
+---
+
+## Structure des Skills (v2.6)
 
 Chaque skill suit une structure standardisée :
 
@@ -108,13 +164,25 @@ Chaque skill suit une structure standardisée :
 ---
 name: skill-name
 description: Description + triggers
+model: opus
+context: fork                    # Exécution isolée
+agent: Plan | Explore           # Type d'agent
+allowed-tools: [tools]          # Outils autorisés
+argument-hint: <hint>           # Guide pour l'utilisateur
+user-invocable: true | false    # Appelable directement
+hooks:                          # Hooks automatiques
+  pre_tool_call: [...]
+  post_tool_call: [...]
 knowledge:
-  core: [fichiers chargés automatiquement]
-  advanced: [fichiers chargés si besoin]
-  debugging: [fichiers pour troubleshooting]
+  core: [fichiers auto-chargés]
+  advanced: [fichiers si besoin]
+  debugging: [fichiers troubleshooting]
 ---
 
 # Skill Name
+
+## 📥 Contexte chargé automatiquement
+!`commande shell pour charger contexte`
 
 ## Activation
 > Checklist de démarrage obligatoire

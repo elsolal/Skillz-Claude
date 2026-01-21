@@ -17,6 +17,22 @@ trigger:
 
 # UI Designer
 
+## 📥 Contexte UI chargé automatiquement
+
+### UX Design source
+!`ls -t docs/planning/ux/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -50 || echo "Pas d'UX design trouvé"`
+
+### Design tokens existants
+!`cat docs/planning/ui/tokens.css src/styles/tokens.css src/theme/tokens.* 2>/dev/null | head -40 || echo "Pas de tokens existants"`
+
+### UI existant (pour cohérence)
+!`ls -la docs/planning/ui/*.md 2>/dev/null | tail -5 || echo "Pas d'UI design existant"`
+
+### Framework frontend détecté
+!`cat package.json 2>/dev/null | grep -E '"(react|vue|angular|svelte|next|nuxt)"' || echo "Framework non détecté"`
+
+---
+
 ## Activation
 
 > **Au démarrage :**

@@ -17,6 +17,19 @@ trigger:
 
 # UX Designer
 
+## 📥 Contexte UX chargé automatiquement
+
+### PRD source (si existant)
+!`ls -t docs/planning/prd/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -40 || echo "Pas de PRD trouvé"`
+
+### Brainstorm source (si existant)
+!`ls -t docs/planning/brainstorms/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -40 || echo "Pas de brainstorm trouvé"`
+
+### UX existant (pour éviter doublons)
+!`ls -la docs/planning/ux/*.md 2>/dev/null | tail -5 || echo "Pas d'UX design existant"`
+
+---
+
 ## Activation
 
 > **Au démarrage :**

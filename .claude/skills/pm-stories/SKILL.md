@@ -6,9 +6,29 @@ agent: Plan
 model: opus
 allowed-tools: Read, Grep, Glob, Write, mcp__github__create_issue, mcp__github__get_issue, mcp__github__list_issues, mcp__github__update_issue
 argument-hint: <prd-or-architecture-file>
+hooks:
+  pre_tool_call:
+    - matcher: "mcp__github__create_issue"
+      command: "gh auth status 2>/dev/null || echo '⚠️ GitHub CLI non authentifié - les issues seront créées via MCP'"
 ---
 
 # PM-Stories
+
+## 📥 Contexte projet chargé automatiquement
+
+### PRD actif
+!`ls -t docs/planning/prd/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -60 || echo "Aucun PRD trouvé - REQUIS"`
+
+### Architecture (si mode FULL)
+!`ls -t docs/planning/architecture/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -40 || echo "Pas d'architecture trouvée"`
+
+### Stories existantes (pour éviter doublons)
+!`ls -la docs/stories/*/STORY-*.md 2>/dev/null | tail -10 || echo "Aucune story existante"`
+
+### GitHub repo info
+!`gh repo view --json name,owner,url 2>/dev/null || echo "⚠️ GitHub CLI non configuré - MCP GitHub sera utilisé"`
+
+---
 
 ## Activation
 

@@ -4,6 +4,10 @@ description: Effectue une revue de code approfondie en 3 passes successives pour
 model: opus
 allowed-tools: Read, Grep, Glob
 argument-hint: <file-or-pr-number>
+hooks:
+  post_tool_call:
+    - matcher: "Read"
+      command: "echo '--- Analysing file for review ---'"
 knowledge:
   quality:
     - ../../knowledge/testing/test-quality.md
@@ -17,6 +21,22 @@ knowledge:
 ---
 
 # Code Reviewer (3 Passes)
+
+## 📥 Contexte review chargé automatiquement
+
+### Fichiers modifiés récemment
+!`git diff --name-only HEAD~5 2>/dev/null | head -15 || echo "Pas de commits récents"`
+
+### Diff actuel (staged + unstaged)
+!`git diff --stat 2>/dev/null | tail -20 || echo "Pas de changements en cours"`
+
+### Derniers commits
+!`git log --oneline -5 2>/dev/null || echo "Pas d'historique git"`
+
+### ESLint/TypeScript errors actuels
+!`npm run lint 2>&1 | tail -20 || npm run typecheck 2>&1 | tail -20 || echo "Pas de linter configuré"`
+
+---
 
 ## Knowledge Base
 

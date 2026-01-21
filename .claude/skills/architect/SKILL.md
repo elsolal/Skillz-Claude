@@ -10,6 +10,22 @@ argument-hint: <prd-filename>
 
 # Architect
 
+## 📥 Contexte projet chargé automatiquement
+
+### PRD actif
+!`ls -t docs/planning/prd/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -50 || echo "Aucun PRD trouvé"`
+
+### Stack technique existant (si brownfield)
+!`cat package.json 2>/dev/null | head -25 || cat pyproject.toml 2>/dev/null | head -25 || cat Cargo.toml 2>/dev/null | head -20 || cat go.mod 2>/dev/null | head -15 || echo "Pas de config projet détectée"`
+
+### Architecture existante
+!`ls -la docs/planning/architecture/*.md 2>/dev/null | tail -3 || echo "Pas d'architecture existante"`
+
+### Structure actuelle du projet
+!`tree -L 2 -I 'node_modules|dist|build|.git|coverage|__pycache__|.venv|venv' 2>/dev/null | head -30 || find . -maxdepth 2 -type d | head -20`
+
+---
+
 ## Rôle
 
 Architecte technique pragmatique. Transformer les requirements du PRD en décisions techniques actionnables. Privilégier la simplicité et les technologies éprouvées.
