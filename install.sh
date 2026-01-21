@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v2.5 Installer
-# Install Claude Code skills + RALPH Mode + 35+ Knowledge Files
-# Structure BMAD-inspired avec Activation, Principes, Règles
-# NEW: UX Designer + UI Designer skills with auto-trigger
+# D-EPCT+R Workflow v3.1 Installer
+# Install Claude Code skills + RALPH Mode + 42 Knowledge Files + Templates
+# 16 skills, 15 commands, 18 templates
 #
 # Usage:
 #   # Fresh install
@@ -57,22 +56,22 @@ TARGET_DOCS="$TARGET_DIR/docs"
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
 if [ "$UPDATE_MODE" = true ]; then
-echo "║             D-EPCT+R Workflow v2.5 Updater                            ║"
+echo "║             D-EPCT+R Workflow v3.1 Updater                            ║"
 else
-echo "║             D-EPCT+R Workflow v2.5 Installer                          ║"
+echo "║             D-EPCT+R Workflow v3.1 Installer                          ║"
 fi
 echo "║                                                                       ║"
-echo "║   MODE MANUEL:  Validation humaine à chaque étape                     ║"
-echo "║   MODE RALPH:   Boucle autonome jusqu'à complétion                    ║"
-echo "║   KNOWLEDGE:    35+ fichiers (testing, workflows, PRD)                ║"
-echo "║   UX/UI:        Skills design optionnels avec auto-trigger            ║"
+echo "║   SKILLS:       16 (Planning, Design, Dev, Security, Performance)     ║"
+echo "║   COMMANDS:     15 (Manuel + RALPH + Utilitaires)                     ║"
+echo "║   TEMPLATES:    18 (CI/CD, Git Hooks, DevContainer, GitHub)           ║"
+echo "║   KNOWLEDGE:    42 fichiers (testing, workflows)                      ║"
 echo "╚═══════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
 # Update mode info
 if [ "$UPDATE_MODE" = true ]; then
     echo -e "${CYAN}🔄 Mode UPDATE activé${NC}"
-    echo -e "   → Skills, commands, hooks, examples, knowledge seront mis à jour"
+    echo -e "   → Skills, commands, hooks, examples, knowledge, templates seront mis à jour"
     echo -e "   → CLAUDE.md, settings.json, mcp.json seront préservés"
     echo ""
 fi
@@ -158,6 +157,10 @@ mkdir -p "$TARGET_CLAUDE/commands"
 mkdir -p "$TARGET_CLAUDE/hooks"
 mkdir -p "$TARGET_CLAUDE/knowledge/testing"
 mkdir -p "$TARGET_CLAUDE/knowledge/workflows"
+mkdir -p "$TARGET_CLAUDE/templates/github-actions"
+mkdir -p "$TARGET_CLAUDE/templates/github/ISSUE_TEMPLATE"
+mkdir -p "$TARGET_CLAUDE/templates/git-hooks"
+mkdir -p "$TARGET_CLAUDE/templates/devcontainer"
 
 # Create docs structure
 echo -e "${GREEN}📁 Creating docs structure...${NC}"
@@ -217,7 +220,7 @@ if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
 fi
 
 # Copy skills
-echo -e "${GREEN}📁 Installing skills (12)...${NC}"
+echo -e "${GREEN}📁 Installing skills (16)...${NC}"
 for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
     if [ -d "$skill_dir" ]; then
         skill_name=$(basename "$skill_dir")
@@ -250,7 +253,7 @@ for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
 done
 
 # Copy commands
-echo -e "${GREEN}📁 Installing commands (6)...${NC}"
+echo -e "${GREEN}📁 Installing commands (15)...${NC}"
 for cmd_file in "$SOURCE_CLAUDE/commands"/*.md; do
     if [ -f "$cmd_file" ]; then
         cmd_name=$(basename "$cmd_file")
@@ -329,6 +332,87 @@ if [ -d "$SOURCE_CLAUDE/examples" ]; then
     done
 fi
 
+# Copy templates (NEW v3.0+)
+echo -e "${GREEN}📁 Installing templates (18 files)...${NC}"
+if [ -d "$SOURCE_CLAUDE/templates" ]; then
+    # GitHub Actions templates
+    if [ -d "$SOURCE_CLAUDE/templates/github-actions" ]; then
+        for file in "$SOURCE_CLAUDE/templates/github-actions"/*; do
+            if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                if [ "$UPDATE_MODE" = true ]; then
+                    cp "$file" "$TARGET_CLAUDE/templates/github-actions/"
+                    echo -e "   ${CYAN}🔄 github-actions/$filename${NC}"
+                else
+                    cp "$file" "$TARGET_CLAUDE/templates/github-actions/"
+                    echo -e "   ${GREEN}✅ github-actions/$filename${NC}"
+                fi
+            fi
+        done
+    fi
+
+    # GitHub templates (PR, Issues)
+    if [ -d "$SOURCE_CLAUDE/templates/github" ]; then
+        # Copy PR template
+        if [ -f "$SOURCE_CLAUDE/templates/github/PULL_REQUEST_TEMPLATE.md" ]; then
+            cp "$SOURCE_CLAUDE/templates/github/PULL_REQUEST_TEMPLATE.md" "$TARGET_CLAUDE/templates/github/"
+            if [ "$UPDATE_MODE" = true ]; then
+                echo -e "   ${CYAN}🔄 github/PULL_REQUEST_TEMPLATE.md${NC}"
+            else
+                echo -e "   ${GREEN}✅ github/PULL_REQUEST_TEMPLATE.md${NC}"
+            fi
+        fi
+        # Copy README
+        if [ -f "$SOURCE_CLAUDE/templates/github/README.md" ]; then
+            cp "$SOURCE_CLAUDE/templates/github/README.md" "$TARGET_CLAUDE/templates/github/"
+        fi
+        # Copy Issue templates
+        if [ -d "$SOURCE_CLAUDE/templates/github/ISSUE_TEMPLATE" ]; then
+            for file in "$SOURCE_CLAUDE/templates/github/ISSUE_TEMPLATE"/*; do
+                if [ -f "$file" ]; then
+                    filename=$(basename "$file")
+                    cp "$file" "$TARGET_CLAUDE/templates/github/ISSUE_TEMPLATE/"
+                    if [ "$UPDATE_MODE" = true ]; then
+                        echo -e "   ${CYAN}🔄 github/ISSUE_TEMPLATE/$filename${NC}"
+                    else
+                        echo -e "   ${GREEN}✅ github/ISSUE_TEMPLATE/$filename${NC}"
+                    fi
+                fi
+            done
+        fi
+    fi
+
+    # Git Hooks templates (NEW v3.1)
+    if [ -d "$SOURCE_CLAUDE/templates/git-hooks" ]; then
+        for file in "$SOURCE_CLAUDE/templates/git-hooks"/*; do
+            if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                cp "$file" "$TARGET_CLAUDE/templates/git-hooks/"
+                if [ "$UPDATE_MODE" = true ]; then
+                    echo -e "   ${CYAN}🔄 git-hooks/$filename${NC}"
+                else
+                    echo -e "   ${GREEN}✅ git-hooks/$filename${NC}"
+                fi
+            fi
+        done
+    fi
+
+    # DevContainer templates (NEW v3.1)
+    if [ -d "$SOURCE_CLAUDE/templates/devcontainer" ]; then
+        for file in "$SOURCE_CLAUDE/templates/devcontainer"/*; do
+            if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                cp "$file" "$TARGET_CLAUDE/templates/devcontainer/"
+                if [ "$UPDATE_MODE" = true ]; then
+                    echo -e "   ${CYAN}🔄 devcontainer/$filename${NC}"
+                else
+                    echo -e "   ${GREEN}✅ devcontainer/$filename${NC}"
+                fi
+            fi
+        done
+    fi
+fi
+
 # Copy mcp.json (PRESERVE in update mode)
 echo -e "${GREEN}📄 Installing mcp.json...${NC}"
 if [ -f "$SOURCE_CLAUDE/mcp.json" ]; then
@@ -395,10 +479,11 @@ echo -e "║                       ✅ Update Complete!                         
 echo -e "╚═══════════════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${CYAN}Updated components:${NC}"
-echo -e "   ${CYAN}🔄 Skills (12 including UX/UI designers)${NC}"
-echo -e "   ${CYAN}🔄 Commands (6)${NC}"
+echo -e "   ${CYAN}🔄 Skills (16)${NC}"
+echo -e "   ${CYAN}🔄 Commands (15)${NC}"
 echo -e "   ${CYAN}🔄 Hooks${NC}"
-echo -e "   ${CYAN}🔄 Knowledge Base (35+ files)${NC}"
+echo -e "   ${CYAN}🔄 Knowledge Base (42 files)${NC}"
+echo -e "   ${CYAN}🔄 Templates (18 files)${NC}"
 echo -e "   ${CYAN}🔄 Examples (3 projects)${NC}"
 echo ""
 echo -e "${GREEN}Preserved (your customizations):${NC}"
@@ -412,26 +497,29 @@ echo -e "╚══════════════════════�
 echo ""
 echo -e "${CYAN}Installed components:${NC}"
 echo ""
-echo -e "${BLUE}  📚 Knowledge Base (35+ files):${NC}"
+echo -e "${BLUE}  📚 Knowledge Base (42 files):${NC}"
 echo "    testing/     32 files (test levels, priorities, factories, fixtures...)"
-echo "    workflows/   3 files (PRD template, complexity matrix, project types)"
+echo "    workflows/   10 files (PRD, architecture, stories, UX, UI templates...)"
+echo ""
+echo -e "${BLUE}  📂 Templates (18 files):${NC}"
+echo "    github-actions/  CI/CD workflows (ci, release, security, deploy)"
+echo "    github/          PR template, Issue templates"
+echo "    git-hooks/       pre-commit, commit-msg (Conventional Commits)"
+echo "    devcontainer/    Docker dev environment (Node.js, PostgreSQL, Redis)"
 echo ""
 echo -e "${BLUE}  📂 Examples (3 projects):${NC}"
 echo "    simple-api/      API REST simple (mode LIGHT)"
 echo "    blog-nextjs/     Blog Next.js (mode FULL)"
 echo "    saas-dashboard/  Dashboard SaaS (mode RALPH)"
 echo ""
-echo -e "${BLUE}  🔌 MCP Servers (3):${NC}"
-echo "    context7         Documentation up-to-date"
-echo "    figma            Extraction designs"
-echo "    chrome-devtools  Tests UI automatisés"
-echo ""
-echo -e "${BLUE}  Skills (12):${NC}"
-echo "    Planning:  idea-brainstorm, pm-prd, architect, pm-stories"
+echo -e "${BLUE}  Skills (16):${NC}"
+echo "    Planning:  idea-brainstorm, pm-prd, architect, pm-stories,"
+echo "               api-designer, database-designer"
 echo "    Design:    ux-designer, ui-designer (auto-triggered)"
 echo "    Dev:       github-issue-reader, codebase-explainer,"
 echo "               implementation-planner, code-implementer,"
 echo "               test-runner, code-reviewer"
+echo "    Audit:     security-auditor, performance-auditor"
 echo ""
 echo -e "${BLUE}  Commands - Mode Manuel:${NC}"
 echo "    /discovery           Planning avec validation"
@@ -442,6 +530,17 @@ echo "    /auto-loop \"prompt\"  Boucle générique"
 echo "    /auto-discovery      Planning autonome"
 echo "    /auto-feature #123   Dev autonome"
 echo "    /cancel-ralph        Arrêter la boucle"
+echo "    /resume              Reprendre session"
+echo ""
+echo -e "${BLUE}  Commands - Utilitaires:${NC}"
+echo "    /status              État du projet"
+echo "    /pr-review #123      Review PR (3 passes)"
+echo "    /quick-fix           Fix rapide"
+echo "    /refactor            Refactoring ciblé"
+echo "    /docs                Génère documentation"
+echo "    /changelog           Génère CHANGELOG"
+echo "    /metrics             Dashboard métriques"
+echo "    /init                Scaffolding projet"
 fi
 echo ""
 echo -e "${CYAN}Usage:${NC}"
