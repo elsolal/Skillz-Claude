@@ -5,6 +5,9 @@ model: opus
 allowed-tools: Read, Grep, Glob
 argument-hint: <file-or-pr-number>
 hooks:
+  pre_tool_call:
+    - matcher: "Read.*\\.ts|Read.*\\.js|Read.*\\.tsx|Read.*\\.jsx"
+      command: "npm test --passWithNoTests 2>/dev/null | tail -5 || echo '⚠️ Tests non exécutés - vérifier manuellement'"
   post_tool_call:
     - matcher: "Read"
       command: "echo '--- Analysing file for review ---'"

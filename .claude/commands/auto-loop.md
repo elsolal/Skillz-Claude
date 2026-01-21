@@ -23,6 +23,7 @@ Je vais travailler en **boucle autonome** jusqu'à complétion de ta tâche.
 │  ⏱️  Timeout      : 1h (default)                                 │
 │  ✅ Promise      : "DONE" (default)                             │
 │  📝 Logs         : docs/ralph-logs/${CLAUDE_SESSION_ID}.md      │
+│  🔍 Verbose      : OFF (use --verbose to enable)                │
 │                                                                 │
 │  ⚠️  Dangerous permissions: ENABLED                             │
 │                                                                 │
@@ -68,6 +69,7 @@ Le loop s'arrête quand :
 | `--timeout Xh` | 1h | Timeout global (1h, 2h, 30m) |
 | `--promise "TEXT"` | "DONE" | Texte de complétion |
 | `--no-log` | false | Désactiver les logs |
+| `--verbose` | false | Mode debug avec logs détaillés |
 
 ## Exemples
 
@@ -80,6 +82,9 @@ Le loop s'arrête quand :
 
 # Long running
 /auto-loop "Migre la base de données vers le nouveau schéma" --max 50 --timeout 2h
+
+# Mode verbose (debug)
+/auto-loop "Debug le problème de performance" --verbose
 ```
 
 ## Initialisation

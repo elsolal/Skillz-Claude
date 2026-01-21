@@ -137,7 +137,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Commandes (12)
+## Commandes (13)
 
 ### Mode Manuel (avec validation)
 
@@ -158,6 +158,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 ### Utilitaires (NEW v2.6)
 
 ```bash
+/status                 # État du projet (docs, issues, RALPH)
 /pr-review #123         # Review une PR GitHub (3 passes)
 /quick-fix "desc"       # Fix rapide sans workflow complet
 /refactor <file>        # Refactoring ciblé avec review
@@ -172,7 +173,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `/auto-discovery` | 30 | 1h | "DISCOVERY COMPLETE" |
 | `/auto-feature` | 50 | 2h | "FEATURE COMPLETE" |
 
-**Options:** `--max N`, `--timeout Xh`, `--promise "TEXT"`, `--no-log`
+**Options:** `--max N`, `--timeout Xh`, `--promise "TEXT"`, `--no-log`, `--verbose`
 
 ---
 
@@ -235,6 +236,8 @@ Tous les skills chargent automatiquement le contexte pertinent au démarrage :
 | `code-implementer` | post | Edit/Write | Auto-lint |
 | `test-runner` | post | npm test | Affiche coverage |
 | `pm-stories` | pre | create_issue | Vérifie GitHub auth |
+| `code-reviewer` | pre | Read (code files) | Exécute tests |
+| `architect` | pre | Write (architecture) | Vérifie PRD existe |
 
 ### Claude Opus
 
@@ -256,6 +259,7 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 | Commande | Description |
 |----------|-------------|
+| `/status` | Vue d'ensemble du projet : documents, issues GitHub, sessions RALPH |
 | `/pr-review #123` | Review une PR GitHub avec les 3 passes (Correctness → Readability → Performance) |
 | `/quick-fix "desc"` | Fix rapide sans workflow complet - idéal pour typos, config, petits bugs |
 | `/refactor <file>` | Refactoring ciblé avec validation des tests avant/après |
@@ -320,13 +324,14 @@ knowledge:
 ├── settings.json                    # Config hooks RALPH
 ├── hooks/
 │   └── stop-hook.sh                 # Hook RALPH (intercepte exit)
-├── commands/                        # 12 commandes
+├── commands/                        # 13 commandes
 │   ├── discovery.md
 │   ├── feature.md
 │   ├── auto-loop.md
 │   ├── auto-discovery.md
 │   ├── auto-feature.md
 │   ├── cancel-ralph.md
+│   ├── status.md                    # NEW v2.6
 │   ├── pr-review.md                 # NEW v2.6
 │   ├── quick-fix.md                 # NEW v2.6
 │   ├── refactor.md                  # NEW v2.6

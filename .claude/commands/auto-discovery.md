@@ -32,6 +32,7 @@ Je vais exécuter **tout le workflow de planning en autonome** :
 | Timeout | **1h** |
 | Completion promise | **"DISCOVERY COMPLETE"** |
 | Logs | `docs/ralph-logs/${CLAUDE_SESSION_ID}.md` |
+| Verbose | OFF (use `--verbose` to enable) |
 
 ## Ce que je vais faire automatiquement
 
@@ -70,6 +71,27 @@ Je vais exécuter **tout le workflow de planning en autonome** :
 - 📄 `docs/planning/architecture/ARCH-xxx.md` (si mode FULL)
 - 📁 `docs/stories/EPIC-xxx/` avec les stories
 - 🐙 Issues GitHub créées et liées
+
+## Arguments supportés
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `--max N` | 30 | Nombre max d'itérations |
+| `--timeout Xh` | 1h | Timeout global |
+| `--verbose` | false | Mode debug avec logs détaillés |
+
+## Mode Verbose
+
+Avec `--verbose`, chaque étape affiche :
+- État du contexte chargé
+- Décisions prises et pourquoi
+- Temps passé par phase
+- Problèmes rencontrés et solutions
+
+```bash
+# Exemple avec verbose
+/auto-discovery "Mon idée de projet" --verbose
+```
 
 ## Arrêt manuel
 

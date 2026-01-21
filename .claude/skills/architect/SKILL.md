@@ -6,6 +6,10 @@ agent: Plan
 model: opus
 allowed-tools: Read, Grep, Glob, Write
 argument-hint: <prd-filename>
+hooks:
+  pre_tool_call:
+    - matcher: "Write.*architecture"
+      command: "ls docs/planning/prd/*.md 2>/dev/null | head -1 || echo '⚠️ Aucun PRD trouvé - architecture sans PRD peut manquer de contexte'"
 ---
 
 # Architect

@@ -39,7 +39,7 @@
 
 ---
 
-## Commandes (12)
+## Commandes (13)
 
 ### Mode Manuel (avec validation)
 
@@ -60,6 +60,7 @@
 ### Utilitaires
 
 ```bash
+/status                 # État du projet (docs, issues, RALPH)
 /pr-review #123         # Review une PR GitHub (3 passes)
 /quick-fix "desc"       # Fix rapide sans workflow complet
 /refactor <file>        # Refactoring ciblé avec review
@@ -74,7 +75,7 @@
 | `/auto-discovery` | 30 | 1h | "DISCOVERY COMPLETE" |
 | `/auto-feature` | 50 | 2h | "FEATURE COMPLETE" |
 
-**Options :** `--max N`, `--timeout Xh`, `--promise "TEXT"`, `--no-log`
+**Options :** `--max N`, `--timeout Xh`, `--promise "TEXT"`, `--no-log`, `--verbose`
 
 ---
 
@@ -137,6 +138,8 @@ Tous les skills chargent automatiquement le contexte pertinent au démarrage :
 | `code-implementer` | post | Edit/Write | Auto-lint |
 | `test-runner` | post | npm test | Affiche coverage |
 | `pm-stories` | pre | create_issue | Vérifie GitHub auth |
+| `code-reviewer` | pre | Read (code files) | Exécute tests |
+| `architect` | pre | Write (architecture) | Vérifie PRD existe |
 
 ### Model Opus
 
@@ -222,8 +225,12 @@ knowledge:
 │   ├── network-first.md
 │   ├── test-healing-patterns.md
 │   └── ... (25 autres)
-└── workflows/                 # 3 fichiers
+└── workflows/                 # 7 fichiers
     ├── prd-template.md
+    ├── architecture-template.md   # NEW
+    ├── stories-template.md        # NEW
+    ├── ux-template.md             # NEW
+    ├── ui-template.md             # NEW
     ├── domain-complexity.csv
     └── project-types.csv
 ```

@@ -32,6 +32,7 @@ Je vais exécuter **tout le workflow de développement en autonome** :
 | Timeout | **2h** |
 | Completion promise | **"FEATURE COMPLETE"** |
 | Logs | `docs/ralph-logs/${CLAUDE_SESSION_ID}.md` |
+| Verbose | OFF (use `--verbose` to enable) |
 
 ## Ce que je vais faire automatiquement
 
@@ -88,6 +89,7 @@ Le loop considère la feature "COMPLETE" quand :
 | `URL` | URL complète de l'issue |
 | `--max N` | Override max iterations (default: 50) |
 | `--timeout Xh` | Override timeout (default: 2h) |
+| `--verbose` | Mode debug avec logs détaillés |
 
 ## Exemples
 
@@ -100,6 +102,9 @@ Le loop considère la feature "COMPLETE" quand :
 
 # Avec options
 /auto-feature #123 --max 100 --timeout 4h
+
+# Mode verbose (debug)
+/auto-feature #123 --verbose
 ```
 
 ---
