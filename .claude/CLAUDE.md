@@ -1,4 +1,4 @@
-# D-EPCT+R Workflow v2.7
+# D-EPCT+R Workflow v2.8
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -39,7 +39,7 @@
 
 ---
 
-## Commandes (14)
+## Commandes (15)
 
 ### Mode Manuel (avec validation)
 
@@ -55,7 +55,7 @@
 /auto-discovery "idée"  # Planning complet en autonome
 /auto-feature #123      # Implémentation complète en autonome
 /cancel-ralph           # Arrêter le mode RALPH
-/resume [session-id]    # Reprendre une session RALPH interrompue (NEW v2.7)
+/resume [session-id]    # Reprendre une session RALPH interrompue
 ```
 
 ### Utilitaires
@@ -66,6 +66,7 @@
 /quick-fix "desc"       # Fix rapide sans workflow complet
 /refactor <file>        # Refactoring ciblé avec review
 /docs [type]            # Génère documentation (readme|api|guide|all)
+/changelog [version]    # Génère CHANGELOG.md (NEW v2.8)
 ```
 
 ### Configuration RALPH
@@ -80,7 +81,7 @@
 
 ---
 
-## Skills (12)
+## Skills (13)
 
 ### Phase Planning
 
@@ -108,6 +109,52 @@
 | `code-implementer` | Implémentation | Validation **lint/types obligatoire** par étape, **hook auto-lint** |
 | `test-runner` | Tests | Mode **ATDD** (tests first) ou Standard, priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
+| `security-auditor` | Audit sécurité (NEW v2.8) | **OWASP Top 10**, dépendances, secrets, scoring |
+
+---
+
+## Fonctionnalités avancées (v2.8)
+
+### Security Auditor
+
+Nouveau skill pour auditer la sécurité du code :
+
+```bash
+/security-auditor src/          # Audit un dossier
+/security-auditor               # Audit tout le projet
+```
+
+**Analyses effectuées** :
+- **OWASP Top 10** : Injection, Auth, XSS, SSRF, etc.
+- **Dépendances** : CVE connus, versions obsolètes
+- **Secrets** : API keys, passwords, tokens exposés
+- **Configuration** : Headers, CORS, debug mode
+
+**Score** : `100 - (Critical×25) - (High×10) - (Medium×5) - (Low×1)`
+
+### GitHub Actions Templates
+
+Templates CI/CD prêts à l'emploi dans `.claude/templates/github-actions/` :
+
+| Template | Description |
+|----------|-------------|
+| `ci.yml` | Lint, Typecheck, Test, Build |
+| `release.yml` | Changelog + GitHub Release |
+| `security.yml` | npm audit, CodeQL, Secret scanning |
+| `deploy.yml` | Vercel, Netlify, AWS, Kubernetes |
+| `dependabot.yml` | Mises à jour automatiques |
+
+### Commande /changelog
+
+Génère CHANGELOG.md depuis les commits :
+
+```bash
+/changelog 2.8.0              # Version spécifique
+/changelog --since v2.7.0     # Depuis un tag
+/changelog --dry-run          # Prévisualiser
+```
+
+**Formats** : `conventional` (default), `keep-a-changelog`
 
 ---
 
@@ -262,7 +309,7 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 ---
 
-## Structure des Skills (v2.7)
+## Structure des Skills (v2.8)
 
 Chaque skill suit une structure standardisée :
 

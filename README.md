@@ -1,13 +1,13 @@
-# D-EPCT+R Workflow v2.7
+# D-EPCT+R Workflow v2.8
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
 > ✅ **Mode Manuel** - Validation humaine à chaque étape
 > ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
-> ✅ **Skill Chaining** - Transitions automatiques entre skills
-> ✅ **Output Validation** - Checklists de validation avec scores
+> ✅ **Security Auditor** - Audit OWASP, dépendances, secrets
+> ✅ **GitHub Actions** - Templates CI/CD prêts à l'emploi
+> ✅ **Changelog auto** - Génération depuis commits/issues
 > ✅ **35+ fichiers Knowledge** - Base de connaissances testing & workflows
-> ✅ **Dynamic Context Injection** - Chargement automatique du contexte pertinent
 > ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
 ## Installation
@@ -138,7 +138,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Commandes (14)
+## Commandes (15)
 
 ### Mode Manuel (avec validation)
 
@@ -154,7 +154,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /auto-discovery "idée"  # Planning complet en autonome
 /auto-feature #123      # Implémentation complète en autonome
 /cancel-ralph           # Arrêter le mode RALPH
-/resume [session-id]    # Reprendre une session RALPH (NEW v2.7)
+/resume [session-id]    # Reprendre une session RALPH
 ```
 
 ### Utilitaires
@@ -165,6 +165,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /quick-fix "desc"       # Fix rapide sans workflow complet
 /refactor <file>        # Refactoring ciblé avec review
 /docs [type]            # Génère documentation (readme|api|guide|all)
+/changelog [version]    # Génère CHANGELOG.md (NEW v2.8)
 ```
 
 ### Configuration RALPH
@@ -179,11 +180,11 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Skills (12)
+## Skills (13)
 
 ### Phase Planning
 
-| Skill | Rôle | Fonctionnalités v2.6 |
+| Skill | Rôle | Fonctionnalités clés |
 |-------|------|----------------------|
 | `idea-brainstorm` | Exploration créative | Mode **Creative** ou **Research-first**, SCAMPER, Five Whys, **auto-trigger UX/UI** |
 | `pm-prd` | Product Requirements | Mode **FULL/LIGHT** auto-détecté, templates, **auto-trigger UX/UI** |
@@ -192,14 +193,14 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ### Phase Design (optionnelle, auto-triggered)
 
-| Skill | Rôle | Fonctionnalités v2.6 |
+| Skill | Rôle | Fonctionnalités clés |
 |-------|------|----------------------|
 | `ux-designer` | Expérience utilisateur | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen |
 | `ui-designer` | Design system | **Tokens** (couleurs, typo, spacing), composants UI, guidelines accessibilité |
 
 ### Phase Développement
 
-| Skill | Rôle | Fonctionnalités v2.6 |
+| Skill | Rôle | Fonctionnalités clés |
 |-------|------|----------------------|
 | `github-issue-reader` | Lecture d'issues | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), G/W/T |
 | `codebase-explainer` | Analyse du code | **Impact mapping**, patterns, flux, risques |
@@ -207,6 +208,43 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `code-implementer` | Implémentation | **Lint/types obligatoires**, **hook auto-lint** |
 | `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
+| `security-auditor` | Audit sécurité (NEW) | **OWASP Top 10**, dépendances, secrets, scoring |
+
+---
+
+## Fonctionnalités v2.8
+
+### Security Auditor
+
+Nouveau skill pour auditer la sécurité du code :
+
+```bash
+/security-auditor src/          # Audit un dossier
+/security-auditor               # Audit tout le projet
+```
+
+**Analyses** : OWASP Top 10, CVE, Secrets, Configuration
+**Score** : `100 - (Critical×25) - (High×10) - (Medium×5) - (Low×1)`
+
+### GitHub Actions Templates
+
+Templates CI/CD dans `.claude/templates/github-actions/` :
+
+| Template | Description |
+|----------|-------------|
+| `ci.yml` | Lint, Typecheck, Test, Build |
+| `release.yml` | Changelog + GitHub Release |
+| `security.yml` | npm audit, CodeQL, Secrets |
+| `deploy.yml` | Vercel, Netlify, AWS, K8s |
+| `dependabot.yml` | Auto-updates |
+
+### Commande /changelog
+
+```bash
+/changelog 2.8.0              # Version spécifique
+/changelog --since v2.7.0     # Depuis un tag
+/changelog --dry-run          # Prévisualiser
+```
 
 ---
 
@@ -311,7 +349,7 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 ---
 
-## Structure SKILL.md (v2.7)
+## Structure SKILL.md (v2.8)
 
 Chaque skill suit une structure standardisée :
 
@@ -368,19 +406,27 @@ knowledge:
 ├── settings.json                    # Config hooks RALPH
 ├── hooks/
 │   └── stop-hook.sh                 # Hook RALPH (intercepte exit)
-├── commands/                        # 14 commandes
+├── commands/                        # 15 commandes
 │   ├── discovery.md
 │   ├── feature.md
 │   ├── auto-loop.md
 │   ├── auto-discovery.md
 │   ├── auto-feature.md
 │   ├── cancel-ralph.md
-│   ├── resume.md                    # NEW v2.7
+│   ├── resume.md
 │   ├── status.md
 │   ├── pr-review.md
 │   ├── quick-fix.md
 │   ├── refactor.md
-│   └── docs.md
+│   ├── docs.md
+│   └── changelog.md                 # NEW v2.8
+├── templates/                       # NEW v2.8
+│   └── github-actions/
+│       ├── ci.yml
+│       ├── release.yml
+│       ├── security.yml
+│       ├── deploy.yml
+│       └── dependabot.yml
 ├── knowledge/                       # 35+ fichiers
 │   ├── tea-index.csv                # Index des fragments
 │   ├── testing/                     # 32 fichiers
@@ -396,7 +442,7 @@ knowledge:
 │       ├── prd-template.md
 │       ├── domain-complexity.csv
 │       └── project-types.csv
-└── skills/                          # 12 skills
+└── skills/                          # 13 skills
     ├── idea-brainstorm/
     ├── pm-prd/
     ├── ux-designer/
@@ -408,7 +454,8 @@ knowledge:
     ├── implementation-planner/
     ├── code-implementer/
     ├── test-runner/
-    └── code-reviewer/
+    ├── code-reviewer/
+    └── security-auditor/            # NEW v2.8
 
 docs/                                # Output documents
 ├── planning/
@@ -489,7 +536,24 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v2.7.0 (Current)
+### v2.8.0 (Current)
+
+**Security Auditor**
+- Nouveau skill `security-auditor` pour audit de sécurité
+- Analyse OWASP Top 10, dépendances vulnérables, secrets exposés
+- Scoring automatique avec classification par sévérité
+
+**GitHub Actions Templates**
+- Templates CI/CD prêts à l'emploi
+- ci.yml, release.yml, security.yml, deploy.yml, dependabot.yml
+- Support Vercel, Netlify, AWS, Kubernetes
+
+**Commande /changelog**
+- Génération automatique de CHANGELOG.md
+- Formats : Conventional Commits, Keep a Changelog
+- Détection automatique de version (major/minor/patch)
+
+### v2.7.0
 
 **Skill Chaining (Auto-Chain)**
 - Chaque skill propose automatiquement le skill suivant après validation
