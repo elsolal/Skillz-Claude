@@ -1,6 +1,7 @@
 ---
 name: code-implementer
 description: Implémente le code selon le plan validé, en respectant les conventions du projet. Utiliser après validation du plan, quand on passe à l'écriture du code, ou pour chaque étape d'implémentation.
+allowed-tools: Read, Grep, Glob, Write, Edit, Bash
 knowledge:
   patterns:
     - ../../knowledge/testing/error-handling.md

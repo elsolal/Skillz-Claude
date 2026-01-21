@@ -1,6 +1,9 @@
 ---
 name: architect
 description: Crée un document d'architecture technique basé sur le PRD. Définit le stack technique, la structure du code, les composants et leurs interactions. Utiliser après la création du PRD, quand l'utilisateur dit "architecture", "tech stack", "structure technique", ou quand on passe du PRD au développement sur un projet complexe.
+context: fork
+agent: Plan
+allowed-tools: Read, Grep, Glob, Write
 ---
 
 # Architect

@@ -4,6 +4,8 @@ description: Lance le workflow de planning complet en mode RALPH autonome (Brain
 
 # Auto-Discovery - RALPH Mode 🔄
 
+**Session ID:** ${CLAUDE_SESSION_ID}
+
 ## Mode RALPH + Planning activé
 
 Je vais exécuter **tout le workflow de planning en autonome** :
@@ -25,10 +27,11 @@ Je vais exécuter **tout le workflow de planning en autonome** :
 
 | Paramètre | Valeur |
 |-----------|--------|
+| Session | `${CLAUDE_SESSION_ID}` |
 | Max iterations | **30** (planning = plus d'étapes) |
 | Timeout | **1h** |
 | Completion promise | **"DISCOVERY COMPLETE"** |
-| Logs | `docs/ralph-logs/` |
+| Logs | `docs/ralph-logs/${CLAUDE_SESSION_ID}.md` |
 
 ## Ce que je vais faire automatiquement
 
@@ -92,7 +95,7 @@ Je vais exécuter **tout le workflow de planning en autonome** :
   "startTime": [TIMESTAMP],
   "timeoutSeconds": 3600,
   "logEnabled": true,
-  "sessionId": "[SESSION_ID]",
+  "sessionId": "${CLAUDE_SESSION_ID}",
   "mode": "auto-discovery"
 }
 ```

@@ -1,6 +1,8 @@
 ---
 name: github-issue-reader
 description: Lit et analyse une issue GitHub pour extraire les requirements, critères d'acceptance et contexte. Utiliser quand on démarre une feature, quand on mentionne une issue GitHub, ou quand on a besoin de comprendre les specs d'une tâche.
+argument-hint: <issue-number-or-url>
+allowed-tools: Read, Grep, mcp__github__get_issue, mcp__github__list_issues, mcp__github__get_pull_request
 knowledge:
   core:
     - ../../knowledge/workflows/project-types.csv
@@ -10,12 +12,22 @@ knowledge:
 
 # GitHub Issue Reader
 
+## 📥 Contexte chargé automatiquement
+
+### Issue demandée : $ARGUMENTS
+!`gh issue view $ARGUMENTS --json number,title,body,state,labels,assignees,milestone,comments,projectItems 2>/dev/null || echo "⚠️ Issue non trouvée ou gh CLI non configuré - utiliser MCP GitHub"`
+
+### PRs liées
+!`gh pr list --search "linked:$ARGUMENTS" --json number,title,state,url 2>/dev/null || echo "Aucune PR liée trouvée"`
+
+---
+
 ## Activation
 
 > **Avant de lire une issue :**
-> 1. Obtenir l'URL ou le numéro de l'issue
-> 2. Vérifier l'accès au repo (public ou MCP GitHub configuré)
-> 3. Identifier le contexte : nouvelle feature, bug fix, refactoring ?
+> 1. Vérifier le contexte chargé ci-dessus
+> 2. Si ⚠️ erreur → utiliser `mcp__github__get_issue` comme fallback
+> 3. Identifier le type : nouvelle feature, bug fix, refactoring ?
 > 4. **STOP si pas d'issue** → Demander quelle issue analyser
 
 ---

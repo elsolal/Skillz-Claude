@@ -1,6 +1,9 @@
 ---
 name: pm-stories
 description: Crée des Epics et User Stories à partir du PRD et de l'Architecture, puis les publie sur GitHub Issues. Utiliser après l'architecture (mode FULL) ou après le PRD (mode LIGHT), quand l'utilisateur dit "stories", "user stories", "epics", "issues", "découper en tâches", ou veut passer à l'implémentation.
+context: fork
+agent: Plan
+allowed-tools: Read, Grep, Glob, Write, mcp__github__create_issue, mcp__github__get_issue, mcp__github__list_issues, mcp__github__update_issue
 ---
 
 # PM-Stories

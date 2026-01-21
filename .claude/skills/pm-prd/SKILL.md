@@ -1,6 +1,9 @@
 ---
 name: pm-prd
 description: Crée un Product Requirements Document (PRD) structuré à partir d'une idée ou d'un brainstorm. Utiliser quand l'utilisateur veut structurer une idée en spécifications, dit "PRD", "spécifications", "requirements", "définir le produit", ou après une session de brainstorm validée.
+context: fork
+agent: Plan
+allowed-tools: Read, Grep, Glob, Write
 knowledge:
   templates:
     - ../../knowledge/workflows/prd-template.md

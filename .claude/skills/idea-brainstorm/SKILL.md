@@ -1,6 +1,7 @@
 ---
 name: idea-brainstorm
 description: Facilite des sessions de brainstorming créatif pour explorer et développer des idées. Utiliser quand l'utilisateur a une idée vague, veut explorer des possibilités, dit "j'ai une idée", "brainstorm", "réfléchissons", ou veut générer des concepts avant de structurer un projet.
+allowed-tools: Read, Grep, Glob, Write, WebSearch
 triggers_ux_ui:
   auto: true
   criteria:
@@ -15,12 +16,23 @@ triggers_ux_ui:
 
 # Idea Brainstorm
 
+## 📥 Contexte existant
+
+### Brainstorms précédents (si existants)
+!`ls -la docs/planning/brainstorms/*.md 2>/dev/null | tail -5 || echo "Aucun brainstorm précédent"`
+
+### PRDs existants (pour éviter les doublons)
+!`ls -la docs/planning/prd/*.md 2>/dev/null | tail -5 || echo "Aucun PRD existant"`
+
+---
+
 ## Activation
 
 > **Au démarrage :**
-> 1. Identifier le mode : **Creative** (explorer) ou **Research** (valider)
-> 2. Pas de jugement - phase divergente
-> 3. Proposer les techniques adaptées au contexte
+> 1. Vérifier le contexte ci-dessus (brainstorms/PRDs existants)
+> 2. Identifier le mode : **Creative** (explorer) ou **Research** (valider)
+> 3. Pas de jugement - phase divergente
+> 4. Proposer les techniques adaptées au contexte
 
 ## Rôle & Principes
 

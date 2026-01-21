@@ -4,6 +4,8 @@ description: Implémente une feature GitHub en mode RALPH autonome (Explain → 
 
 # Auto-Feature - RALPH Mode 🔄
 
+**Session ID:** ${CLAUDE_SESSION_ID}
+
 ## Mode RALPH + Implémentation activé
 
 Je vais exécuter **tout le workflow de développement en autonome** :
@@ -25,10 +27,11 @@ Je vais exécuter **tout le workflow de développement en autonome** :
 
 | Paramètre | Valeur |
 |-----------|--------|
+| Session | `${CLAUDE_SESSION_ID}` |
 | Max iterations | **50** (dev = beaucoup d'itérations possibles) |
 | Timeout | **2h** |
 | Completion promise | **"FEATURE COMPLETE"** |
-| Logs | `docs/ralph-logs/` |
+| Logs | `docs/ralph-logs/${CLAUDE_SESSION_ID}.md` |
 
 ## Ce que je vais faire automatiquement
 
@@ -117,7 +120,7 @@ Le loop considère la feature "COMPLETE" quand :
   "startTime": [TIMESTAMP],
   "timeoutSeconds": 7200,
   "logEnabled": true,
-  "sessionId": "[SESSION_ID]",
+  "sessionId": "${CLAUDE_SESSION_ID}",
   "mode": "auto-feature"
 }
 ```

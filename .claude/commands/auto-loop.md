@@ -6,6 +6,8 @@ description: Lance Claude en mode RALPH (boucle autonome) jusqu'à complétion d
 
 ## Mode activé : RALPH 🔄
 
+**Session ID:** ${CLAUDE_SESSION_ID}
+
 Je vais travailler en **boucle autonome** jusqu'à complétion de ta tâche.
 
 ## Configuration
@@ -15,11 +17,12 @@ Je vais travailler en **boucle autonome** jusqu'à complétion de ta tâche.
 │                    RALPH LOOP ACTIVE                            │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
+│  🆔 Session      : ${CLAUDE_SESSION_ID}                         │
 │  📋 Tâche        : $ARGUMENTS                                   │
 │  🔄 Max iterations: 20 (default)                                │
 │  ⏱️  Timeout      : 1h (default)                                 │
 │  ✅ Promise      : "DONE" (default)                             │
-│  📝 Logs         : docs/ralph-logs/                             │
+│  📝 Logs         : docs/ralph-logs/${CLAUDE_SESSION_ID}.md      │
 │                                                                 │
 │  ⚠️  Dangerous permissions: ENABLED                             │
 │                                                                 │
@@ -112,11 +115,11 @@ Je commence maintenant. Quand j'aurai terminé, j'inclurai "DONE" dans ma répon
   "startTime": [TIMESTAMP],
   "timeoutSeconds": 3600,
   "logEnabled": true,
-  "sessionId": "[SESSION_ID]"
+  "sessionId": "${CLAUDE_SESSION_ID}"
 }
 ```
 
-Création du fichier de configuration...
+Création du fichier de configuration et log dans `docs/ralph-logs/${CLAUDE_SESSION_ID}.md`...
 
 **🚀 RALPH Loop démarré - Iteration 1/20**
 

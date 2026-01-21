@@ -1,6 +1,7 @@
 ---
 name: test-runner
 description: Écrit et exécute les tests pour valider l'implémentation. Utiliser après l'implémentation du code, quand on a besoin de vérifier que le code fonctionne, ou avant les code reviews. Peut aussi être utilisé en mode ATDD (tests d'abord).
+allowed-tools: Read, Grep, Glob, Write, Edit, Bash
 knowledge:
   core:
     - ../../knowledge/testing/test-levels-framework.md

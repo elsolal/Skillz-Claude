@@ -1,6 +1,9 @@
 ---
 name: codebase-explainer
 description: Analyse le code source du projet pour comprendre l'architecture, les patterns utilisés et le contexte technique. Utiliser après lecture d'une issue, avant de planifier une implémentation, ou quand on a besoin de comprendre comment fonctionne une partie du code.
+context: fork
+agent: Explore
+allowed-tools: Read, Grep, Glob, Bash
 knowledge:
   core:
     - ../../knowledge/workflows/project-types.csv
@@ -12,13 +15,25 @@ knowledge:
 
 # Codebase Explainer
 
+## 📥 Contexte projet chargé automatiquement
+
+### Structure du projet
+!`tree -L 2 -I 'node_modules|dist|build|.git|coverage|__pycache__|.venv|venv' 2>/dev/null || find . -maxdepth 2 -type d | head -30`
+
+### Configuration détectée
+!`cat package.json 2>/dev/null | head -30 || cat pyproject.toml 2>/dev/null | head -30 || cat Cargo.toml 2>/dev/null | head -30 || cat go.mod 2>/dev/null | head -15 || echo "Aucun fichier de config standard trouvé"`
+
+### Conventions projet (CLAUDE.md)
+!`cat CLAUDE.md 2>/dev/null | head -50 || cat .claude/CLAUDE.md 2>/dev/null | head -50 || echo "Pas de CLAUDE.md trouvé"`
+
+---
+
 ## Activation
 
-> **Avant d'analyser le code :**
-> 1. Vérifier qu'une issue/requirement existe (output de github-issue-reader)
-> 2. Identifier les zones d'intérêt à explorer
-> 3. Localiser les fichiers de configuration du projet
-> 4. **STOP si pas de contexte** → Utiliser `github-issue-reader` d'abord
+> **Contexte pré-chargé ci-dessus.** Vérifier :
+> 1. Structure du projet détectée correctement ?
+> 2. Stack technique identifiable ?
+> 3. **STOP si pas de contexte issue** → Utiliser `github-issue-reader` d'abord
 
 ---
 

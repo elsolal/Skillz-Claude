@@ -1,6 +1,9 @@
 ---
 name: implementation-planner
 description: Crée un plan d'implémentation détaillé basé sur les requirements et l'analyse du code. Utiliser après l'étape Explain, quand on a besoin de structurer le travail de développement, ou avant de commencer à coder.
+context: fork
+agent: Plan
+allowed-tools: Read, Grep, Glob
 knowledge:
   core:
     - ../../knowledge/workflows/domain-complexity.csv
