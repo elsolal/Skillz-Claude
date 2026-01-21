@@ -1,13 +1,13 @@
-# D-EPCT+R Workflow v3.0
+# D-EPCT+R Workflow v3.1
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
 > ✅ **Mode Manuel** - Validation humaine à chaque étape
 > ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
-> ✅ **Database Designer** - ERD, migrations, Prisma/Drizzle (NEW v3.0)
-> ✅ **Commande /init** - Scaffolding Next.js, Express, API, CLI (NEW v3.0)
-> ✅ **Issue Templates** - Bug report, feature request (NEW v3.0)
-> ✅ **API Designer** - OpenAPI 3.1, REST/GraphQL, versioning
+> ✅ **Git Hooks** - pre-commit, commit-msg (NEW v3.1)
+> ✅ **DevContainer** - Docker dev environment (NEW v3.1)
+> ✅ **Performance Auditor** - Core Web Vitals, Lighthouse (NEW v3.1)
+> ✅ **Database Designer** - ERD, migrations, Prisma/Drizzle
 > ✅ **35+ fichiers Knowledge** - Base de connaissances testing & workflows
 > ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
@@ -183,7 +183,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Skills (15)
+## Skills (16)
 
 ### Phase Planning
 
@@ -213,7 +213,48 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `code-implementer` | Implémentation | **Lint/types obligatoires**, **hook auto-lint** |
 | `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
-| `security-auditor` | Audit sécurité (NEW) | **OWASP Top 10**, dépendances, secrets, scoring |
+| `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
+| `performance-auditor` | Audit performance (NEW) | **Core Web Vitals**, bundle size, Lighthouse |
+
+---
+
+## Fonctionnalités v3.1
+
+### Git Hooks
+
+Templates de hooks Git :
+
+```bash
+# Installation
+cp .claude/templates/git-hooks/* .git/hooks/
+chmod +x .git/hooks/*
+```
+
+| Hook | Checks |
+|------|--------|
+| `pre-commit` | ESLint, TypeScript, Prettier, Tests, Secrets |
+| `commit-msg` | Conventional Commits format |
+
+### DevContainer Templates
+
+Configuration Docker pour VS Code / GitHub Codespaces :
+
+```bash
+mkdir -p .devcontainer
+cp .claude/templates/devcontainer/* .devcontainer/
+```
+
+**Inclus** : Node.js 20, PostgreSQL, Redis, extensions VS Code
+
+### Skill performance-auditor
+
+Audit de performance :
+
+```bash
+/performance-auditor https://example.com
+```
+
+**Analyses** : Core Web Vitals (LCP, INP, CLS), Bundle size, Lighthouse, Dependencies
 
 ---
 
@@ -515,12 +556,19 @@ knowledge:
 │   │   ├── security.yml
 │   │   ├── deploy.yml
 │   │   └── dependabot.yml
-│   └── github/
-│       ├── PULL_REQUEST_TEMPLATE.md
-│       └── ISSUE_TEMPLATE/          # NEW v3.0
-│           ├── bug_report.md
-│           ├── feature_request.md
-│           └── config.yml
+│   ├── github/
+│   │   ├── PULL_REQUEST_TEMPLATE.md
+│   │   └── ISSUE_TEMPLATE/
+│   │       ├── bug_report.md
+│   │       ├── feature_request.md
+│   │       └── config.yml
+│   ├── git-hooks/                   # NEW v3.1
+│   │   ├── pre-commit
+│   │   └── commit-msg
+│   └── devcontainer/                # NEW v3.1
+│       ├── devcontainer.json
+│       ├── Dockerfile
+│       └── docker-compose.yml
 ├── knowledge/                       # 35+ fichiers
 │   ├── tea-index.csv                # Index des fragments
 │   ├── testing/                     # 32 fichiers
@@ -536,7 +584,7 @@ knowledge:
 │       ├── prd-template.md
 │       ├── domain-complexity.csv
 │       └── project-types.csv
-└── skills/                          # 15 skills
+└── skills/                          # 16 skills
     ├── idea-brainstorm/
     ├── pm-prd/
     ├── ux-designer/
@@ -551,7 +599,8 @@ knowledge:
     ├── code-reviewer/
     ├── security-auditor/
     ├── api-designer/
-    └── database-designer/           # NEW v3.0
+    ├── database-designer/
+    └── performance-auditor/         # NEW v3.1
 
 docs/                                # Output documents
 ├── planning/
@@ -632,7 +681,26 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v3.0.0 (Current)
+### v3.1.0 (Current)
+
+**Git Hooks**
+- Templates pre-commit et commit-msg
+- Checks : ESLint, TypeScript, Prettier, Secrets, Conventional Commits
+- Compatible Husky
+
+**DevContainer Templates**
+- Configuration VS Code Dev Containers
+- Dockerfile avec Node.js 20, Zsh, outils
+- docker-compose.yml avec PostgreSQL et Redis
+
+**Skill performance-auditor**
+- Audit Core Web Vitals (LCP, INP, CLS)
+- Analyse bundle (JS/CSS size, chunks)
+- Intégration Lighthouse
+- Détection des dépendances lourdes
+- Recommandations avec impact quantifié
+
+### v3.0.0
 
 **Skill database-designer**
 - Nouveau skill pour concevoir des schémas de base de données

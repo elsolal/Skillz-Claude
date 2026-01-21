@@ -1,4 +1,4 @@
-# D-EPCT+R Workflow v3.0
+# D-EPCT+R Workflow v3.1
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -83,7 +83,7 @@
 
 ---
 
-## Skills (15)
+## Skills (16)
 
 ### Phase Planning
 
@@ -113,7 +113,59 @@
 | `code-implementer` | Implémentation | Validation **lint/types obligatoire** par étape, **hook auto-lint** |
 | `test-runner` | Tests | Mode **ATDD** (tests first) ou Standard, priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
-| `security-auditor` | Audit sécurité (NEW v2.8) | **OWASP Top 10**, dépendances, secrets, scoring |
+| `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
+| `performance-auditor` | Audit performance (NEW v3.1) | **Core Web Vitals**, bundle size, Lighthouse |
+
+---
+
+## Fonctionnalités avancées (v3.1)
+
+### Git Hooks
+
+Templates de hooks Git dans `.claude/templates/git-hooks/` :
+
+| Hook | Description |
+|------|-------------|
+| `pre-commit` | ESLint, TypeScript, Prettier, Tests, Secrets |
+| `commit-msg` | Validation Conventional Commits |
+
+**Installation** :
+```bash
+cp .claude/templates/git-hooks/pre-commit .git/hooks/
+cp .claude/templates/git-hooks/commit-msg .git/hooks/
+chmod +x .git/hooks/*
+```
+
+### Templates DevContainer
+
+Configuration Docker dev environment dans `.claude/templates/devcontainer/` :
+
+| Fichier | Description |
+|---------|-------------|
+| `devcontainer.json` | Config VS Code + extensions |
+| `Dockerfile` | Node.js 20 + outils |
+| `docker-compose.yml` | PostgreSQL, Redis |
+
+**Installation** :
+```bash
+mkdir -p .devcontainer
+cp .claude/templates/devcontainer/* .devcontainer/
+```
+
+### Skill performance-auditor
+
+Audit de performance avec Core Web Vitals et bundle analysis :
+
+```bash
+/performance-auditor https://example.com    # Audit URL
+/performance-auditor ./dist                 # Audit build
+```
+
+**Analyses** :
+- **Core Web Vitals** : LCP, INP, CLS
+- **Bundle** : JS/CSS size, chunks, tree-shaking
+- **Lighthouse** : Score complet
+- **Dependencies** : Packages lourds, alternatives
 
 ---
 

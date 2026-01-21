@@ -1,0 +1,70 @@
+# Docker Compose for Dev Container with services
+# Usage: Use with devcontainer.json "dockerComposeFile" option
+
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces:cached
+      - node_modules:/workspaces/node_modules
+    command: sleep infinity
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/app_dev
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "3000:3000"
+      - "5555:5555"  # Prisma Studio
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app_dev
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  # Optional: Mailhog for email testing
+  # mailhog:
+  #   image: mailhog/mailhog
+  #   ports:
+  #     - "1025:1025"  # SMTP
+  #     - "8025:8025"  # Web UI
+
+  # Optional: MinIO for S3-compatible storage
+  # minio:
+  #   image: minio/minio
+  #   command: server /data --console-address ":9001"
+  #   volumes:
+  #     - minio_data:/data
+  #   environment:
+  #     MINIO_ROOT_USER: minioadmin
+  #     MINIO_ROOT_PASSWORD: minioadmin
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+
+volumes:
+  node_modules:
+  postgres_data:
+  redis_data:
+  # minio_data:
