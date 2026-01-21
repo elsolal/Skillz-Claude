@@ -1,5 +1,5 @@
 ---
-description: Reprendre une session RALPH interrompue à partir des logs. Usage: /resume [session-id] ou /resume (reprend la dernière session)
+description: Reprendre une session RALPH interrompue à partir des logs. Usage: /resume-ralph [session-id] ou /resume-ralph (reprend la dernière session)
 ---
 
 # Resume RALPH Session 🔄
@@ -208,10 +208,10 @@ Selon le mode RALPH :
 
 ```bash
 # Reprendre la dernière session
-/resume
+/resume-ralph
 
 # Reprendre une session spécifique
-/resume abc123-def456
+/resume-ralph abc123-def456
 
 # Voir les sessions disponibles sans reprendre
 /status

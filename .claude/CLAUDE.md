@@ -72,7 +72,7 @@
 /auto-discovery "idée"  # Planning complet en autonome
 /auto-feature #123      # Implémentation complète en autonome
 /cancel-ralph           # Arrêter le mode RALPH
-/resume [session-id]    # Reprendre une session RALPH interrompue
+/resume-ralph [session-id]  # Reprendre une session RALPH interrompue
 ```
 
 ### Utilitaires
@@ -417,13 +417,13 @@ Les commandes RALPH trackent automatiquement les métriques :
 | Retours arrière | [X] |
 ```
 
-### Commande /resume
+### Commande /resume-ralph
 
 Reprendre une session RALPH interrompue :
 
 ```bash
-/resume                 # Reprend la dernière session
-/resume <session-id>    # Reprend une session spécifique
+/resume-ralph                 # Reprend la dernière session
+/resume-ralph <session-id>    # Reprend une session spécifique
 ```
 
 Options disponibles :

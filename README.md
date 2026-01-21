@@ -155,7 +155,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /auto-discovery "idée"  # Planning complet en autonome
 /auto-feature #123      # Implémentation complète en autonome
 /cancel-ralph           # Arrêter le mode RALPH
-/resume [session-id]    # Reprendre une session RALPH
+/resume-ralph [session-id]  # Reprendre une session RALPH
 ```
 
 ### Utilitaires
@@ -406,13 +406,13 @@ Les commandes RALPH trackent automatiquement :
 - Fichiers créés/modifiés
 - Retours arrière
 
-### Commande /resume
+### Commande /resume-ralph
 
 Reprendre une session RALPH interrompue :
 
 ```bash
-/resume                 # Dernière session
-/resume <session-id>    # Session spécifique
+/resume-ralph                 # Dernière session
+/resume-ralph <session-id>    # Session spécifique
 ```
 
 ---
@@ -777,7 +777,7 @@ docs/                                # Output documents
 - Comptage des auto-corrections (lint, types, tests)
 - Métriques fichiers créés/modifiés
 
-**Commande /resume**
+**Commande /resume-ralph**
 - Reprendre une session RALPH interrompue
 - Options : Continue, Restart, Modify, Abandon
 
