@@ -87,12 +87,51 @@ Le loop s'arrête quand :
 /auto-loop "Debug le problème de performance" --verbose
 ```
 
+## Métriques RALPH
+
+Le log inclut automatiquement les métriques suivantes :
+
+```markdown
+## 📊 Métriques Session
+
+| Métrique | Valeur |
+|----------|--------|
+| **Durée totale** | [X]m [Y]s |
+| **Itérations** | [N] / [Max] |
+| **Phases** | [Liste des phases traversées] |
+
+### Temps par phase
+| Phase | Durée | % Total |
+|-------|-------|---------|
+| [Phase 1] | [X]m | [Y]% |
+| [Phase 2] | [X]m | [Y]% |
+
+### Auto-corrections
+| Type | Count |
+|------|-------|
+| Lint errors corrigés | [X] |
+| Type errors corrigés | [X] |
+| Tests fixés | [X] |
+| Retours arrière | [X] |
+
+### Fichiers
+| Métrique | Valeur |
+|----------|--------|
+| Fichiers créés | [X] |
+| Fichiers modifiés | [X] |
+| Lignes ajoutées | +[X] |
+| Lignes supprimées | -[X] |
+```
+
+---
+
 ## Initialisation
 
 Je vais maintenant :
 1. ✅ Créer le fichier de configuration `.claude/ralph-state.json`
 2. ✅ Activer le mode RALPH
-3. 🚀 Commencer à travailler sur ta tâche
+3. 📊 Initialiser le tracking des métriques
+4. 🚀 Commencer à travailler sur ta tâche
 
 ---
 

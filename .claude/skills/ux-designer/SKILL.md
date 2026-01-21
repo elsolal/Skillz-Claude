@@ -334,6 +334,55 @@ Document créé : `docs/planning/ux/UX-{slug}.md`
 - **Justifier les choix** : Chaque décision a une raison
 - **Itérer** : L'UX s'affine avec le feedback
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output UX Design
+
+| Critère | Status |
+|---------|--------|
+| Fichier créé dans `docs/planning/ux/` | ✅/❌ |
+| Au moins 1 persona défini | ✅/❌ |
+| User journey principal documenté | ✅/❌ |
+| Wireframes des écrans clés | ✅/❌ |
+| Heuristiques Nielsen vérifiées | ✅/❌ |
+| Checklist accessibilité remplie | ✅/❌ |
+| Décisions UX justifiées | ✅/❌ |
+
+**Score : X/7** → Si < 5, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation de l'UX, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ UX Design terminé et sauvegardé.
+
+**Recommandation basée sur le scope :**
+
+[Si 5+ composants UI identifiés ET pas de design system]
+→ 🖌️ **Lancer `/ui-designer` ?** (recommandé - design system nécessaire)
+
+[Sinon]
+→ 📋 **Lancer `/pm-prd` ?** (enrichir le PRD avec l'UX)
+→ 🏗️ Ou **`/architect`** si PRD déjà validé
+
+---
+
+**[Y] Oui, continuer** | **[N] Non, je choisis** | **[P] Pause**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers ui-designer** : "On définit le design system et l'UI ?"

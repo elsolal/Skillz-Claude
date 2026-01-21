@@ -1,4 +1,4 @@
-# D-EPCT+R Workflow v2.6
+# D-EPCT+R Workflow v2.7
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -39,7 +39,7 @@
 
 ---
 
-## Commandes (13)
+## Commandes (14)
 
 ### Mode Manuel (avec validation)
 
@@ -55,6 +55,7 @@
 /auto-discovery "idée"  # Planning complet en autonome
 /auto-feature #123      # Implémentation complète en autonome
 /cancel-ralph           # Arrêter le mode RALPH
+/resume [session-id]    # Reprendre une session RALPH interrompue (NEW v2.7)
 ```
 
 ### Utilitaires
@@ -110,6 +111,108 @@
 
 ---
 
+## Fonctionnalités avancées (v2.7)
+
+### Skill Chaining (Auto-Chain)
+
+Chaque skill propose automatiquement le skill suivant après validation de son output :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ [Skill actuel] terminé et sauvegardé.
+
+→ 📋 **Lancer `/[next-skill]` ?** (recommandé)
+
+---
+
+**[Y] Oui, continuer** | **[N] Non, je choisis** | **[P] Pause**
+```
+
+| Skill actuel | Propositions (selon contexte) |
+|--------------|------------------------------|
+| `idea-brainstorm` | `/ux-designer` (si UI) ou `/pm-prd` |
+| `pm-prd` | `/ui-designer` (si design) ou `/architect` |
+| `architect` | `/pm-stories` |
+| `pm-stories` | `/feature` ou `/auto-feature` |
+| `github-issue-reader` | `/codebase-explainer` |
+| `codebase-explainer` | `/implementation-planner` |
+| `implementation-planner` | `/code-implementer` |
+| `code-implementer` | `/test-runner` |
+| `test-runner` | `/code-reviewer` |
+| `code-reviewer` | Commit/PR (fin du cycle) |
+
+### Output Validation
+
+Chaque skill valide son output avant de proposer la transition :
+
+```markdown
+### ✅ Checklist Output [Skill]
+
+| Critère | Status |
+|---------|--------|
+| [Critère 1] | ✅/❌ |
+| [Critère 2] | ✅/❌ |
+| [Critère 3] | ✅/❌ |
+
+**Score : X/N** → Si < seuil, compléter avant transition
+```
+
+| Skill | Seuil minimum |
+|-------|--------------|
+| `idea-brainstorm` | 4/5 |
+| `pm-prd` | 6/7 |
+| `architect` | 5/6 |
+| `pm-stories` | 13/15 (Readiness Check) |
+| `implementation-planner` | 5/6 |
+| `code-implementer` | 4/5 |
+| `test-runner` | 4/5 |
+| `code-reviewer` | Toutes passes OK |
+
+### RALPH Metrics
+
+Les commandes RALPH trackent automatiquement les métriques :
+
+```markdown
+## 📊 Métriques RALPH
+
+| Métrique | Valeur |
+|----------|--------|
+| **Durée totale** | [X]m [Y]s |
+| **Itérations** | [N] / [Max] |
+
+### Temps par phase
+| Phase | Durée | Status |
+|-------|-------|--------|
+| [Phase 1] | [X]m | ✅ |
+| [Phase 2] | [X]m | ✅ |
+
+### Auto-corrections
+| Type | Count |
+|------|-------|
+| Lint errors corrigés | [X] |
+| Type errors corrigés | [X] |
+| Tests fixés | [X] |
+| Retours arrière | [X] |
+```
+
+### Commande /resume
+
+Reprendre une session RALPH interrompue :
+
+```bash
+/resume                 # Reprend la dernière session
+/resume <session-id>    # Reprend une session spécifique
+```
+
+Options disponibles :
+- **Continue** : Reprendre où on s'est arrêté
+- **Restart** : Recommencer la phase en cours
+- **Modify** : Changer les paramètres (max iter, timeout)
+- **Abandon** : Abandonner et archiver
+
+---
+
 ## Fonctionnalités avancées (v2.6)
 
 ### Dynamic Context Injection
@@ -159,7 +262,7 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 ---
 
-## Structure des Skills (v2.6)
+## Structure des Skills (v2.7)
 
 Chaque skill suit une structure standardisée :
 
@@ -203,6 +306,12 @@ knowledge:
 
 ## Output Template
 
+## Output Validation (NEW v2.7)
+> Checklist de validation avant transition
+
+## Auto-Chain (NEW v2.7)
+> Proposition automatique du skill suivant
+
 ## Transitions
 - **Vers [skill]** : "Question de transition"
 ```
@@ -225,12 +334,15 @@ knowledge:
 │   ├── network-first.md
 │   ├── test-healing-patterns.md
 │   └── ... (25 autres)
-└── workflows/                 # 7 fichiers
+└── workflows/                 # 10 fichiers
     ├── prd-template.md
-    ├── architecture-template.md   # NEW
-    ├── stories-template.md        # NEW
-    ├── ux-template.md             # NEW
-    ├── ui-template.md             # NEW
+    ├── prd-patterns.md            # NEW v2.7 - Patterns par domaine
+    ├── architecture-template.md
+    ├── stories-template.md
+    ├── ux-template.md
+    ├── ui-template.md
+    ├── estimation-techniques.md   # NEW v2.7 - Techniques d'estimation
+    ├── risk-assessment.md         # NEW v2.7 - Framework de risques
     ├── domain-complexity.csv
     └── project-types.csv
 ```

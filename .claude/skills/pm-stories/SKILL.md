@@ -347,6 +347,57 @@ gh issue create --title "[STORY-001] Titre" --body "..." --label "story"
 
 ---
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output Stories
+
+| Critère | Status |
+|---------|--------|
+| Fichiers créés dans `docs/stories/EPIC-*/` | ✅/❌ |
+| Epics identifiées et documentées | ✅/❌ |
+| Stories INVEST-compliant | ✅/❌ |
+| Critères d'acceptance en Given/When/Then | ✅/❌ |
+| Estimations (XS/S/M/L) présentes | ✅/❌ |
+| Readiness Check score ≥ 13/15 | ✅/❌ |
+| Issues GitHub créées | ✅/❌ |
+| Liens Epic ↔ Stories établis | ✅/❌ |
+
+**Score : X/8** → Si < 6, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après publication sur GitHub, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Stories publiées sur GitHub.
+
+**Issues créées :**
+- Epic #XX : [Nom]
+- Story #YY : [Titre] (P0)
+- Story #ZZ : [Titre] (P0)
+- ...
+
+**Recommandation :**
+
+→ 🚀 **Lancer `/feature #YY` ?** (implémenter la première story P0)
+
+---
+
+**[Y] Oui, commencer l'implémentation** | **[N] Non, je choisis** | **[P] Pause**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers Feature** : "Lance `/feature #XX` pour implémenter"

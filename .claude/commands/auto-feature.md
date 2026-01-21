@@ -75,6 +75,67 @@ Le loop considère la feature "COMPLETE" quand :
 - ✅ 3 passes de review effectuées
 - ✅ Aucune issue critique restante
 
+---
+
+## 📊 Métriques RALPH
+
+Le log inclut automatiquement les métriques suivantes :
+
+```markdown
+## 📊 Métriques Feature
+
+| Métrique | Valeur |
+|----------|--------|
+| **Durée totale** | [X]m [Y]s |
+| **Itérations** | [N] / 50 |
+| **Issue** | #[NUM] |
+
+### Temps par phase
+| Phase | Durée | Status |
+|-------|-------|--------|
+| Explain | [X]m | ✅ |
+| Plan | [X]m | ✅ |
+| Code | [X]m | ✅ |
+| Test | [X]m | ✅ |
+| Review Pass 1 | [X]m | ✅ |
+| Review Pass 2 | [X]m | ✅ |
+| Review Pass 3 | [X]m | ✅ |
+
+### Code Metrics
+| Métrique | Valeur |
+|----------|--------|
+| Fichiers créés | [X] |
+| Fichiers modifiés | [X] |
+| Lignes ajoutées | +[X] |
+| Lignes supprimées | -[X] |
+| Fonctions ajoutées | [X] |
+
+### Tests
+| Métrique | Valeur |
+|----------|--------|
+| Tests écrits | [X] |
+| Tests P0 | [X] |
+| Tests P1 | [X] |
+| Coverage | [X]% |
+| Flaky runs | [X] |
+
+### Auto-corrections
+| Type | Count |
+|------|-------|
+| Lint errors corrigés | [X] |
+| Type errors corrigés | [X] |
+| Tests fixés | [X] |
+| Review issues résolues | [X] |
+| Retours arrière | [X] |
+
+### Review Summary
+| Pass | Issues trouvées | Issues résolues |
+|------|-----------------|-----------------|
+| Correctness | [X] | [X] |
+| Readability | [X] | [X] |
+| Performance | [X] | [X] |
+```
+
 ## Arrêt manuel
 
 ```bash

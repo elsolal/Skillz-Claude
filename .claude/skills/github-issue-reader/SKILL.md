@@ -210,6 +210,59 @@ Then [résultat attendu]
 
 ---
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output Issue Reader
+
+| Critère | Status |
+|---------|--------|
+| Requirements fonctionnels extraits | ✅/❌ |
+| Critères d'acceptance formalisés | ✅/❌ |
+| Type d'issue identifié (feature/bug/refactor) | ✅/❌ |
+| Ambiguïtés classifiées (🔴/🟡/🟢) | ✅/❌ |
+| Questions bloquantes résolues | ✅/❌ |
+| Dépendances identifiées | ✅/❌ |
+| Metadata extraites (labels, milestone...) | ✅/❌ |
+
+**Score : X/7** → Si < 5 ou questions 🔴 non résolues, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation de l'analyse, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Issue #[NUM] analysée.
+
+**Résumé :**
+- Type : [Feature/Bug/Refactor]
+- Requirements : [X] extraits
+- Questions bloquantes : [Résolues/X restantes]
+
+**Recommandation :**
+
+[Si questions bloquantes restantes]
+→ ⚠️ Résoudre les questions 🔴 avant de continuer
+
+[Sinon]
+→ 🔍 **Lancer l'analyse codebase ?** (comprendre l'implémentation existante)
+
+---
+
+**[Y] Oui, analyser le code** | **[N] Non, je choisis** | **[Q] Poser des questions**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers codebase-explainer** : "Issue analysée, on explore le code pour comprendre l'implémentation ?"

@@ -72,6 +72,57 @@ Je vais exécuter **tout le workflow de planning en autonome** :
 - 📁 `docs/stories/EPIC-xxx/` avec les stories
 - 🐙 Issues GitHub créées et liées
 
+---
+
+## 📊 Métriques RALPH
+
+Le log inclut automatiquement les métriques suivantes :
+
+```markdown
+## 📊 Métriques Discovery
+
+| Métrique | Valeur |
+|----------|--------|
+| **Durée totale** | [X]m [Y]s |
+| **Itérations** | [N] / 30 |
+| **Mode détecté** | FULL / LIGHT |
+
+### Temps par phase
+| Phase | Durée | Status |
+|-------|-------|--------|
+| Analyse initiale | [X]m | ✅ |
+| Brainstorm | [X]m | ✅/⏭️ |
+| UX Design | [X]m | ✅/⏭️ |
+| PRD | [X]m | ✅ |
+| UI Design | [X]m | ✅/⏭️ |
+| Architecture | [X]m | ✅/⏭️ |
+| Stories | [X]m | ✅ |
+| GitHub | [X]m | ✅ |
+
+### Documents générés
+| Type | Fichier | Status |
+|------|---------|--------|
+| Brainstorm | `BRAINSTORM-xxx.md` | ✅/❌ |
+| UX Design | `UX-xxx.md` | ✅/⏭️ |
+| PRD | `PRD-xxx.md` | ✅ |
+| UI Design | `UI-xxx.md` | ✅/⏭️ |
+| Architecture | `ARCH-xxx.md` | ✅/⏭️ |
+| Stories | `EPIC-xxx/` | ✅ |
+
+### Issues GitHub
+| Type | Count | Numéros |
+|------|-------|---------|
+| Epics | [X] | #[nums] |
+| Stories | [X] | #[nums] |
+
+### Auto-corrections
+| Type | Count |
+|------|-------|
+| Questions résolues auto | [X] |
+| Modes ajustés | [X] |
+| Retours phases | [X] |
+```
+
 ## Arguments supportés
 
 | Argument | Default | Description |

@@ -453,6 +453,55 @@ Documents créés :
 - **Developer handoff** : Specs claires et mesures exactes
 - **Scalable** : Penser système, pas pages isolées
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output UI Design
+
+| Critère | Status |
+|---------|--------|
+| Fichier créé dans `docs/planning/ui/` | ✅/❌ |
+| Tokens couleurs définis | ✅/❌ |
+| Tokens typographie définis | ✅/❌ |
+| Tokens spacing définis | ✅/❌ |
+| Composants principaux spécifiés | ✅/❌ |
+| États des composants documentés | ✅/❌ |
+| Contraste WCAG AA validé | ✅/❌ |
+| tokens.css exporté (optionnel) | ✅/❌/- |
+
+**Score : X/7** → Si < 5, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation de l'UI, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ UI Design terminé et sauvegardé.
+
+**Flux recommandé :**
+
+[Si Architecture pas encore faite]
+→ 🏗️ **Lancer `/architect` ?** (intégrer les specs UI dans l'archi)
+
+[Si Architecture existe]
+→ 📝 **Lancer `/pm-stories` ?** (créer les stories avec specs UI)
+
+---
+
+**[Y] Oui, continuer** | **[N] Non, je choisis** | **[P] Pause**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers architect** : "On intègre le design system dans l'architecture ?"

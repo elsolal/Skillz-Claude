@@ -341,6 +341,57 @@ PRD ✅ → Architecture → Stories
 - **Scope clair** : Toujours définir ce qui est HORS scope
 - **Pas de solution technique** : Le PRD définit le QUOI, pas le COMMENT (c'est le rôle de l'Architect)
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output PRD
+
+| Critère | Status |
+|---------|--------|
+| Fichier créé dans `docs/planning/prd/` | ✅/❌ |
+| Problème clairement défini | ✅/❌ |
+| Utilisateurs/personas identifiés | ✅/❌ |
+| Features MVP listées avec priorités | ✅/❌ |
+| Hors scope défini | ✅/❌ |
+| Métriques de succès mesurables | ✅/❌ |
+| Mode (FULL/LIGHT) choisi | ✅/❌ |
+
+**Score : X/7** → Si < 5, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation du PRD, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ PRD créé et validé.
+
+**Mode détecté : [FULL/LIGHT]**
+
+[Si Mode FULL + Score UX ≥ 4]
+→ 🎨 **Lancer `/ux-designer` ?** (recommandé - interface complexe)
+
+[Si Mode FULL + pas d'UX requis]
+→ 🏗️ **Lancer `/architect` ?** (architecture technique requise)
+
+[Si Mode LIGHT]
+→ 📝 **Lancer `/pm-stories` ?** (direct aux stories)
+
+---
+
+**[Y] Oui, continuer** | **[N] Non, je choisis** | **[P] Pause**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transition
 
 - **Vers ux-designer** : "On définit l'expérience utilisateur ?"

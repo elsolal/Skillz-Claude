@@ -210,3 +210,66 @@ Entre chaque passe : appliquer les corrections, puis passer à la suivante.
 
 ### Prêt pour merge: ✅
 ```
+
+---
+
+## Output Validation
+
+Avant de conclure, valider :
+
+```markdown
+### ✅ Checklist Output Code Review
+
+| Critère | Status |
+|---------|--------|
+| Pass 1 (Correctness) complète | ✅/❌ |
+| Pass 2 (Readability) complète | ✅/❌ |
+| Pass 3 (Performance) complète | ✅/❌ |
+| Toutes issues 🔴 résolues | ✅/❌ |
+| Tests toujours passent | ✅/❌ |
+| Lint/Types OK après refactoring | ✅/❌ |
+| Diff final documenté | ✅/❌ |
+
+**Score : X/7** → Si < 6, compléter les passes manquantes
+```
+
+---
+
+## Auto-Chain
+
+Après les 3 passes de review, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Code Review terminée (3 passes).
+
+**Résumé :**
+- Pass 1 (Correctness): ✅
+- Pass 2 (Readability): ✅
+- Pass 3 (Performance): ✅
+- Issues critiques résolues: [X]
+
+**Statut : PRÊT POUR MERGE** 🎉
+
+**Options :**
+
+→ 📦 **Créer le commit ?**
+→ 🔀 **Créer la PR ?**
+→ 🔄 **Nouvelle feature ?** (retour au début)
+
+---
+
+**[C] Commit** | **[P] Pull Request** | **[N] Nouvelle feature** | **[R] Réviser encore**
+```
+
+**⏸️ STOP** - Attendre confirmation
+
+---
+
+## Transitions
+
+- **Vers commit** : "Prêt à committer les changements ?"
+- **Vers PR** : "Prêt à créer la Pull Request ?"
+- **Retour code-implementer** : "Besoin de modifications supplémentaires"
+- **Retour test-runner** : "Besoin de tests additionnels"

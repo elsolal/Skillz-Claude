@@ -299,6 +299,59 @@ npm test
 
 ---
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output Tests
+
+| Critère | Status |
+|---------|--------|
+| Tests P0 passent (100%) | ✅/❌ |
+| Tests P1 passent (100%) | ✅/❌ |
+| Coverage P0 atteinte (Unit >90%, Int >80%) | ✅/❌ |
+| Pas de tests flaky (3 runs identiques) | ✅/❌ |
+| Pas de hard waits (`waitForTimeout`) | ✅/❌ |
+| Assertions visibles (pas dans helpers) | ✅/❌ |
+| Cleanup automatique (fixtures) | ✅/❌ |
+
+**Score : X/7** → Si < 5 ou tests échouent, corriger avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation des tests, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Tests passent.
+
+**Résumé :**
+- Tests passés : [X]
+- Coverage : [X]%
+- Flaky check : 3/3 runs identiques ✅
+
+**Recommandation :**
+
+[Si Mode ATDD et tests RED]
+→ 💻 **Retour `/code-implementer` ?** (implémenter pour passer au GREEN)
+
+[Si tests GREEN]
+→ 🔄 **Lancer `/code-reviewer` ?** (3 passes de review)
+
+---
+
+**[Y] Oui, lancer la review** | **[N] Non, ajuster les tests** | **[C] Retour au code**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers code-reviewer** : "Tests passent, on passe à la review ?"

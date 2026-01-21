@@ -212,6 +212,58 @@ throw new Error('Error');
 
 ---
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output Implementation
+
+| Critère | Status |
+|---------|--------|
+| Toutes étapes du plan complétées | ✅/❌ |
+| Lint passe (0 errors) | ✅/❌ |
+| TypeCheck passe (0 errors) | ✅/❌ |
+| Build passe | ✅/❌ |
+| Diff montré pour chaque modification | ✅/❌ |
+| Pas de code mort/commenté | ✅/❌ |
+| Conventions du projet respectées | ✅/❌ |
+
+**Score : X/7** → Si < 5, corriger avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation de l'implémentation, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Implémentation terminée.
+
+**Résumé :**
+- Étapes complétées : [X/Y]
+- Fichiers modifiés : [X]
+- Lignes : +[X] / -[Y]
+- Lint: ✅ | Types: ✅ | Build: ✅
+
+**Recommandation :**
+
+→ 🧪 **Lancer `/test-runner` ?** (écrire et exécuter les tests)
+
+Le code est implémenté, il faut maintenant le tester.
+
+---
+
+**[Y] Oui, écrire les tests** | **[N] Non, ajuster le code** | **[P] Retour au plan**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers test-runner** : "Code implémenté, on passe aux tests ?"

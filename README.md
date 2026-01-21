@@ -1,12 +1,13 @@
-# D-EPCT+R Workflow v2.6
+# D-EPCT+R Workflow v2.7
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
 > ✅ **Mode Manuel** - Validation humaine à chaque étape
-> ✅ **Mode RALPH** - Boucle autonome jusqu'à complétion
+> ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
+> ✅ **Skill Chaining** - Transitions automatiques entre skills
+> ✅ **Output Validation** - Checklists de validation avec scores
 > ✅ **35+ fichiers Knowledge** - Base de connaissances testing & workflows
 > ✅ **Dynamic Context Injection** - Chargement automatique du contexte pertinent
-> ✅ **Hooks automatiques** - Auto-lint, coverage, auth checks
 > ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
 ## Installation
@@ -137,7 +138,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Commandes (13)
+## Commandes (14)
 
 ### Mode Manuel (avec validation)
 
@@ -153,9 +154,10 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /auto-discovery "idée"  # Planning complet en autonome
 /auto-feature #123      # Implémentation complète en autonome
 /cancel-ralph           # Arrêter le mode RALPH
+/resume [session-id]    # Reprendre une session RALPH (NEW v2.7)
 ```
 
-### Utilitaires (NEW v2.6)
+### Utilitaires
 
 ```bash
 /status                 # État du projet (docs, issues, RALPH)
@@ -205,6 +207,48 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `code-implementer` | Implémentation | **Lint/types obligatoires**, **hook auto-lint** |
 | `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
+
+---
+
+## Fonctionnalités v2.7
+
+### Skill Chaining (Auto-Chain)
+
+Chaque skill propose automatiquement le skill suivant après validation :
+
+```
+✅ Brainstorm terminé → Lancer /ux-designer ou /pm-prd ?
+✅ PRD validé → Lancer /ui-designer ou /architect ?
+✅ Code implémenté → Lancer /test-runner ?
+```
+
+### Output Validation
+
+Chaque skill valide son output avec un score minimum avant transition :
+
+| Skill | Seuil |
+|-------|-------|
+| `idea-brainstorm` | 4/5 |
+| `pm-prd` | 6/7 |
+| `pm-stories` | 13/15 |
+| `code-implementer` | 4/5 |
+
+### RALPH Metrics
+
+Les commandes RALPH trackent automatiquement :
+- Temps par phase
+- Auto-corrections (lint, types, tests)
+- Fichiers créés/modifiés
+- Retours arrière
+
+### Commande /resume
+
+Reprendre une session RALPH interrompue :
+
+```bash
+/resume                 # Dernière session
+/resume <session-id>    # Session spécifique
+```
 
 ---
 
@@ -267,7 +311,7 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 ---
 
-## Structure SKILL.md (v2.6)
+## Structure SKILL.md (v2.7)
 
 Chaque skill suit une structure standardisée :
 
@@ -324,18 +368,19 @@ knowledge:
 ├── settings.json                    # Config hooks RALPH
 ├── hooks/
 │   └── stop-hook.sh                 # Hook RALPH (intercepte exit)
-├── commands/                        # 13 commandes
+├── commands/                        # 14 commandes
 │   ├── discovery.md
 │   ├── feature.md
 │   ├── auto-loop.md
 │   ├── auto-discovery.md
 │   ├── auto-feature.md
 │   ├── cancel-ralph.md
-│   ├── status.md                    # NEW v2.6
-│   ├── pr-review.md                 # NEW v2.6
-│   ├── quick-fix.md                 # NEW v2.6
-│   ├── refactor.md                  # NEW v2.6
-│   └── docs.md                      # NEW v2.6
+│   ├── resume.md                    # NEW v2.7
+│   ├── status.md
+│   ├── pr-review.md
+│   ├── quick-fix.md
+│   ├── refactor.md
+│   └── docs.md
 ├── knowledge/                       # 35+ fichiers
 │   ├── tea-index.csv                # Index des fragments
 │   ├── testing/                     # 32 fichiers
@@ -402,9 +447,16 @@ docs/                                # Output documents
 | **CI/CD** | 3 | Burn-in, selective testing |
 | **Advanced** | 13 | Contract testing, feature flags, auth |
 
-#### Workflows (3 fichiers)
+#### Workflows (10 fichiers)
 
 - `prd-template.md` - Template PRD complet
+- `prd-patterns.md` - Patterns PRD par domaine (NEW v2.7)
+- `architecture-template.md` - Template architecture
+- `stories-template.md` - Template stories
+- `ux-template.md` - Template UX design
+- `ui-template.md` - Template UI design
+- `estimation-techniques.md` - Techniques d'estimation (NEW v2.7)
+- `risk-assessment.md` - Framework de risques (NEW v2.7)
 - `domain-complexity.csv` - Matrice complexité
 - `project-types.csv` - Types de projets
 
@@ -437,7 +489,34 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v2.6.0 (Current)
+### v2.7.0 (Current)
+
+**Skill Chaining (Auto-Chain)**
+- Chaque skill propose automatiquement le skill suivant après validation
+- Transitions intelligentes basées sur le contexte (UX/UI triggers)
+
+**Output Validation**
+- Chaque skill valide son output avec une checklist et un score minimum
+- Les 12 skills ont maintenant des critères de validation explicites
+
+**RALPH Metrics**
+- Tracking automatique du temps par phase
+- Comptage des auto-corrections (lint, types, tests)
+- Métriques fichiers créés/modifiés
+
+**Commande /resume**
+- Reprendre une session RALPH interrompue
+- Options : Continue, Restart, Modify, Abandon
+
+**Knowledge Base Planning**
+- `prd-patterns.md` - Patterns PRD par domaine (SaaS, E-commerce, Mobile, API)
+- `estimation-techniques.md` - T-shirt sizing, Story points, Three-point
+- `risk-assessment.md` - Matrice Probabilité × Impact
+
+**Examples avec code réel**
+- 3 exemples (simple-api, blog-nextjs, saas-dashboard) enrichis avec du code complet
+
+### v2.6.0
 
 **Dynamic Context Injection**
 - Tous les 12 skills chargent automatiquement le contexte pertinent au démarrage

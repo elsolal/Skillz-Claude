@@ -280,6 +280,58 @@ project/
 
 ---
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output Codebase Analysis
+
+| Critère | Status |
+|---------|--------|
+| Architecture globale documentée | ✅/❌ |
+| Stack technique identifié | ✅/❌ |
+| Fichiers à modifier listés | ✅/❌ |
+| Patterns et conventions notés | ✅/❌ |
+| Flux de données cartographié | ✅/❌ |
+| Dépendances internes mappées | ✅/❌ |
+| Risques identifiés avec mitigations | ✅/❌ |
+| Tests existants localisés | ✅/❌ |
+
+**Score : X/8** → Si < 6, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation de l'analyse, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Codebase analysé.
+
+**Résumé :**
+- Type de projet : [Frontend/Backend/Fullstack/etc.]
+- Fichiers à modifier : [X]
+- Risques identifiés : [X]
+
+**Recommandation :**
+
+→ 📝 **Lancer `/implementation-planner` ?** (créer le plan d'implémentation)
+
+L'architecture est comprise, on peut planifier les étapes.
+
+---
+
+**[Y] Oui, créer le plan** | **[N] Non, explorer plus** | **[I] Relire l'issue**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers implementation-planner** : "Architecture comprise, on passe au plan d'implémentation ?"

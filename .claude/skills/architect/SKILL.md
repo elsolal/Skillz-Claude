@@ -305,6 +305,53 @@ Document : `docs/planning/architecture/ARCH-{slug}.md`
 - **Rester pragmatique** : L'architecture doit être implémentable
 - **Identifier les risques** : Anticiper les problèmes
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output Architecture
+
+| Critère | Status |
+|---------|--------|
+| Fichier créé dans `docs/planning/architecture/` | ✅/❌ |
+| Stack technique défini avec justifications | ✅/❌ |
+| Structure du projet documentée | ✅/❌ |
+| Data model spécifié | ✅/❌ |
+| APIs/Endpoints listés | ✅/❌ |
+| Sécurité adressée | ✅/❌ |
+| Risques techniques identifiés | ✅/❌ |
+| Référence au PRD présente | ✅/❌ |
+
+**Score : X/8** → Si < 6, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation de l'architecture, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Architecture créée et validée.
+
+**Recommandation :**
+
+→ 📝 **Lancer `/pm-stories` ?** (créer les Epics et User Stories)
+
+L'architecture est prête, on peut maintenant découper en stories implémentables.
+
+---
+
+**[Y] Oui, continuer** | **[N] Non, réviser** | **[P] Pause**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transition
 
 - **Vers PM-Stories** : "On passe à la création des User Stories ?"

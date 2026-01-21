@@ -362,6 +362,55 @@ Dis "ok" pour continuer.
 
 ---
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output Brainstorm
+
+| Critère | Status |
+|---------|--------|
+| Fichier créé dans `docs/planning/brainstorms/` | ✅/❌ |
+| Synthèse des idées présente | ✅/❌ |
+| Direction recommandée claire | ✅/❌ |
+| Questions ouvertes listées | ✅/❌ |
+| Évaluation UX/UI effectuée | ✅/❌ |
+
+**Score : X/5** → Si < 4, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation du brainstorm, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Brainstorm terminé et sauvegardé.
+
+**Basé sur l'évaluation UX/UI :**
+
+[Si Score UX ≥ 4]
+→ 🎨 **Lancer `/ux-designer` ?** (recommandé - parcours multi-écrans détecté)
+
+[Si Score UI ≥ 3 et pas d'UX requis]
+→ 🖌️ **Lancer `/ui-designer` ?** (design system nécessaire)
+
+[Sinon]
+→ 📋 **Lancer `/pm-prd` ?** (structurer en spécifications)
+
+---
+
+**[Y] Oui, continuer** | **[N] Non, je choisis** | **[P] Pause**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers ux-designer** : "On définit l'expérience utilisateur d'abord ?"

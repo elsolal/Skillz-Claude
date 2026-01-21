@@ -333,6 +333,61 @@ npm run lint && npm run typecheck && npm test
 
 ---
 
+## Output Validation
+
+Avant de proposer la transition, valider :
+
+```markdown
+### ✅ Checklist Output Implementation Plan
+
+| Critère | Status |
+|---------|--------|
+| Tous requirements couverts par des étapes | ✅/❌ |
+| Étapes atomiques (< 30 min chacune) | ✅/❌ |
+| Dépendances entre étapes séquencées | ✅/❌ |
+| Tests prévus pour chaque fonctionnalité | ✅/❌ |
+| Risques identifiés avec mitigations | ✅/❌ |
+| 3 passes de review incluses | ✅/❌ |
+| Estimations réalistes | ✅/❌ |
+| Commandes de validation définies | ✅/❌ |
+
+**Score : X/8** → Si < 6, compléter avant transition
+```
+
+---
+
+## Auto-Chain
+
+Après validation du plan, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Plan d'implémentation validé.
+
+**Résumé :**
+- Étapes : [X]
+- Complexité : [S/M/L]
+- Estimation totale : [X]h
+- Mode : [Standard/ATDD]
+
+**Recommandation :**
+
+[Si Mode ATDD]
+→ 🧪 **Lancer `/test-runner` ?** (écrire les tests d'abord - RED)
+
+[Si Mode Standard]
+→ 💻 **Lancer `/code-implementer` ?** (commencer l'implémentation)
+
+---
+
+**[Y] Oui, commencer** | **[N] Non, ajuster le plan** | **[A] Mode ATDD** | **[S] Mode Standard**
+```
+
+**⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
 ## Transitions
 
 - **Vers code-implementer** : "Plan validé, on commence l'implémentation ?"
