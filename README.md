@@ -1,13 +1,14 @@
-# D-EPCT+R Workflow v3.1
+# D-EPCT+R Workflow v3.2
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
+> ✅ **Task System** - Nouveau système de tracking (remplace TodoWrite) (NEW v3.2)
+> ✅ **Plan Mode** - Workflow Explore → Plan → Code documenté (NEW v3.2)
+> ✅ **Skills Merger** - Slash commands et skills fusionnés (NEW v3.2)
 > ✅ **Mode Manuel** - Validation humaine à chaque étape
 > ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
-> ✅ **Git Hooks** - pre-commit, commit-msg (NEW v3.1)
-> ✅ **DevContainer** - Docker dev environment (NEW v3.1)
-> ✅ **Performance Auditor** - Core Web Vitals, Lighthouse (NEW v3.1)
-> ✅ **Database Designer** - ERD, migrations, Prisma/Drizzle
+> ✅ **Git Hooks** - pre-commit, commit-msg
+> ✅ **DevContainer** - Docker dev environment
 > ✅ **42 fichiers Knowledge** - Base de connaissances testing & workflows
 > ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
@@ -215,6 +216,34 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
 | `performance-auditor` | Audit performance (NEW) | **Core Web Vitals**, bundle size, Lighthouse |
+
+---
+
+## Fonctionnalités v3.2
+
+### Task System
+
+Claude Code utilise le système **Tasks** pour tracker les projets complexes :
+
+| Outil | Usage |
+|-------|-------|
+| `TaskCreate` | Créer une tâche avec subject, description, activeForm |
+| `TaskList` | Lister toutes les tâches et leur statut |
+| `TaskGet` | Récupérer les détails d'une tâche par ID |
+| `TaskUpdate` | Mettre à jour statut, description, dépendances |
+
+**Multi-sessions :**
+```bash
+CLAUDE_CODE_TASK_LIST_ID=mon-projet claude
+```
+
+### Plan Mode
+
+Pour les tâches non-triviales, Claude utilise le workflow :
+1. **Explore** → Recherche dans le codebase
+2. **Plan** → Designer la solution
+3. **Validate** → Approbation utilisateur
+4. **Execute** → Implémentation avec Tasks
 
 ---
 
@@ -688,7 +717,31 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v3.1.0 (Current)
+### v3.2.0 (Current)
+
+**Task System Integration**
+- Nouveau système Tasks (TaskCreate, TaskList, TaskUpdate, TaskGet)
+- Remplace TodoWrite obsolète dans tous les skills
+- Support multi-sessions avec CLAUDE_CODE_TASK_LIST_ID
+- Coordination entre subagents
+
+**Plan Mode Obligatoire**
+- Documentation du workflow Explore → Plan → Code
+- Tableau de décision pour activer Plan Mode
+- Intégration avec le système Tasks
+
+**Skills Merger Compliance**
+- Ajout de `user-invocable: true` à tous les skills
+- Standardisation de l'ordre des champs frontmatter
+- Conversion allowed-tools en format liste YAML
+- Ajout de `context: fork` aux skills manquants
+
+**Améliorations techniques**
+- 16 skills mis à jour avec frontmatter standardisé
+- Meilleure isolation avec context: fork
+- Documentation Subagents et Context
+
+### v3.1.0
 
 **Git Hooks**
 - Templates pre-commit et commit-msg
