@@ -2,8 +2,21 @@
 name: test-runner
 description: Écrit et exécute les tests pour valider l'implémentation. Utiliser après l'implémentation du code, quand on a besoin de vérifier que le code fonctionne, ou avant les code reviews. Peut aussi être utilisé en mode ATDD (tests d'abord).
 model: opus
-allowed-tools: Read, Grep, Glob, Write, Edit, Bash
+context: fork
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+  - Bash
+  - Task
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
+  - TaskGet
 argument-hint: <file-or-directory-to-test>
+user-invocable: true
 hooks:
   post_tool_call:
     - matcher: "Bash.*npm test|Bash.*npm run test|Bash.*jest|Bash.*vitest|Bash.*pytest"

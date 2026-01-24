@@ -1,11 +1,16 @@
 ---
 name: ui-designer
 description: Définit le design system, les composants UI et les guidelines visuelles. Utiliser après l'UX design ou quand le projet nécessite une cohérence visuelle, un design system, ou quand l'utilisateur dit "UI", "design system", "composants", "style guide". Peut être déclenché automatiquement par UX designer ou PRD.
+model: opus
 context: fork
 agent: Plan
-model: opus
-allowed-tools: Read, Grep, Glob, Write
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
 argument-hint: <ux-design-file>
+user-invocable: true
 trigger:
   auto_criteria:
     - has_design_system: false

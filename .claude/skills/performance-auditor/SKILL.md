@@ -12,7 +12,10 @@ allowed-tools:
   - Edit
   - Bash
   - Task
-  - TodoWrite
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
+  - TaskGet
   - WebFetch
 argument-hint: <url-or-directory>
 user-invocable: true

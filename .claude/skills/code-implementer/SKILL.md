@@ -2,8 +2,21 @@
 name: code-implementer
 description: Implémente le code selon le plan validé, en respectant les conventions du projet. Utiliser après validation du plan, quand on passe à l'écriture du code, ou pour chaque étape d'implémentation.
 model: opus
-allowed-tools: Read, Grep, Glob, Write, Edit, Bash
+context: fork
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+  - Bash
+  - Task
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
+  - TaskGet
 argument-hint: <plan-step-number-or-file>
+user-invocable: true
 hooks:
   post_tool_call:
     - matcher: "Edit|Write"

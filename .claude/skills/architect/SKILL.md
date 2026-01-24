@@ -1,11 +1,16 @@
 ---
 name: architect
 description: Crée un document d'architecture technique basé sur le PRD. Définit le stack technique, la structure du code, les composants et leurs interactions. Utiliser après la création du PRD, quand l'utilisateur dit "architecture", "tech stack", "structure technique", ou quand on passe du PRD au développement sur un projet complexe.
+model: opus
 context: fork
 agent: Plan
-model: opus
-allowed-tools: Read, Grep, Glob, Write
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
 argument-hint: <prd-filename>
+user-invocable: true
 hooks:
   pre_tool_call:
     - matcher: "Write.*architecture"

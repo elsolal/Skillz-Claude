@@ -15,7 +15,7 @@
 
 ---
 
-# D-EPCT+R Workflow v3.1
+# D-EPCT+R Workflow v3.2
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -183,6 +183,147 @@ Audit de performance avec Core Web Vitals et bundle analysis :
 - **Bundle** : JS/CSS size, chunks, tree-shaking
 - **Lighthouse** : Score complet
 - **Dependencies** : Packages lourds, alternatives
+
+---
+
+## Fonctionnalités avancées (v3.2)
+
+### Task System
+
+Claude Code utilise le système **Tasks** pour tracker les projets complexes et coordonner le travail multi-sessions.
+
+**Quand utiliser les Tasks :**
+- Tâche avec 3+ étapes distinctes
+- Dépendances entre étapes
+- Travail multi-sessions ou multi-subagents
+- Projet nécessitant un tracking de progression
+
+**Outils disponibles :**
+
+| Outil | Usage |
+|-------|-------|
+| `TaskCreate` | Créer une nouvelle tâche avec subject, description, activeForm |
+| `TaskList` | Lister toutes les tâches et leur statut |
+| `TaskGet` | Récupérer les détails d'une tâche par ID |
+| `TaskUpdate` | Mettre à jour statut, description, dépendances |
+
+**Workflow Tasks :**
+
+```
+1. TaskCreate → Créer les tâches avec dépendances
+2. TaskUpdate(status: in_progress) → Marquer le début
+3. [Exécution du travail]
+4. TaskUpdate(status: completed) → Marquer la fin
+5. TaskList → Vérifier la prochaine tâche
+```
+
+**Multi-sessions :**
+
+```bash
+# Partager une liste de tâches entre sessions
+CLAUDE_CODE_TASK_LIST_ID=mon-projet claude
+```
+
+Toutes les sessions avec le même ID partagent les Tasks et sont notifiées des mises à jour.
+
+**Champs TaskCreate :**
+- `subject` : Titre court en forme impérative ("Implémenter X")
+- `description` : Détails, contexte, critères d'acceptance
+- `activeForm` : Forme progressive pour le spinner ("Implementing X")
+
+**Statuts :**
+- `pending` : En attente
+- `in_progress` : En cours (un seul à la fois recommandé)
+- `completed` : Terminé
+
+> ⚠️ **Note** : `TodoWrite` est obsolète et remplacé par `TaskCreate`.
+
+---
+
+### Plan Mode Obligatoire
+
+Pour les tâches d'implémentation non-triviales, Claude DOIT utiliser le Plan Mode.
+
+**Quand activer Plan Mode :**
+
+| Situation | Plan Mode ? |
+|-----------|-------------|
+| Nouvelle feature | ✅ Oui |
+| Bug fix simple (< 10 lignes) | ❌ Non |
+| Refactoring | ✅ Oui |
+| Documentation | ❌ Non |
+| Architecture | ✅ Oui |
+| Changement multi-fichiers | ✅ Oui |
+| Choix technique à faire | ✅ Oui |
+
+**Workflow recommandé :**
+
+```
+1. Explore (agent: Explore) → Recherche dans le codebase
+2. EnterPlanMode → Designer la solution
+3. Validation utilisateur (⏸️ STOP)
+4. Exécution avec Tasks pour tracking
+5. Output Scoring → Validation qualité
+```
+
+**Règles :**
+- ✅ Toujours explorer avant de planifier
+- ✅ Toujours planifier avant de coder (sauf fix trivial)
+- ✅ Toujours valider le plan avec l'utilisateur
+- ✅ Utiliser Tasks pour tracker l'exécution
+- ⛔ Ne JAMAIS coder sans avoir compris l'existant
+
+---
+
+### Subagents et Context
+
+**Types de subagents :**
+
+| Agent | Usage |
+|-------|-------|
+| `Explore` | Recherche dans le codebase, analyse de fichiers |
+| `Plan` | Conception de plans d'implémentation |
+| `Bash` | Exécution de commandes shell |
+
+**Context modes :**
+
+| Mode | Usage |
+|------|-------|
+| `context: fork` | Isolation complète, contexte forké |
+| `context: default` | Contexte partagé avec la session principale |
+
+**Recommandations :**
+- Skills de planification → `context: fork` (isolation)
+- Skills d'implémentation → `context: fork` (protection)
+- Skills de lecture simple → `context: default`
+
+---
+
+### Skills + Slash Commands (Merger)
+
+Les Slash Commands et Skills sont maintenant fusionnés. Chaque skill peut être invoqué avec `/skill-name`.
+
+**Frontmatter d'invocation :**
+
+```yaml
+user-invocable: true        # Peut être appelé via /skill-name
+# Si false, le skill ne peut être appelé que par Claude ou un subagent
+```
+
+**Utilisation :**
+- `/idea-brainstorm "mon idée"` → Invoque le skill idea-brainstorm
+- `/feature #123` → Invoque le workflow feature
+- `/pr-review #456` → Invoque le skill pr-review
+
+**Avec subagents :**
+
+Les skills peuvent spawner des subagents avec `agent: <type>` :
+```yaml
+agent: Explore  # Spawn un subagent Explore pour la recherche
+agent: Plan     # Spawn un subagent Plan pour la conception
+```
+
+Avec `context: fork`, le subagent hérite du contexte actuel mais travaille de manière isolée.
 
 ---
 
@@ -483,27 +624,34 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 ---
 
-## Structure des Skills (v2.8)
+## Structure des Skills (v3.2)
 
-Chaque skill suit une structure standardisée :
+Chaque skill suit une structure standardisée avec le frontmatter dans cet ordre :
 
 ```markdown
 ---
-name: skill-name
+name: skill-name                 # Nom kebab-case
 description: Description + triggers
-model: opus
-context: fork                    # Exécution isolée
-agent: Plan | Explore           # Type d'agent
-allowed-tools: [tools]          # Outils autorisés
-argument-hint: <hint>           # Guide pour l'utilisateur
-user-invocable: true | false    # Appelable directement
-hooks:                          # Hooks automatiques
+model: opus                      # Modèle Claude
+context: fork | default          # Isolation (fork) ou partagé (default)
+agent: Plan | Explore            # Type de subagent (optionnel)
+allowed-tools:                   # Outils autorisés (liste YAML)
+  - Read
+  - Write
+  - Bash
+  - Task                         # Nouveau système Tasks
+argument-hint: <hint>            # Guide pour l'utilisateur
+user-invocable: true             # Appelable via /skill-name
+hooks:                           # Hooks automatiques (optionnel)
   pre_tool_call: [...]
   post_tool_call: [...]
-knowledge:
+knowledge:                       # Knowledge base (optionnel)
   core: [fichiers auto-chargés]
   advanced: [fichiers si besoin]
   debugging: [fichiers troubleshooting]
+triggers_ux_ui:                  # Auto-trigger UX/UI (optionnel)
+  auto: true
+  criteria: {...}
 ---
 
 # Skill Name

@@ -1,11 +1,19 @@
 ---
 name: implementation-planner
 description: Crée un plan d'implémentation détaillé basé sur les requirements et l'analyse du code. Utiliser après l'étape Explain, quand on a besoin de structurer le travail de développement, ou avant de commencer à coder.
+model: opus
 context: fork
 agent: Plan
-model: opus
-allowed-tools: Read, Grep, Glob
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Task
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
 argument-hint: <prd-or-issue-reference>
+user-invocable: true
 knowledge:
   core:
     - ../../knowledge/workflows/domain-complexity.csv

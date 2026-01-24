@@ -12,7 +12,10 @@ allowed-tools:
   - Edit
   - Bash
   - Task
-  - TodoWrite
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
+  - TaskGet
   - mcp__github__get_issue
   - mcp__github__list_issues
 argument-hint: <project-name-or-prd-reference>

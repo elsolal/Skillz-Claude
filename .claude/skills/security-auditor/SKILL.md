@@ -10,6 +10,10 @@ allowed-tools:
   - Grep
   - Bash
   - Task
+  - TaskCreate
+  - TaskUpdate
+  - TaskList
+  - TaskGet
   - WebFetch
 argument-hint: <file-or-directory-to-audit>
 user-invocable: true
