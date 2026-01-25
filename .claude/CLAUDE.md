@@ -193,10 +193,16 @@ Audit de performance avec Core Web Vitals et bundle analysis :
 Claude Code utilise le système **Tasks** pour tracker les projets complexes et coordonner le travail multi-sessions.
 
 **Quand utiliser les Tasks :**
-- Tâche avec 3+ étapes distinctes
-- Dépendances entre étapes
-- Travail multi-sessions ou multi-subagents
-- Projet nécessitant un tracking de progression
+- Travail multi-étapes où tu pourrais oublier une étape
+- Dépendances entre actions (X doit être fait avant Y)
+- Travail interruptible (multi-sessions, risque de timeout)
+- L'utilisateur demande explicitement un suivi de progression
+
+**Quand NE PAS utiliser les Tasks :**
+- Action unique évidente (ajouter un import, corriger une typo)
+- Fix trivial < 1 minute
+- Exploration/recherche sans modification de code
+- Le spinner natif suffit à montrer l'activité en cours
 
 **Outils disponibles :**
 
