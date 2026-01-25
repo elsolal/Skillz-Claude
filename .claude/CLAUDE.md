@@ -896,6 +896,7 @@ fix/[issue-number]-description-courte
 
 ### Tous modes
 
+- ⛔ Ne JAMAIS commit/push directement sur main (toujours utiliser une branche dédiée + PR)
 - ⛔ Ne JAMAIS committer sans tests qui passent
 - ⛔ Ne JAMAIS merger sans les 3 passes de review
 - ✅ Respecter les conventions du projet existant
