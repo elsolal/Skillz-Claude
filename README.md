@@ -232,6 +232,16 @@ Claude Code utilise le système **Tasks** pour tracker les projets complexes :
 | `TaskGet` | Récupérer les détails d'une tâche par ID |
 | `TaskUpdate` | Mettre à jour statut, description, dépendances |
 
+**Quand utiliser :**
+- Travail multi-étapes où tu pourrais oublier une étape
+- Dépendances entre actions (X avant Y)
+- Travail interruptible (multi-sessions)
+
+**Quand NE PAS utiliser :**
+- Action unique évidente (typo, import)
+- Fix trivial < 1 minute
+- Le spinner natif suffit
+
 **Multi-sessions :**
 ```bash
 CLAUDE_CODE_TASK_LIST_ID=mon-projet claude
