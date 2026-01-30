@@ -15,6 +15,15 @@ description: Lance le workflow EPCT+R complet pour implémenter une feature à p
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### Task System (tracking automatique)
+
+Si la feature a **2+ étapes**, des Tasks sont créées automatiquement pour :
+- Visualiser la progression en temps réel
+- Permettre la reprise en cas d'interruption
+- Documenter le travail effectué
+
+Utiliser `TaskList` à tout moment pour voir l'état des Tasks.
+
 ---
 
 ## Phase 1: EXPLAIN 📋
@@ -106,10 +115,12 @@ Optimal ? Memory leaks ? Scale ?
 
 ### PLAN
 - [ ] Plan créé
+- [ ] Tasks créées (si 2+ étapes)
 - [ ] ✅ Validé
 
 ### CODE
 - [ ] Étapes implémentées
+- [ ] Tasks mises à jour (completed)
 - [ ] ✅ Validé
 
 ### TEST

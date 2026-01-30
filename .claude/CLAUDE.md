@@ -15,7 +15,7 @@
 
 ---
 
-# D-EPCT+R Workflow v3.2
+# D-EPCT+R Workflow v3.3
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -126,8 +126,8 @@
 |-------|------|----------------------|
 | `github-issue-reader` | Lecture d'issues | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), Given/When/Then |
 | `codebase-explainer` | Analyse du code | **Impact mapping**, patterns, flux de données, risques |
-| `implementation-planner` | Planification | **Complexité S/M/L**, étapes atomiques, timeline, risques |
-| `code-implementer` | Implémentation | Validation **lint/types obligatoire** par étape, **hook auto-lint** |
+| `implementation-planner` | Planification | **Complexité S/M/L**, étapes atomiques, timeline, risques, **TaskCreate si 2+ étapes** (NEW v3.3) |
+| `code-implementer` | Implémentation | Validation **lint/types obligatoire** par étape, **hook auto-lint**, **TaskUpdate auto** (NEW v3.3) |
 | `test-runner` | Tests | Mode **ATDD** (tests first) ou Standard, priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
@@ -186,9 +186,78 @@ Audit de performance avec Core Web Vitals et bundle analysis :
 
 ---
 
+## Fonctionnalités avancées (v3.3)
+
+### Task System intégré au workflow /feature
+
+Le Task System est maintenant **automatiquement utilisé** dans le workflow `/feature` quand il y a 2+ étapes d'implémentation.
+
+**Règle de déclenchement :**
+
+| Nombre d'étapes | Comportement |
+|-----------------|--------------|
+| 1 étape | Pas de Task (spinner natif suffit) |
+| **2+ étapes** | `TaskCreate` automatique pour chaque étape |
+
+**Workflow automatisé :**
+
+```
+/feature #123
+    │
+    ├── EXPLAIN → Analyse de l'issue et du codebase
+    │
+    ├── PLAN → implementation-planner
+    │   └── Si 2+ étapes :
+    │       TaskCreate("Étape 1: ...")
+    │       TaskCreate("Étape 2: ...")
+    │       TaskUpdate(addBlockedBy: [...])  # Dépendances
+    │
+    ├── CODE → code-implementer
+    │   └── Pour chaque étape :
+    │       TaskUpdate(in_progress) → Coder → TaskUpdate(completed)
+    │
+    ├── TEST → test-runner
+    │
+    └── REVIEW → 3 passes
+```
+
+**Bénéfices :**
+- Visualisation en temps réel de la progression
+- Reprise automatique en cas d'interruption (timeout, crash)
+- Coordination multi-sessions (CLAUDE_CODE_TASK_LIST_ID)
+- Documentation du travail effectué
+
+**Format TaskCreate dans implementation-planner :**
+
+```typescript
+TaskCreate({
+  subject: "Étape N: [Titre court impératif]",
+  description: `
+    **Objectif:** [Ce que cette étape accomplit]
+    **Fichiers:** [Liste des fichiers à modifier]
+    **Validation:** [Commandes de vérification]
+    **Dépendances:** [Étapes préalables]
+  `,
+  activeForm: "[Action]ing [objet]..."  // Ex: "Creating user types..."
+})
+```
+
+**Mise à jour dans code-implementer :**
+
+```typescript
+// Avant de commencer une étape
+TaskUpdate({ taskId: "X", status: "in_progress" })
+
+// Après avoir terminé une étape
+TaskUpdate({ taskId: "X", status: "completed" })
+TaskList()  // Voir la prochaine tâche
+```
+
+---
+
 ## Fonctionnalités avancées (v3.2)
 
-### Task System
+### Task System (documentation générale)
 
 Claude Code utilise le système **Tasks** pour tracker les projets complexes et coordonner le travail multi-sessions.
 
@@ -630,7 +699,7 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 ---
 
-## Structure des Skills (v3.2)
+## Structure des Skills (v3.3)
 
 Chaque skill suit une structure standardisée avec le frontmatter dans cet ordre :
 

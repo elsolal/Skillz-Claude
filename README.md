@@ -1,10 +1,11 @@
-# D-EPCT+R Workflow v3.2
+# D-EPCT+R Workflow v3.3
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
-> ✅ **Task System** - Nouveau système de tracking (remplace TodoWrite) (NEW v3.2)
-> ✅ **Plan Mode** - Workflow Explore → Plan → Code documenté (NEW v3.2)
-> ✅ **Skills Merger** - Slash commands et skills fusionnés (NEW v3.2)
+> ✅ **Task System auto** - Tracking automatique si 2+ étapes dans /feature (NEW v3.3)
+> ✅ **Task System** - Système de tracking (remplace TodoWrite) (v3.2)
+> ✅ **Plan Mode** - Workflow Explore → Plan → Code documenté (v3.2)
+> ✅ **Skills Merger** - Slash commands et skills fusionnés (v3.2)
 > ✅ **Mode Manuel** - Validation humaine à chaque étape
 > ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
 > ✅ **Git Hooks** - pre-commit, commit-msg
@@ -210,8 +211,8 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 |-------|------|----------------------|
 | `github-issue-reader` | Lecture d'issues | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), G/W/T |
 | `codebase-explainer` | Analyse du code | **Impact mapping**, patterns, flux, risques |
-| `implementation-planner` | Planification | **Complexité S/M/L**, étapes atomiques, timeline |
-| `code-implementer` | Implémentation | **Lint/types obligatoires**, **hook auto-lint** |
+| `implementation-planner` | Planification | **Complexité S/M/L**, étapes atomiques, **TaskCreate auto** (NEW) |
+| `code-implementer` | Implémentation | **Lint/types obligatoires**, **TaskUpdate auto** (NEW) |
 | `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
@@ -219,9 +220,40 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
+## Fonctionnalités v3.3
+
+### Task System automatique dans /feature
+
+Le Task System est maintenant **automatiquement utilisé** dans le workflow `/feature` :
+
+| Étapes | Comportement |
+|--------|--------------|
+| 1 étape | Spinner natif (pas de Task) |
+| **2+ étapes** | `TaskCreate` automatique pour chaque étape |
+
+**Workflow :**
+```
+/feature #123
+    │
+    ├── PLAN → TaskCreate pour chaque étape (avec dépendances)
+    │
+    └── CODE → TaskUpdate(in_progress) → Coder → TaskUpdate(completed)
+```
+
+**Bénéfices :**
+- Visualisation en temps réel de la progression
+- Reprise en cas d'interruption (timeout, crash)
+- Documentation automatique du travail
+
+**Skills mis à jour :**
+- `implementation-planner` : Crée les Tasks si 2+ étapes
+- `code-implementer` : Met à jour les Tasks automatiquement
+
+---
+
 ## Fonctionnalités v3.2
 
-### Task System
+### Task System (général)
 
 Claude Code utilise le système **Tasks** pour tracker les projets complexes :
 
@@ -727,7 +759,21 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v3.2.0 (Current)
+### v3.3.0 (Current)
+
+**Task System automatique dans /feature**
+- `implementation-planner` crée automatiquement des Tasks si 2+ étapes
+- `code-implementer` met à jour les Tasks (in_progress → completed)
+- Règle claire : 1 étape = pas de Task, 2+ étapes = Tasks automatiques
+- Dépendances entre Tasks (addBlockedBy) pour séquençage
+- Checklist de validation mise à jour dans les deux skills
+
+**Skills modifiés :**
+- `implementation-planner/SKILL.md` : Nouvelle section "Création des Tasks"
+- `code-implementer/SKILL.md` : Nouvelle section "Gestion des Tasks"
+- `feature.md` : Documentation du Task System
+
+### v3.2.0
 
 **Task System Integration**
 - Nouveau système Tasks (TaskCreate, TaskList, TaskUpdate, TaskGet)

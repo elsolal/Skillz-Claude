@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v3.2 Installer
+# D-EPCT+R Workflow v3.3 Installer
 # Install Claude Code skills + RALPH Mode + 42 Knowledge Files + Templates
 # 16 skills, 15 commands, 18 templates
 #
@@ -56,9 +56,9 @@ TARGET_DOCS="$TARGET_DIR/docs"
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
 if [ "$UPDATE_MODE" = true ]; then
-echo "║             D-EPCT+R Workflow v3.2 Updater                            ║"
+echo "║             D-EPCT+R Workflow v3.3 Updater                            ║"
 else
-echo "║             D-EPCT+R Workflow v3.2 Installer                          ║"
+echo "║             D-EPCT+R Workflow v3.3 Installer                          ║"
 fi
 echo "║                                                                       ║"
 echo "║   SKILLS:       16 (Planning, Design, Dev, Security, Performance)     ║"
@@ -147,7 +147,7 @@ else
 fi
 
 if [ "$UPDATE_MODE" != true ] && [ "$MERGE_MODE" != true ]; then
-    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v3.2 to $TARGET_DIR...${NC}"
+    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v3.3 to $TARGET_DIR...${NC}"
 fi
 echo ""
 

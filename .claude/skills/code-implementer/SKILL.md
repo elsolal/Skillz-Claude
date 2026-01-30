@@ -83,13 +83,59 @@ knowledge:
 - [ ] Étape courante : #X
 - [ ] Fichiers à modifier listés
 - [ ] Coding standards lus (si project-context.md existe)
+- [ ] Tasks existantes vérifiées (TaskList)
+```
+
+**Vérifier les Tasks existantes :**
+```typescript
+// Lister les tasks créées par implementation-planner
+TaskList()
+
+// Si des Tasks existent, les utiliser pour suivre la progression
+// Sinon, travailler sans (feature simple à 1 étape)
 ```
 
 **⏸️ STOP** - Confirmer l'étape à implémenter
 
 ---
 
-### 2. Implémentation (par étape)
+### 2. Gestion des Tasks (OBLIGATOIRE si Tasks existent)
+
+**Avant de commencer une étape :**
+```typescript
+// Marquer la Task comme en cours
+TaskUpdate({
+  taskId: "[ID de l'étape]",
+  status: "in_progress"
+})
+```
+
+**Après avoir terminé une étape :**
+```typescript
+// Marquer la Task comme terminée
+TaskUpdate({
+  taskId: "[ID de l'étape]",
+  status: "completed"
+})
+
+// Vérifier la prochaine Task disponible
+TaskList()
+```
+
+**Workflow Task par étape :**
+```
+┌─────────────────────────────────────────────────────┐
+│  TaskUpdate(in_progress) → Coder → Valider → TaskUpdate(completed)  │
+│         ↓                    ↓        ↓              ↓               │
+│    [Spinner actif]      [Edit/Write] [Lint]    [Task cochée]        │
+└─────────────────────────────────────────────────────┘
+```
+
+**⚠️ IMPORTANT :** Ne jamais oublier de mettre à jour le statut des Tasks. L'utilisateur voit la progression en temps réel.
+
+---
+
+### 3. Implémentation (par étape)
 
 **Pour chaque étape du plan :**
 
@@ -133,7 +179,7 @@ npm run typecheck # si TypeScript
 
 ---
 
-### 3. Auto-vérification continue
+### 4. Auto-vérification continue
 
 | Check | Commande | Attendu |
 |-------|----------|---------|
@@ -241,8 +287,9 @@ Avant de proposer la transition, valider :
 | Diff montré pour chaque modification | ✅/❌ |
 | Pas de code mort/commenté | ✅/❌ |
 | Conventions du projet respectées | ✅/❌ |
+| **Tasks mises à jour (completed)** | ✅/❌/N/A |
 
-**Score : X/7** → Si < 5, corriger avant transition
+**Score : X/8** → Si < 6, corriger avant transition
 ```
 
 ---

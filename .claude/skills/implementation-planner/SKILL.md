@@ -95,7 +95,78 @@ knowledge:
 
 ---
 
-### 2. Décomposition
+### 2. Création des Tasks (OBLIGATOIRE si 2+ étapes)
+
+**Règle de déclenchement :**
+
+| Nombre d'étapes | Action |
+|-----------------|--------|
+| 1 étape | Pas de Task (spinner natif suffit) |
+| 2+ étapes | `TaskCreate` pour chaque étape |
+
+**Pourquoi utiliser les Tasks :**
+- Visualiser la progression en temps réel
+- Reprendre en cas d'interruption (timeout, crash)
+- Coordonner le travail multi-sessions
+- Documenter le travail effectué
+
+**Format TaskCreate :**
+
+```typescript
+// Pour chaque étape du plan :
+TaskCreate({
+  subject: "Étape N: [Titre court impératif]",
+  description: `
+    **Objectif:** [Ce que cette étape accomplit]
+    **Fichiers:** [Liste des fichiers à modifier]
+    **Validation:** [Commandes de vérification]
+    **Dépendances:** [Étapes préalables]
+  `,
+  activeForm: "[Action]ing [objet]..."  // Ex: "Creating user types..."
+})
+```
+
+**Exemple concret :**
+
+```typescript
+TaskCreate({
+  subject: "Étape 1: Créer les types User",
+  description: `
+    **Objectif:** Définir les interfaces TypeScript pour User
+    **Fichiers:** src/types/user.ts (Create)
+    **Validation:** npm run typecheck
+    **Dépendances:** Aucune
+  `,
+  activeForm: "Creating User types..."
+})
+
+TaskCreate({
+  subject: "Étape 2: Implémenter UserService",
+  description: `
+    **Objectif:** Service CRUD pour les utilisateurs
+    **Fichiers:** src/services/user.service.ts (Create)
+    **Validation:** npm run lint && npm run typecheck
+    **Dépendances:** Étape 1
+  `,
+  activeForm: "Implementing UserService..."
+})
+```
+
+**Configurer les dépendances entre Tasks :**
+
+```typescript
+// Après création, lier les dépendances
+TaskUpdate({
+  taskId: "2",
+  addBlockedBy: ["1"]  // Étape 2 bloquée par Étape 1
+})
+```
+
+**⚠️ IMPORTANT :** Créer TOUTES les Tasks AVANT de commencer l'implémentation. Cela permet à l'utilisateur de voir le plan complet et de valider.
+
+---
+
+### 4. Décomposition
 
 **Stratégie de découpage :**
 
@@ -127,7 +198,7 @@ Feature X
 
 ---
 
-### 3. Estimation de complexité
+### 5. Estimation de complexité
 
 **Matrice de complexité :**
 
@@ -145,7 +216,7 @@ Feature X
 
 ---
 
-### 4. Identification des risques
+### 6. Identification des risques
 
 **Catégories de risques :**
 
@@ -167,7 +238,7 @@ Feature X
 
 ---
 
-### 5. Critères de validation
+### 7. Critères de validation
 
 **Pour chaque étape, définir :**
 - Comment vérifier que c'est fait ?
@@ -197,6 +268,7 @@ npm run test        # Pass
 **Complexité globale:** S/M/L
 **Estimation totale:** [X]h
 **Mode:** Standard | ATDD (tests first)
+**Tasks créées:** [X] (IDs: #1, #2, ...)
 
 ### ✅ Checklist rapide
 
@@ -358,8 +430,9 @@ Avant de proposer la transition, valider :
 | 3 passes de review incluses | ✅/❌ |
 | Estimations réalistes | ✅/❌ |
 | Commandes de validation définies | ✅/❌ |
+| **Tasks créées (si 2+ étapes)** | ✅/❌/N/A |
 
-**Score : X/8** → Si < 6, compléter avant transition
+**Score : X/9** → Si < 7, compléter avant transition
 ```
 
 ---
@@ -378,6 +451,7 @@ Après validation du plan, proposer automatiquement :
 - Complexité : [S/M/L]
 - Estimation totale : [X]h
 - Mode : [Standard/ATDD]
+- **Tasks créées : [X]** (utiliser `TaskList` pour voir la progression)
 
 **Recommandation :**
 
@@ -386,6 +460,8 @@ Après validation du plan, proposer automatiquement :
 
 [Si Mode Standard]
 → 💻 **Lancer `/code-implementer` ?** (commencer l'implémentation)
+
+Les Tasks seront mises à jour automatiquement pendant l'implémentation.
 
 ---
 
