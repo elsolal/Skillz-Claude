@@ -542,6 +542,67 @@ Pour chaque appel API :
 - 403 (accès refusé)
 - 3 échecs consécutifs après retries
 
+### Anti-substitution (⛔ CRITIQUE)
+
+> **INTERDIT** : Ne JAMAIS chercher des "modèles alternatifs" ou "modèles gratuits" sur OpenRouter ou ailleurs. Si un modèle échoue après retries → marquer l'agent indisponible, point final.
+
+**Comportements INTERDITS** :
+- ⛔ `curl openrouter.ai/api/v1/models` pour chercher des alternatives
+- ⛔ Remplacer `kimi-k2.5` par `moonlight` ou autre
+- ⛔ Remplacer `deepseek-v3.2` par `deepseek-chat`
+- ⛔ Utiliser des modèles `:free` à la place des modèles spécifiés
+- ⛔ "Improviser" avec d'autres modèles
+
+### Compatibilité macOS
+
+macOS n'a pas la commande `timeout`. Utiliser ces alternatives :
+
+```bash
+# Option 1: Installer gtimeout via Homebrew
+brew install coreutils
+gtimeout 60 curl ...
+
+# Option 2: Utiliser la fonction Bash native (préféré)
+run_with_timeout() {
+  local timeout=$1
+  shift
+  "$@" &
+  local pid=$!
+  ( sleep "$timeout"; kill -9 $pid 2>/dev/null ) &
+  local killer=$!
+  wait $pid 2>/dev/null
+  local result=$?
+  kill $killer 2>/dev/null
+  wait $killer 2>/dev/null
+  return $result
+}
+
+# Usage
+run_with_timeout 60 curl -X POST ...
+```
+
+### Échappement JSON sécurisé
+
+Pour éviter les problèmes de quotes, **toujours** utiliser des fichiers temporaires :
+
+```bash
+# ✅ CORRECT - Utiliser un fichier JSON
+cat > /tmp/payload.json << 'EOFPAYLOAD'
+{
+  "model": "deepseek/deepseek-v3.2",
+  "messages": [{"role": "user", "content": "..."}]
+}
+EOFPAYLOAD
+
+curl -X POST "https://openrouter.ai/api/v1/chat/completions" \
+  -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d @/tmp/payload.json
+
+# ⛔ INCORRECT - Interpolation de variables dans le JSON inline
+curl -d '{"messages": [{"content": "$PROMPT"}]}' # ERREUR!
+```
+
 ---
 
 ## Connecteurs par Agent
