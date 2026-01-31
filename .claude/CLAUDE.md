@@ -15,7 +15,7 @@
 
 ---
 
-# D-EPCT+R Workflow v3.4
+# D-EPCT+R Workflow v3.5
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -132,7 +132,7 @@
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
 | `performance-auditor` | Audit performance (NEW v3.1) | **Core Web Vitals**, bundle size, Lighthouse |
-| `multi-mind` | Débat multi-agents (NEW v3.4) | **6 IA**, 4 rounds, consensus/divergences |
+| `multi-mind` | Débat multi-agents (NEW v3.5) | **6 IA**, **5 rounds avec débat itératif**, consensus/divergences |
 
 ---
 
@@ -187,11 +187,11 @@ Audit de performance avec Core Web Vitals et bundle analysis :
 
 ---
 
-## Fonctionnalités avancées (v3.4)
+## Fonctionnalités avancées (v3.5)
 
-### Multi-Mind Debate System
+### Multi-Mind Debate System v3.5
 
-Système de débat multi-agents avec 6 IA pour valider PRD et code avec des perspectives diverses.
+Système de débat multi-agents avec 6 IA pour valider PRD et code avec des **débats itératifs** et des **échanges ping-pong** entre agents.
 
 ```bash
 /multi-mind prd docs/PRD/PRD-Feature.md    # Valider un PRD
@@ -202,12 +202,14 @@ Système de débat multi-agents avec 6 IA pour valider PRD et code avec des pers
 
 | Agent | Provider | Rôle | Connecteur | Coût |
 |-------|----------|------|------------|------|
-| 🏛️ **Claude** | Anthropic | Architecte Prudent | Orchestrateur natif | Inclus |
+| 🏛️ **Claude** | Anthropic | Architecte Prudent (débatteur) | Orchestrateur natif | Inclus |
 | 🤖 **GPT** | OpenAI | Perfectionniste | Codex CLI | 💳 Payant |
 | 💎 **Gemini** | Google | Innovateur UX | Gemini CLI | 💳 Payant |
 | 🐉 **DeepSeek** | DeepSeek | Provocateur | API REST | 🆓 Gratuit |
 | 🔮 **GLM** | Zhipu AI | Craftsman Frontend | API REST | 🆓 Gratuit |
 | 🌙 **Kimi** | Moonshot | Product Thinker | OpenRouter | 🆓 Gratuit |
+
+> **Note** : Claude participe comme **débatteur** (pas comme modérateur). Il argumente, défend ses positions, et ne synthétise qu'à la fin.
 
 ### Configuration des agents
 
@@ -244,28 +246,54 @@ npm install -g gemini-cli      # Gemini CLI
 
 **Minimum requis** : 3 agents pour un débat valide.
 
-### Workflow 4 Rounds
+### Workflow 5 Rounds (avec débat itératif)
 
 ```
 Round 1: CRITIQUE
 ├─ Chaque agent analyse indépendamment
-├─ Output: 6 critiques séparées avec score /10
-└─ ⏸️ STOP - Afficher résumé
+└─ Output: 6 critiques séparées avec score /10
 
-Round 2: CONFRONTATION
-├─ Partager critiques entre agents
-├─ Chaque agent répond aux autres
-└─ Identifier accords/désaccords
+Round 2: FRICTIONS (NEW)
+├─ Identifier 2-3 désaccords majeurs
+├─ Former les "camps" (agents pour/contre)
+└─ Préparer le débat ciblé
 
-Round 3: CONVERGENCE
-├─ Chaque agent donne son TOP 3
+Round 3: DÉBAT CIBLÉ (NEW - itératif)
+├─ Pour chaque friction (max 3) :
+│   ├─ Tour 1: Camp A argumente / Camp B argumente
+│   ├─ Tour 2: Camp A répond à B / Camp B répond à A
+│   └─ Tour 3: Positions finales (si pas de résolution)
+├─ Max 3 tours par friction
+└─ Résultat: RÉSOLU ou DIVERGENCE MAINTENUE
+
+Round 4: CONVERGENCE
+├─ Chaque agent donne son TOP 3 (post-débat)
 └─ Pondérer par spécialité de l'agent
 
-Round 4: CONSENSUS
-├─ Claude synthétise le débat
+Round 5: CONSENSUS
+├─ Claude synthétise le débat complet
 ├─ Points de consensus documentés
+├─ Résultats des débats (frictions résolues/maintenues)
 ├─ Divergences avec arguments des deux côtés
 └─ Actions prioritaires (TOP 5)
+```
+
+### Mode d'exécution : CONTINU
+
+Le débat s'exécute **automatiquement du Round 1 au Round 5** sans interruption :
+
+```
+🧠 Multi-Mind Debate en cours...
+├─ Round 1: CRITIQUE ✅
+├─ Round 2: FRICTIONS ✅ (3 identifiées)
+├─ Round 3: DÉBAT CIBLÉ ⏳
+│  ├─ Friction #1: Tour 2/3 ⏳
+│  │  ├─ Camp A (🏛️🤖🔮): "SQL pour intégrité..."
+│  │  └─ Camp B (💎🐉🌙): "NoSQL pour flexibilité..."
+│  ├─ Friction #2: En attente...
+│  └─ Friction #3: En attente...
+├─ Round 4: CONVERGENCE ...
+└─ Round 5: CONSENSUS ...
 ```
 
 ### Intégration au workflow
@@ -283,22 +311,28 @@ Le skill Multi-Mind est proposé automatiquement :
 ```
 ╔═══════════════════════════════════════╗
 ║  🧠 MULTI-MIND DEBATE COMPLETE        ║
-║  Agents: 6/6 | Duration: 2m 34s       ║
+║  Agents: 6/6 | Duration: 4m 12s       ║
 ╠═══════════════════════════════════════╣
-║  ✅ CONSENSUS (3 points)              ║
-║  ⚖️ DIVERGENCES (2 points)            ║
+║  ✅ CONSENSUS (4 points)              ║
+║  🔥 FRICTIONS (3 débattues, 2 résolues)║
+║  ⚖️ DIVERGENCES (1 point)             ║
 ║  📋 ACTIONS (5 items)                 ║
 ╚═══════════════════════════════════════╝
 ```
 
-**Rapport** : `docs/debates/YYYY-MM-DD-topic.md`
+**Rapport complet** : `docs/debates/YYYY-MM-DD-topic.md`
+- Round 1 : Critiques individuelles
+- Round 2 : Frictions identifiées
+- Round 3 : Tous les tours de débat détaillés
+- Round 4 : Convergence pondérée
+- Round 5 : Synthèse finale
 
 ### Knowledge Base Multi-Mind
 
 ```
 .claude/knowledge/multi-mind/
 ├── agent-personalities.md    # 6 system prompts
-└── debate-templates.md       # Templates 4 rounds
+└── debate-templates.md       # Templates 5 rounds
 ```
 
 ---
@@ -816,7 +850,7 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 ---
 
-## Structure des Skills (v3.4)
+## Structure des Skills (v3.5)
 
 Chaque skill suit une structure standardisée avec le frontmatter dans cet ordre :
 
@@ -906,9 +940,9 @@ triggers_ux_ui:                  # Auto-trigger UX/UI (optionnel)
 │   ├── risk-assessment.md         # NEW v2.7 - Framework de risques
 │   ├── domain-complexity.csv
 │   └── project-types.csv
-└── multi-mind/                # NEW v3.4 - Débat multi-agents
+└── multi-mind/                # NEW v3.5 - Débat multi-agents
     ├── agent-personalities.md     # 6 system prompts
-    └── debate-templates.md        # Templates 4 rounds
+    └── debate-templates.md        # Templates 5 rounds (itératif)
 ```
 
 ### Chargement progressif
