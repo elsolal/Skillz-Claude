@@ -263,9 +263,12 @@ Après les 3 passes de review, proposer automatiquement :
 → 🔀 **Créer la PR ?**
 → 🔄 **Nouvelle feature ?** (retour au début)
 
+[Si code critique ou architecture complexe]
+→ 🧠 **Validation Multi-Mind ?** (review multi-perspectives avec 6 IA)
+
 ---
 
-**[C] Commit** | **[P] Pull Request** | **[N] Nouvelle feature** | **[R] Réviser encore**
+**[C] Commit** | **[P] Pull Request** | **[M] Multi-Mind** | **[N] Nouvelle feature** | **[R] Réviser encore**
 ```
 
 **⏸️ STOP** - Attendre confirmation

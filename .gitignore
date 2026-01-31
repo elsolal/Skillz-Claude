@@ -2,3 +2,7 @@
 *.swp
 *.swo
 *~
+
+# Environment variables (API keys)
+.env.local
+.env

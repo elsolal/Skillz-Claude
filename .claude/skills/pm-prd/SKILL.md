@@ -385,12 +385,15 @@ Après validation du PRD, proposer automatiquement :
 [Si Mode FULL + pas d'UX requis]
 → 🏗️ **Lancer `/architect` ?** (architecture technique requise)
 
+[Si Mode FULL - optionnel]
+→ 🧠 **Lancer `/multi-mind prd` ?** (débat multi-perspectives avec 6 IA)
+
 [Si Mode LIGHT]
 → 📝 **Lancer `/pm-stories` ?** (direct aux stories)
 
 ---
 
-**[Y] Oui, continuer** | **[N] Non, je choisis** | **[P] Pause**
+**[Y] Oui, continuer** | **[M] Multi-Mind** | **[N] Non, je choisis** | **[P] Pause**
 ```
 
 **⏸️ STOP** - Attendre confirmation avant auto-lancement

@@ -15,7 +15,7 @@
 
 ---
 
-# D-EPCT+R Workflow v3.3
+# D-EPCT+R Workflow v3.4
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -100,7 +100,7 @@
 
 ---
 
-## Skills (16)
+## Skills (17)
 
 ### Phase Planning
 
@@ -132,6 +132,7 @@
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
 | `performance-auditor` | Audit performance (NEW v3.1) | **Core Web Vitals**, bundle size, Lighthouse |
+| `multi-mind` | Débat multi-agents (NEW v3.4) | **6 IA**, 4 rounds, consensus/divergences |
 
 ---
 
@@ -183,6 +184,122 @@ Audit de performance avec Core Web Vitals et bundle analysis :
 - **Bundle** : JS/CSS size, chunks, tree-shaking
 - **Lighthouse** : Score complet
 - **Dependencies** : Packages lourds, alternatives
+
+---
+
+## Fonctionnalités avancées (v3.4)
+
+### Multi-Mind Debate System
+
+Système de débat multi-agents avec 6 IA pour valider PRD et code avec des perspectives diverses.
+
+```bash
+/multi-mind prd docs/PRD/PRD-Feature.md    # Valider un PRD
+/multi-mind review src/components/Auth.tsx  # Review multi-perspectives
+```
+
+### Les 6 Agents
+
+| Agent | Provider | Rôle | Connecteur | Coût |
+|-------|----------|------|------------|------|
+| 🏛️ **Claude** | Anthropic | Architecte Prudent | Orchestrateur natif | Inclus |
+| 🤖 **GPT** | OpenAI | Perfectionniste | Codex CLI | 💳 Payant |
+| 💎 **Gemini** | Google | Innovateur UX | Gemini CLI | 💳 Payant |
+| 🐉 **DeepSeek** | DeepSeek | Provocateur | API REST | 🆓 Gratuit |
+| 🔮 **GLM** | Zhipu AI | Craftsman Frontend | API REST | 🆓 Gratuit |
+| 🌙 **Kimi** | Moonshot | Product Thinker | OpenRouter | 🆓 Gratuit |
+
+### Configuration des agents
+
+#### Option 1 : Fichier `.env.local` (recommandé)
+
+```bash
+cp .env.example .env.local
+# Éditer .env.local avec tes clés API
+```
+
+Contenu de `.env.local` :
+```
+DEEPSEEK_API_KEY=sk-ta-clé-deepseek
+GLM_API_KEY=ta-clé-glm
+OPENROUTER_API_KEY=sk-or-v1-ta-clé-openrouter
+```
+
+#### Option 2 : Variables d'environnement
+
+```bash
+# Ajouter dans ~/.zshrc
+export DEEPSEEK_API_KEY="sk-..."      # https://platform.deepseek.com/
+export GLM_API_KEY="..."              # https://open.bigmodel.cn/
+export OPENROUTER_API_KEY="sk-or-..." # https://openrouter.ai/
+source ~/.zshrc
+```
+
+#### Agents payants (optionnels)
+
+```bash
+npm install -g @openai/codex   # GPT via Codex CLI
+npm install -g gemini-cli      # Gemini CLI
+```
+
+**Minimum requis** : 3 agents pour un débat valide.
+
+### Workflow 4 Rounds
+
+```
+Round 1: CRITIQUE
+├─ Chaque agent analyse indépendamment
+├─ Output: 6 critiques séparées avec score /10
+└─ ⏸️ STOP - Afficher résumé
+
+Round 2: CONFRONTATION
+├─ Partager critiques entre agents
+├─ Chaque agent répond aux autres
+└─ Identifier accords/désaccords
+
+Round 3: CONVERGENCE
+├─ Chaque agent donne son TOP 3
+└─ Pondérer par spécialité de l'agent
+
+Round 4: CONSENSUS
+├─ Claude synthétise le débat
+├─ Points de consensus documentés
+├─ Divergences avec arguments des deux côtés
+└─ Actions prioritaires (TOP 5)
+```
+
+### Intégration au workflow
+
+Le skill Multi-Mind est proposé automatiquement :
+
+| Après | Proposition |
+|-------|-------------|
+| `/pm-prd` (Mode FULL) | "Valider le PRD avec Multi-Mind ?" |
+| `/code-reviewer` (3 passes) | "Review multi-perspectives ?" |
+
+### Output
+
+**Terminal** :
+```
+╔═══════════════════════════════════════╗
+║  🧠 MULTI-MIND DEBATE COMPLETE        ║
+║  Agents: 6/6 | Duration: 2m 34s       ║
+╠═══════════════════════════════════════╣
+║  ✅ CONSENSUS (3 points)              ║
+║  ⚖️ DIVERGENCES (2 points)            ║
+║  📋 ACTIONS (5 items)                 ║
+╚═══════════════════════════════════════╝
+```
+
+**Rapport** : `docs/debates/YYYY-MM-DD-topic.md`
+
+### Knowledge Base Multi-Mind
+
+```
+.claude/knowledge/multi-mind/
+├── agent-personalities.md    # 6 system prompts
+└── debate-templates.md       # Templates 4 rounds
+```
 
 ---
 
@@ -699,7 +816,7 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 
 ---
 
-## Structure des Skills (v3.3)
+## Structure des Skills (v3.4)
 
 Chaque skill suit une structure standardisée avec le frontmatter dans cet ordre :
 
@@ -778,17 +895,20 @@ triggers_ux_ui:                  # Auto-trigger UX/UI (optionnel)
 │   ├── network-first.md
 │   ├── test-healing-patterns.md
 │   └── ... (25 autres)
-└── workflows/                 # 10 fichiers
-    ├── prd-template.md
-    ├── prd-patterns.md            # NEW v2.7 - Patterns par domaine
-    ├── architecture-template.md
-    ├── stories-template.md
-    ├── ux-template.md
-    ├── ui-template.md
-    ├── estimation-techniques.md   # NEW v2.7 - Techniques d'estimation
-    ├── risk-assessment.md         # NEW v2.7 - Framework de risques
-    ├── domain-complexity.csv
-    └── project-types.csv
+├── workflows/                 # 10 fichiers
+│   ├── prd-template.md
+│   ├── prd-patterns.md            # NEW v2.7 - Patterns par domaine
+│   ├── architecture-template.md
+│   ├── stories-template.md
+│   ├── ux-template.md
+│   ├── ui-template.md
+│   ├── estimation-techniques.md   # NEW v2.7 - Techniques d'estimation
+│   ├── risk-assessment.md         # NEW v2.7 - Framework de risques
+│   ├── domain-complexity.csv
+│   └── project-types.csv
+└── multi-mind/                # NEW v3.4 - Débat multi-agents
+    ├── agent-personalities.md     # 6 system prompts
+    └── debate-templates.md        # Templates 4 rounds
 ```
 
 ### Chargement progressif

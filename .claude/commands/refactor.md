@@ -152,6 +152,37 @@ refactor(scope): rename [old] to [new] for clarity
 
 ---
 
+## Auto-Chain
+
+Après les 3 passes de refactoring, proposer automatiquement :
+
+```markdown
+## 🔗 Prochaine étape
+
+✅ Refactoring terminé (3 passes).
+
+**Résumé :**
+- Lint: ✅
+- Types: ✅
+- Tests: ✅
+
+**Options :**
+
+→ 📦 **Créer le commit ?**
+→ 🧪 **Lancer les tests complets ?**
+
+[Si refactoring complexe ou module critique]
+→ 🧠 **Validation Multi-Mind ?** (consensus de 6 IA sur le refactoring)
+
+---
+
+**[C] Commit** | **[T] Tests** | **[M] Multi-Mind** | **[R] Réviser encore**
+```
+
+**⏸️ STOP** - Attendre confirmation
+
+---
+
 ## Démarrage
 
 **Cible du refactoring :** $ARGUMENTS
