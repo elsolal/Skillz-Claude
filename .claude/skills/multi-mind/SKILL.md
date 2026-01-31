@@ -483,7 +483,7 @@ Utilise le contexte courant de Claude Code (claude-opus-4.5).
 
 ### GPT via Codex CLI
 ```bash
-codex --model gpt-5.2 --prompt "[system prompt]" --input "[document]"
+codex exec -m gpt-5.2-codex -o /tmp/gpt-response.txt "[system prompt + document]"
 ```
 
 ### Gemini via Gemini CLI
