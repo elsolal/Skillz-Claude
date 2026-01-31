@@ -514,7 +514,7 @@ curl -X POST "https://open.bigmodel.cn/api/paas/v4/chat/completions" \
 curl -X POST "https://openrouter.ai/api/v1/chat/completions" \
   -H "Authorization: Bearer $OPENROUTER_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model": "moonshotai/kimi-k2-instruct", "messages": [...]}'
+  -d '{"model": "moonshotai/kimi-k2.5", "messages": [...]}'
 # Kimi K2.5 via OpenRouter
 ```
 
