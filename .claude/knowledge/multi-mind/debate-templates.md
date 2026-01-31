@@ -571,9 +571,12 @@ Points d'attention qui méritent un suivi :
 ### Configuration des agents
 | Agent | Modèle | API | Tokens utilisés |
 |-------|--------|-----|-----------------|
-| Claude | claude-3-opus | Native | ~X |
-| GPT | gpt-4o | Codex CLI | ~X |
-| ... | ... | ... | ... |
+| Claude | claude-opus-4.5 | Native | ~X |
+| GPT | gpt-5.2 | Codex CLI | ~X |
+| Gemini | gemini-2.0-flash | Gemini CLI | ~X |
+| DeepSeek | deepseek-reasoner | API REST | ~X |
+| GLM | glm-4-0520 | API REST | ~X |
+| Kimi | kimi-k2-instruct | OpenRouter | ~X |
 
 ### Prompts utilisés
 [Référence aux prompts de chaque round - optionnel]
