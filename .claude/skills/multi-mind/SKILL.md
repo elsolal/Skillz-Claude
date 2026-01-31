@@ -43,15 +43,20 @@ knowledge:
 - **Convergence** : Synthèse vers un consensus actionnable
 - **Transparence** : Toutes les critiques, échanges et divergences sont documentées
 
-**Règles** :
+**Règles STRICTES** :
 - ⛔ Ne JAMAIS sauter un round
 - ⛔ Ne JAMAIS ignorer une critique majeure
 - ⛔ Ne JAMAIS forcer un consensus artificiel
 - ⛔ Ne JAMAIS interrompre le débat (mode continu)
+- ⛔ Ne JAMAIS contourner un agent si sa clé API est configurée (même si erreur temporaire, retry 2x)
+- ⛔ Ne JAMAIS utiliser un modèle différent de celui spécifié dans les connecteurs
+- ⛔ Ne JAMAIS terminer sans avoir écrit le rapport Markdown complet
+- ✅ **OBLIGATOIRE** : Sauvegarder le rapport dans `docs/debates/YYYY-MM-DD-topic.md`
 - ✅ Documenter les divergences irrésolues
 - ✅ Pondérer les avis selon la spécialité
 - ✅ Minimum 3 agents pour un débat valide
 - ✅ Claude est un **débatteur** comme les autres (pas un modérateur)
+- ✅ Si erreur API → retry 2x avant de marquer l'agent comme indisponible
 
 ---
 
@@ -440,7 +445,14 @@ Points sur lesquels tous les agents s'accordent :
 ╚═══════════════════════════════════════════════════════════════╝
 ```
 
-### Rapport Markdown complet
+### Rapport Markdown complet (⚠️ OBLIGATOIRE)
+
+> **CETTE ÉTAPE EST OBLIGATOIRE** : À la fin du Round 5, tu DOIS créer le fichier `docs/debates/YYYY-MM-DD-topic.md` avec le rapport complet. Ne JAMAIS terminer sans avoir écrit ce fichier. Le débat n'est PAS terminé tant que le fichier n'est pas créé.
+
+**Procédure** :
+1. Créer le dossier `docs/debates/` s'il n'existe pas
+2. Écrire le fichier avec le template ci-dessous
+3. Confirmer la création dans le terminal
 
 Sauvegarder dans `docs/debates/YYYY-MM-DD-topic.md` :
 
@@ -494,6 +506,44 @@ Sauvegarder dans `docs/debates/YYYY-MM-DD-topic.md` :
 
 ---
 
+## Règles d'appel API (⚠️ STRICTES)
+
+### Utilisation des modèles
+
+> **OBLIGATOIRE** : Utiliser EXACTEMENT les modèles spécifiés ci-dessous. Ne JAMAIS substituer par un autre modèle.
+
+| Agent | Modèle EXACT | Aucune substitution |
+|-------|--------------|---------------------|
+| Claude | claude-opus-4.5 | ⛔ Pas de sonnet/haiku |
+| GPT | gpt-5.2-codex | ⛔ Pas de gpt-4/gpt-4o |
+| Gemini | gemini-3 | ⛔ Pas de gemini-1.5/2.0 |
+| DeepSeek | deepseek/deepseek-v3.2 | ⛔ Pas de deepseek-chat |
+| GLM | glm-4.7 | ⛔ Pas de glm-4-flash |
+| Kimi | moonshotai/kimi-k2.5 | ⛔ Pas de moonshot-v1 |
+
+### Gestion des erreurs API
+
+```
+Pour chaque appel API :
+1. Essai initial
+2. Si erreur (timeout, quota, 429, 5xx) → attendre 3s → retry #1
+3. Si encore erreur → attendre 5s → retry #2
+4. Si encore erreur → marquer agent comme ❌ indisponible (pas de substitution!)
+```
+
+**Erreurs à NE PAS interpréter comme "quota épuisé"** :
+- Erreur réseau temporaire → retry
+- Timeout → retry
+- 429 (rate limit) → retry avec backoff
+- 5xx (erreur serveur) → retry
+
+**Seules ces erreurs marquent l'agent comme indisponible** :
+- 401 (clé invalide)
+- 403 (accès refusé)
+- 3 échecs consécutifs après retries
+
+---
+
 ## Connecteurs par Agent
 
 ### Claude (natif)
@@ -520,11 +570,11 @@ curl -X POST "https://openrouter.ai/api/v1/chat/completions" \
 
 ### GLM via Z.AI API
 ```bash
-curl -X POST "https://api.z.ai/api/paas/v4/chat/completions" \
+curl -X POST "https://api.z.ai/api/coding/paas/v4/chat/completions" \
   -H "Authorization: Bearer $GLM_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"model": "glm-4.7", "messages": [...]}'
-# GLM-4.7 via Z.AI
+# GLM-4.7 via Z.AI (endpoint coding/paas)
 ```
 
 ### Kimi via OpenRouter
