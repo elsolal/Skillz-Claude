@@ -19,9 +19,9 @@ knowledge:
     - .claude/knowledge/multi-mind/debate-templates.md
 ---
 
-# Multi-Mind Debate System
+# Multi-Mind Debate System v3.5
 
-> Système de débat multi-agents avec 6 IA pour valider PRD et reviewer le code avec des perspectives diverses.
+> Système de débat multi-agents avec 6 IA pour valider PRD et reviewer le code avec des perspectives diverses et des **échanges itératifs**.
 
 ## Activation
 
@@ -38,17 +38,20 @@ knowledge:
 
 **Principes** :
 - **Diversité** : Chaque agent a une personnalité et une spécialité distinctes
-- **Rigueur** : 4 rounds structurés pour une analyse complète
+- **Confrontation** : Les agents débattent réellement avec des ping-pong argumentés
+- **Rigueur** : 5 rounds structurés pour une analyse complète
 - **Convergence** : Synthèse vers un consensus actionnable
-- **Transparence** : Toutes les critiques et divergences sont documentées
+- **Transparence** : Toutes les critiques, échanges et divergences sont documentées
 
 **Règles** :
 - ⛔ Ne JAMAIS sauter un round
 - ⛔ Ne JAMAIS ignorer une critique majeure
 - ⛔ Ne JAMAIS forcer un consensus artificiel
+- ⛔ Ne JAMAIS interrompre le débat (mode continu)
 - ✅ Documenter les divergences irrésolues
 - ✅ Pondérer les avis selon la spécialité
 - ✅ Minimum 3 agents pour un débat valide
+- ✅ Claude est un **débatteur** comme les autres (pas un modérateur)
 
 ---
 
@@ -104,13 +107,13 @@ detect_agents() {
 
 **Validation** : Si moins de 3 agents disponibles → afficher instructions d'installation et s'arrêter.
 
-**Si 3+ agents disponibles** : Afficher la table des agents et continuer automatiquement.
+**Si 3+ agents disponibles** : Afficher la table des agents et lancer le débat automatiquement.
 
 ---
 
-## Mode d'exécution : CONTINU
+## Mode d'exécution : CONTINU (5 rounds automatiques)
 
-Le débat s'exécute en continu sans validation intermédiaire. L'utilisateur voit un progress indicator :
+Le débat s'exécute **en continu du Round 1 au Round 5** sans validation intermédiaire. L'utilisateur voit un progress indicator en temps réel :
 
 ```
 🧠 Multi-Mind Debate en cours...
@@ -118,21 +121,28 @@ Le débat s'exécute en continu sans validation intermédiaire. L'utilisateur vo
 │  ├─ 🏛️ Claude ✅
 │  ├─ 🤖 GPT ✅
 │  ├─ 💎 Gemini ✅
-│  ├─ 🐉 DeepSeek ⏳
-│  ├─ 🔮 GLM ...
-│  └─ 🌙 Kimi ...
-├─ Round 2: CONFRONTATION ...
-├─ Round 3: CONVERGENCE ...
-└─ Round 4: CONSENSUS ...
+│  ├─ 🐉 DeepSeek ✅
+│  ├─ 🔮 GLM ✅
+│  └─ 🌙 Kimi ✅
+├─ Round 2: FRICTIONS ✅
+│  └─ 3 frictions identifiées
+├─ Round 3: DÉBAT CIBLÉ ⏳
+│  ├─ Friction #1: Tour 2/3 ⏳
+│  │  ├─ Camp A (🏛️🤖🔮): "SQL pour intégrité..."
+│  │  └─ Camp B (💎🐉🌙): "NoSQL pour flexibilité..."
+│  ├─ Friction #2: En attente...
+│  └─ Friction #3: En attente...
+├─ Round 4: CONVERGENCE ...
+└─ Round 5: CONSENSUS ...
 ```
 
-Le rapport final est généré dans `docs/debates/` et affiché à la fin.
+Le rapport final complet est généré dans `docs/debates/` et affiché à la fin.
 
 ---
 
-### 2. Round 1 : CRITIQUE
+## ROUND 1 : CRITIQUE
 
-Chaque agent analyse le document indépendamment.
+Chaque agent analyse le document **indépendamment**.
 
 **Pour chaque agent disponible** :
 1. Envoyer le document avec le system prompt de l'agent
@@ -154,55 +164,136 @@ Chaque agent analyse le document indépendamment.
 3. [Point fort 3]
 
 #### ⚠️ Points faibles
-1. [Point faible 1]
-2. [Point faible 2]
+1. [Point faible 1] - Sévérité: [Critique/Majeure/Mineure]
+2. [Point faible 2] - Sévérité: [Critique/Majeure/Mineure]
 
 #### 🚨 Risques
-- [Risque 1]
-- [Risque 2]
+- [Risque 1] - Probabilité: [Haute/Moyenne/Basse]
+- [Risque 2] - Probabilité: [Haute/Moyenne/Basse]
 ```
 
-*Continuer automatiquement vers Round 2*
+*→ Continuer automatiquement vers Round 2*
 
 ---
 
-### 3. Round 2 : CONFRONTATION
+## ROUND 2 : IDENTIFICATION DES FRICTIONS
 
-Partager les critiques entre agents et les faire réagir.
+Analyser les critiques du Round 1 pour extraire les **points de désaccord majeurs**.
 
-**Pour chaque agent** :
-1. Envoyer les critiques des autres agents
-2. Demander :
-   - Accords explicites (avec qui et sur quoi)
-   - Désaccords argumentés (avec qui et pourquoi)
-   - Nouvelles perspectives après lecture des autres
+**Process** :
+1. Comparer les critiques de tous les agents
+2. Identifier 2-3 frictions majeures (points où les agents divergent)
+3. Former les "camps" pour chaque friction
 
 **Output attendu** :
 ```markdown
-### 🏛️ Claude répond
+## 🔥 Frictions identifiées
 
-#### ✅ Accords
-- Avec 🤖 GPT sur [point]
-- Avec 💎 Gemini sur [point]
+### Friction #1 : [Sujet du désaccord]
+**Question** : [Question centrale du débat]
 
-#### ❌ Désaccords
-- Avec 🐉 DeepSeek : [argument]
+| Camp A | Camp B |
+|--------|--------|
+| 🏛️ Claude, 🤖 GPT, 🔮 GLM | 💎 Gemini, 🐉 DeepSeek, 🌙 Kimi |
+| Position : [Résumé position A] | Position : [Résumé position B] |
 
-#### 💡 Nouvelle perspective
-[Insight après lecture des autres critiques]
+### Friction #2 : [Sujet du désaccord]
+**Question** : [Question centrale du débat]
+
+| Camp A | Camp B |
+|--------|--------|
+| [Agents] | [Agents] |
+| Position : [Résumé] | Position : [Résumé] |
+
+### Friction #3 : [Sujet du désaccord]
+...
 ```
 
-*Continuer automatiquement vers Round 3*
+*→ Continuer automatiquement vers Round 3*
 
 ---
 
-### 4. Round 3 : CONVERGENCE
+## ROUND 3 : DÉBAT CIBLÉ (Itératif)
 
-Chaque agent donne son TOP 3 des points prioritaires.
+Pour chaque friction identifiée, organiser un **débat avec plusieurs tours d'échange**.
+
+**Règles du débat** :
+- Maximum **3 tours** par friction
+- Chaque camp argumente puis répond aux arguments de l'autre
+- Claude participe comme débatteur dans son camp (pas comme modérateur)
+- Arrêt anticipé si consensus atteint
+
+**Structure par friction** :
+
+```
+Friction #1 : [Sujet]
+│
+├─ Tour 1
+│  ├─ Camp A argumente : [Arguments initiaux]
+│  └─ Camp B argumente : [Arguments initiaux]
+│
+├─ Tour 2
+│  ├─ Camp A répond à B : [Contre-arguments]
+│  └─ Camp B répond à A : [Contre-arguments]
+│
+└─ Tour 3 (si pas de résolution)
+   ├─ Camp A : [Arguments finaux / concession]
+   └─ Camp B : [Arguments finaux / concession]
+   └─ Statut : [RÉSOLU vers X / DIVERGENCE MAINTENUE]
+```
+
+**Output attendu par friction** :
+```markdown
+### 🔥 Friction #1 : [Sujet]
+
+#### Tour 1 - Arguments initiaux
+
+**Camp A (🏛️🤖🔮)** :
+> [Arguments détaillés du Camp A]
+
+**Camp B (💎🐉🌙)** :
+> [Arguments détaillés du Camp B]
+
+---
+
+#### Tour 2 - Réponses croisées
+
+**Camp A répond à Camp B** :
+> [Contre-arguments A → B]
+
+**Camp B répond à Camp A** :
+> [Contre-arguments B → A]
+
+---
+
+#### Tour 3 - Position finale
+
+**Camp A** :
+> [Position finale, éventuelles concessions]
+
+**Camp B** :
+> [Position finale, éventuelles concessions]
+
+---
+
+#### 📊 Résultat
+- **Statut** : [✅ RÉSOLU / ⚖️ DIVERGENCE]
+- **Si résolu** : [Consensus atteint sur X]
+- **Si divergence** : [Positions maintenues, à trancher par l'utilisateur]
+```
+
+*→ Continuer automatiquement vers Round 4*
+
+---
+
+## ROUND 4 : CONVERGENCE
+
+Après les débats, chaque agent donne son **TOP 3 des points prioritaires**.
 
 **Pour chaque agent** :
 1. Demander les 3 points les plus importants à traiter
-2. Pondérer selon la spécialité de l'agent
+2. Tenir compte des résultats du Round 3 (débats)
+3. Pondérer selon la spécialité de l'agent
 
 **Pondération par spécialité** :
 
@@ -217,39 +308,67 @@ Chaque agent donne son TOP 3 des points prioritaires.
 
 **Output attendu** :
 ```markdown
-### TOP 3 pondéré
+## 📊 Convergence
 
-| Rang | Point | Score | Agents |
-|------|-------|-------|--------|
+### TOP 3 par agent
+
+| Agent | #1 | #2 | #3 |
+|-------|-----|-----|-----|
+| 🏛️ Claude | [Point] | [Point] | [Point] |
+| 🤖 GPT | [Point] | [Point] | [Point] |
+| 💎 Gemini | [Point] | [Point] | [Point] |
+| 🐉 DeepSeek | [Point] | [Point] | [Point] |
+| 🔮 GLM | [Point] | [Point] | [Point] |
+| 🌙 Kimi | [Point] | [Point] | [Point] |
+
+### Classement pondéré global
+
+| Rang | Point | Score pondéré | Agents |
+|------|-------|---------------|--------|
 | 1 | [Point] | 4.5 | 🏛️💎🌙 |
 | 2 | [Point] | 3.8 | 🤖🐉 |
 | 3 | [Point] | 3.2 | 🏛️🤖🔮 |
+| 4 | [Point] | 2.9 | 💎🐉🌙 |
+| 5 | [Point] | 2.5 | 🔮🌙 |
 ```
+
+*→ Continuer automatiquement vers Round 5*
 
 ---
 
-### 5. Round 4 : CONSENSUS
+## ROUND 5 : CONSENSUS
 
-Claude synthétise le débat.
+Claude synthétise **l'ensemble du débat** (en tant que rapporteur, après avoir été débatteur).
 
 **Synthèse** :
 1. Points de consensus (unanimité ou majorité)
-2. Divergences irrésolues (documenter les deux positions)
-3. Actions prioritaires (TOP 5 actionnable)
-4. Recommandation finale
+2. Résultats des débats (Round 3)
+3. Divergences irrésolues (documenter les deux positions)
+4. Actions prioritaires (TOP 5 actionnable)
+5. Recommandation finale
 
 **Output final** :
 ```markdown
 ## 🧠 Synthèse Multi-Mind
 
 ### ✅ Consensus (X points)
+Points sur lesquels tous les agents s'accordent :
 1. [Point de consensus 1]
 2. [Point de consensus 2]
+3. [Point de consensus 3]
 
-### ⚖️ Divergences (Y points)
-| Point | Position A | Position B |
-|-------|------------|------------|
-| [Point] | 🏛️🤖 : [Argument] | 💎🐉 : [Argument] |
+### 🔥 Résultats des débats
+
+| Friction | Statut | Conclusion |
+|----------|--------|------------|
+| #1 : [Sujet] | ✅ Résolu | [Consensus atteint sur X] |
+| #2 : [Sujet] | ⚖️ Divergence | [Voir détails ci-dessous] |
+| #3 : [Sujet] | ✅ Résolu | [Consensus atteint sur Y] |
+
+### ⚖️ Divergences irrésolues (Y points)
+| Point | Position A | Position B | Recommandation |
+|-------|------------|------------|----------------|
+| [Point] | 🏛️🤖 : [Argument] | 💎🐉 : [Argument] | [Ma recommandation] |
 
 ### 📋 Actions Prioritaires
 1. [ ] **P0** : [Action critique]
@@ -258,8 +377,8 @@ Claude synthétise le débat.
 4. [ ] **P2** : [Action souhaitable]
 5. [ ] **P2** : [Action souhaitable]
 
-### 💬 Recommandation
-[Recommandation finale de Claude basée sur le débat]
+### 💬 Recommandation finale
+[Recommandation finale de Claude basée sur le débat complet - 3 à 5 phrases]
 ```
 
 ---
@@ -278,9 +397,10 @@ Claude synthétise le débat.
 ║  🐉 DeepSeek [✅|❌]  🔮 GLM [✅|❌]  🌙 Kimi [✅|❌]          ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║  Round 1: CRITIQUE      [⏳|✅]                                ║
-║  Round 2: CONFRONTATION [⏳|✅]                                ║
-║  Round 3: CONVERGENCE   [⏳|✅]                                ║
-║  Round 4: CONSENSUS     [⏳|✅]                                ║
+║  Round 2: FRICTIONS     [⏳|✅]                                ║
+║  Round 3: DÉBAT CIBLÉ   [⏳|✅]  ← 3 frictions, 9 tours       ║
+║  Round 4: CONVERGENCE   [⏳|✅]                                ║
+║  Round 5: CONSENSUS     [⏳|✅]                                ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║  Duration: [X]m [Y]s                                          ║
 ╚═══════════════════════════════════════════════════════════════╝
@@ -294,6 +414,7 @@ Claude synthétise le débat.
 ║  Agents: [N]/6 | Duration: [X]m [Y]s                          ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║  ✅ CONSENSUS ([N] points)                                    ║
+║  🔥 FRICTIONS ([N] débattues, [M] résolues)                   ║
 ║  ⚖️ DIVERGENCES ([N] points)                                  ║
 ║  📋 ACTIONS ([N] items)                                       ║
 ╠═══════════════════════════════════════════════════════════════╣
@@ -301,7 +422,7 @@ Claude synthétise le débat.
 ╚═══════════════════════════════════════════════════════════════╝
 ```
 
-### Rapport Markdown
+### Rapport Markdown complet
 
 Sauvegarder dans `docs/debates/YYYY-MM-DD-topic.md` :
 
@@ -314,21 +435,43 @@ Sauvegarder dans `docs/debates/YYYY-MM-DD-topic.md` :
 - **Fichier** : [path/to/file]
 - **Agents** : [N]/6
 - **Durée** : [X]m [Y]s
+- **Frictions** : [N] identifiées, [M] résolues
 
 ## Résumé exécutif
 [3-5 phrases résumant le débat et ses conclusions]
 
-## Round 1 : Critiques
+---
+
+## Round 1 : Critiques individuelles
 [Critiques complètes de chaque agent]
 
-## Round 2 : Confrontations
-[Réponses et débats entre agents]
+---
 
-## Round 3 : TOP 3 par agent
-[Liste pondérée des priorités]
+## Round 2 : Frictions identifiées
+[Liste des frictions avec les camps formés]
 
-## Round 4 : Synthèse finale
-[Consensus, divergences, actions]
+---
+
+## Round 3 : Débats ciblés
+
+### Friction #1 : [Sujet]
+[Tous les tours d'échange détaillés]
+
+### Friction #2 : [Sujet]
+[Tous les tours d'échange détaillés]
+
+### Friction #3 : [Sujet]
+[Tous les tours d'échange détaillés]
+
+---
+
+## Round 4 : Convergence
+[TOP 3 de chaque agent + classement pondéré]
+
+---
+
+## Round 5 : Synthèse finale
+[Consensus, résultats débats, divergences, actions]
 ```
 
 ---
@@ -336,16 +479,16 @@ Sauvegarder dans `docs/debates/YYYY-MM-DD-topic.md` :
 ## Connecteurs par Agent
 
 ### Claude (natif)
-Utilise le contexte courant de Claude Code.
+Utilise le contexte courant de Claude Code (claude-opus-4.5).
 
 ### GPT via Codex CLI
 ```bash
-codex --model gpt-4o --prompt "[system prompt]" --input "[document]"
+codex --model gpt-5.2 --prompt "[system prompt]" --input "[document]"
 ```
 
 ### Gemini via Gemini CLI
 ```bash
-gemini --model gemini-2.0-flash --prompt "[system prompt + document]"
+gemini --model gemini-3 --prompt "[system prompt + document]"
 ```
 
 ### DeepSeek via API REST
@@ -353,7 +496,8 @@ gemini --model gemini-2.0-flash --prompt "[system prompt + document]"
 curl -X POST "https://api.deepseek.com/v1/chat/completions" \
   -H "Authorization: Bearer $DEEPSEEK_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model": "deepseek-chat", "messages": [...]}'
+  -d '{"model": "deepseek-reasoner", "messages": [...]}'
+# Alternative: "deepseek-chat" pour DeepSeek-V3
 ```
 
 ### GLM via API REST
@@ -361,7 +505,8 @@ curl -X POST "https://api.deepseek.com/v1/chat/completions" \
 curl -X POST "https://open.bigmodel.cn/api/paas/v4/chat/completions" \
   -H "Authorization: Bearer $GLM_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model": "glm-4-flash", "messages": [...]}'
+  -d '{"model": "glm-4-0520", "messages": [...]}'
+# Dernière version: glm-4-0520 (GLM-4.7)
 ```
 
 ### Kimi via OpenRouter
@@ -369,7 +514,8 @@ curl -X POST "https://open.bigmodel.cn/api/paas/v4/chat/completions" \
 curl -X POST "https://openrouter.ai/api/v1/chat/completions" \
   -H "Authorization: Bearer $OPENROUTER_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model": "moonshot/kimi", "messages": [...]}'
+  -d '{"model": "moonshotai/kimi-k2-instruct", "messages": [...]}'
+# Kimi K2.5 via OpenRouter
 ```
 
 ---
@@ -443,14 +589,16 @@ gemini auth
 | Critère | Status |
 |---------|--------|
 | Minimum 3 agents actifs | ✅/❌ |
-| 4 rounds complétés | ✅/❌ |
+| 5 rounds complétés | ✅/❌ |
 | Toutes critiques documentées | ✅/❌ |
+| Frictions identifiées | ✅/❌ |
+| Débats itératifs exécutés | ✅/❌ |
 | Consensus identifié | ✅/❌ |
 | Divergences documentées | ✅/❌ |
 | Actions prioritaires listées | ✅/❌ |
 | Rapport Markdown généré | ✅/❌ |
 
-**Score minimum : 6/7**
+**Score minimum : 8/9**
 
 ---
 
