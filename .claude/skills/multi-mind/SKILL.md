@@ -102,13 +102,35 @@ detect_agents() {
 }
 ```
 
-**Validation** : Si moins de 3 agents disponibles → afficher instructions d'installation.
+**Validation** : Si moins de 3 agents disponibles → afficher instructions d'installation et s'arrêter.
 
-**⏸️ STOP** - Afficher la table des agents disponibles et demander confirmation pour continuer.
+**Si 3+ agents disponibles** : Afficher la table des agents et continuer automatiquement.
 
 ---
 
-### 1. Round 1 : CRITIQUE
+## Mode d'exécution : CONTINU
+
+Le débat s'exécute en continu sans validation intermédiaire. L'utilisateur voit un progress indicator :
+
+```
+🧠 Multi-Mind Debate en cours...
+├─ Round 1: CRITIQUE
+│  ├─ 🏛️ Claude ✅
+│  ├─ 🤖 GPT ✅
+│  ├─ 💎 Gemini ✅
+│  ├─ 🐉 DeepSeek ⏳
+│  ├─ 🔮 GLM ...
+│  └─ 🌙 Kimi ...
+├─ Round 2: CONFRONTATION ...
+├─ Round 3: CONVERGENCE ...
+└─ Round 4: CONSENSUS ...
+```
+
+Le rapport final est généré dans `docs/debates/` et affiché à la fin.
+
+---
+
+### 2. Round 1 : CRITIQUE
 
 Chaque agent analyse le document indépendamment.
 
@@ -140,11 +162,11 @@ Chaque agent analyse le document indépendamment.
 - [Risque 2]
 ```
 
-**⏸️ STOP** - Afficher le résumé des 6 critiques et demander confirmation pour le Round 2.
+*Continuer automatiquement vers Round 2*
 
 ---
 
-### 2. Round 2 : CONFRONTATION
+### 3. Round 2 : CONFRONTATION
 
 Partager les critiques entre agents et les faire réagir.
 
@@ -170,11 +192,11 @@ Partager les critiques entre agents et les faire réagir.
 [Insight après lecture des autres critiques]
 ```
 
-**⏸️ STOP** - Afficher la matrice accords/désaccords.
+*Continuer automatiquement vers Round 3*
 
 ---
 
-### 3. Round 3 : CONVERGENCE
+### 4. Round 3 : CONVERGENCE
 
 Chaque agent donne son TOP 3 des points prioritaires.
 
@@ -206,7 +228,7 @@ Chaque agent donne son TOP 3 des points prioritaires.
 
 ---
 
-### 4. Round 4 : CONSENSUS
+### 5. Round 4 : CONSENSUS
 
 Claude synthétise le débat.
 
