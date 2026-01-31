@@ -573,7 +573,7 @@ Points d'attention qui méritent un suivi :
 |-------|--------|-----|-----------------|
 | Claude | claude-opus-4.5 | Native | ~X |
 | GPT | gpt-5.2 | Codex CLI | ~X |
-| Gemini | gemini-2.5-pro (Deep Think) | Gemini CLI | ~X |
+| Gemini | gemini-3 | Gemini CLI | ~X |
 | DeepSeek | deepseek-reasoner | API REST | ~X |
 | GLM | glm-4-0520 | API REST | ~X |
 | Kimi | kimi-k2-instruct | OpenRouter | ~X |
