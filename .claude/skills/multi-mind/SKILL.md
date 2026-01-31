@@ -67,7 +67,22 @@ knowledge:
 
 ## Process
 
-### 0. Détection des agents
+### 0. Chargement des API Keys
+
+Avant de détecter les agents, charger les clés depuis `.env.local` si le fichier existe :
+
+```bash
+# Charger .env.local s'il existe (à la racine du projet)
+if [ -f ".env.local" ]; then
+  export $(grep -v '^#' .env.local | xargs)
+  echo "✅ API keys chargées depuis .env.local"
+elif [ -f "$HOME/.env.local" ]; then
+  export $(grep -v '^#' $HOME/.env.local | xargs)
+  echo "✅ API keys chargées depuis ~/.env.local"
+fi
+```
+
+### 1. Détection des agents
 
 ```bash
 # Vérifier les agents disponibles
@@ -78,7 +93,7 @@ detect_agents() {
   which codex >/dev/null 2>&1 && agents+=("GPT")
   which gemini >/dev/null 2>&1 && agents+=("Gemini")
 
-  # API Keys (gratuits)
+  # API Keys (gratuits) - depuis .env.local ou environnement
   [ -n "$DEEPSEEK_API_KEY" ] && agents+=("DeepSeek")
   [ -n "$GLM_API_KEY" ] && agents+=("GLM")
   [ -n "$OPENROUTER_API_KEY" ] && agents+=("Kimi")
@@ -346,24 +361,43 @@ Si moins de 3 agents disponibles, afficher :
 
 Multi-Mind nécessite minimum 3 agents. Actuellement : [N] agent(s).
 
-### Installation des agents gratuits (recommandé)
+### Option 1 : Fichier .env.local (recommandé)
 
-#### DeepSeek (🆓 gratuit)
-1. Créer un compte sur https://platform.deepseek.com/
-2. Générer une API key
-3. `export DEEPSEEK_API_KEY="sk-..."`
+Copier le template et ajouter tes clés :
 
-#### GLM (🆓 gratuit)
-1. Créer un compte sur https://open.bigmodel.cn/
-2. Générer une API key
-3. `export GLM_API_KEY="..."`
+```bash
+cp .env.example .env.local
+# Éditer .env.local avec tes clés API
+```
 
-#### Kimi via OpenRouter (🆓 gratuit)
-1. Créer un compte sur https://openrouter.ai/
-2. Générer une API key
-3. `export OPENROUTER_API_KEY="sk-or-..."`
+Contenu de `.env.local` :
+```
+DEEPSEEK_API_KEY=sk-ta-clé-deepseek
+GLM_API_KEY=ta-clé-glm
+OPENROUTER_API_KEY=sk-or-v1-ta-clé-openrouter
+```
 
-### Installation des agents payants (optionnel)
+### Option 2 : Variables d'environnement
+
+Ajouter dans `~/.zshrc` ou `~/.bashrc` :
+
+```bash
+export DEEPSEEK_API_KEY="sk-..."
+export GLM_API_KEY="..."
+export OPENROUTER_API_KEY="sk-or-..."
+```
+
+Puis : `source ~/.zshrc`
+
+### Où obtenir les clés (gratuit)
+
+| Agent | URL |
+|-------|-----|
+| DeepSeek | https://platform.deepseek.com/api_keys |
+| GLM | https://open.bigmodel.cn/usercenter/apikeys |
+| OpenRouter | https://openrouter.ai/keys |
+
+### Agents payants (optionnel)
 
 #### GPT via Codex CLI
 ```bash
@@ -373,7 +407,7 @@ codex auth
 
 #### Gemini CLI
 ```bash
-npm install -g @anthropic/gemini-cli
+npm install -g gemini-cli
 gemini auth
 ```
 ```
