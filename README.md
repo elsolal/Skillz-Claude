@@ -1,8 +1,9 @@
-# D-EPCT+R Workflow v3.3
+# D-EPCT+R Workflow v3.4
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
-> ✅ **Task System auto** - Tracking automatique si 2+ étapes dans /feature (NEW v3.3)
+> ✅ **Multi-Mind** - Débat multi-agents avec 6 IA pour valider PRD et code (NEW v3.4)
+> ✅ **Task System auto** - Tracking automatique si 2+ étapes dans /feature (v3.3)
 > ✅ **Task System** - Système de tracking (remplace TodoWrite) (v3.2)
 > ✅ **Plan Mode** - Workflow Explore → Plan → Code documenté (v3.2)
 > ✅ **Skills Merger** - Slash commands et skills fusionnés (v3.2)
@@ -10,7 +11,7 @@
 > ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
 > ✅ **Git Hooks** - pre-commit, commit-msg
 > ✅ **DevContainer** - Docker dev environment
-> ✅ **42 fichiers Knowledge** - Base de connaissances testing & workflows
+> ✅ **44 fichiers Knowledge** - Base de connaissances testing & workflows
 > ✅ **Claude Opus** - Intelligence maximale sur tous les skills
 
 ## Installation
@@ -185,7 +186,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Skills (16)
+## Skills (17)
 
 ### Phase Planning
 
@@ -216,7 +217,65 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `test-runner` | Tests | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage** |
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
-| `performance-auditor` | Audit performance (NEW) | **Core Web Vitals**, bundle size, Lighthouse |
+| `performance-auditor` | Audit performance | **Core Web Vitals**, bundle size, Lighthouse |
+| `multi-mind` | Débat multi-agents (NEW) | **6 IA**, 4 rounds, consensus/divergences |
+
+---
+
+## Fonctionnalités v3.4
+
+### Multi-Mind Debate System
+
+Système de débat multi-agents avec 6 IA pour valider PRD et code :
+
+```bash
+/multi-mind prd docs/PRD/PRD-Feature.md    # Valider un PRD
+/multi-mind review src/components/Auth.tsx  # Review multi-perspectives
+```
+
+### Les 6 Agents
+
+| Agent | Provider | Rôle | Coût |
+|-------|----------|------|------|
+| 🏛️ **Claude** | Anthropic | Architecte Prudent | Inclus |
+| 🤖 **GPT** | OpenAI | Perfectionniste | 💳 Payant |
+| 💎 **Gemini** | Google | Innovateur UX | 💳 Payant |
+| 🐉 **DeepSeek** | DeepSeek | Provocateur | 🆓 Gratuit |
+| 🔮 **GLM** | Zhipu AI | Craftsman Frontend | 🆓 Gratuit |
+| 🌙 **Kimi** | Moonshot | Product Thinker | 🆓 Gratuit |
+
+### Configuration des agents
+
+```bash
+# Agents gratuits (recommandés)
+export DEEPSEEK_API_KEY="sk-..."      # https://platform.deepseek.com/
+export GLM_API_KEY="..."              # https://open.bigmodel.cn/
+export OPENROUTER_API_KEY="sk-or-..." # https://openrouter.ai/
+
+# Agents payants (optionnels)
+npm install -g @openai/codex   # GPT via Codex CLI
+npm install -g gemini-cli      # Gemini CLI
+```
+
+**Minimum requis** : 3 agents pour un débat valide.
+
+### Workflow 4 Rounds
+
+```
+Round 1: CRITIQUE     → Chaque agent analyse indépendamment (score /10)
+Round 2: CONFRONTATION → Agents débattent (accords/désaccords)
+Round 3: CONVERGENCE  → TOP 3 par agent, pondéré par spécialité
+Round 4: CONSENSUS    → Claude synthétise + actions prioritaires
+```
+
+### Intégration au workflow
+
+Multi-Mind est proposé (optionnel) après :
+- `/pm-prd` (Mode FULL) → Option **[M]** Multi-Mind
+- `/code-reviewer` (3 passes) → Option **[M]** Multi-Mind
+- `/refactor` (3 passes) → Option **[M]** Multi-Mind
+
+**Output** : Rapport dans `docs/debates/YYYY-MM-DD-topic.md`
 
 ---
 
@@ -651,18 +710,21 @@ knowledge:
 │   │   ├── network-first.md
 │   │   ├── test-healing-patterns.md
 │   │   └── ... (25 autres)
-│   └── workflows/                   # 10 fichiers
-│       ├── prd-template.md
-│       ├── prd-patterns.md
-│       ├── architecture-template.md
-│       ├── stories-template.md
-│       ├── ux-template.md
-│       ├── ui-template.md
-│       ├── estimation-techniques.md
-│       ├── risk-assessment.md
-│       ├── domain-complexity.csv
-│       └── project-types.csv
-└── skills/                          # 16 skills
+│   ├── workflows/                   # 10 fichiers
+│   │   ├── prd-template.md
+│   │   ├── prd-patterns.md
+│   │   ├── architecture-template.md
+│   │   ├── stories-template.md
+│   │   ├── ux-template.md
+│   │   ├── ui-template.md
+│   │   ├── estimation-techniques.md
+│   │   ├── risk-assessment.md
+│   │   ├── domain-complexity.csv
+│   │   └── project-types.csv
+│   └── multi-mind/                  # NEW v3.4 - Débat multi-agents
+│       ├── agent-personalities.md
+│       └── debate-templates.md
+└── skills/                          # 17 skills
     ├── idea-brainstorm/
     ├── pm-prd/
     ├── ux-designer/
@@ -678,7 +740,8 @@ knowledge:
     ├── security-auditor/
     ├── api-designer/
     ├── database-designer/
-    └── performance-auditor/         # NEW v3.1
+    ├── performance-auditor/
+    └── multi-mind/                  # NEW v3.4
 
 docs/                                # Output documents
 ├── planning/
@@ -689,6 +752,7 @@ docs/                                # Output documents
 │   └── architecture/
 ├── stories/
 │   └── EPIC-{num}-{slug}/
+├── debates/                         # NEW v3.4 - Rapports Multi-Mind
 └── ralph-logs/
 ```
 
@@ -704,7 +768,7 @@ docs/                                # Output documents
 | **advanced** | Si complexe | `fixture-architecture.md` |
 | **debugging** | Si problème | `test-healing-patterns.md` |
 
-### Contenu (42 fichiers)
+### Contenu (44 fichiers)
 
 #### Testing (32 fichiers)
 
@@ -729,6 +793,11 @@ docs/                                # Output documents
 - `risk-assessment.md` - Framework de risques (NEW v2.7)
 - `domain-complexity.csv` - Matrice complexité
 - `project-types.csv` - Types de projets
+
+#### Multi-Mind (2 fichiers) - NEW v3.4
+
+- `agent-personalities.md` - System prompts pour les 6 agents IA
+- `debate-templates.md` - Templates pour les 4 rounds de débat
 
 ---
 
@@ -759,7 +828,27 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v3.3.0 (Current)
+### v3.4.0 (Current)
+
+**Multi-Mind Debate System**
+- Nouveau skill `multi-mind` pour débat multi-agents
+- 6 IA : Claude, GPT, Gemini, DeepSeek, GLM, Kimi
+- Workflow 4 rounds : Critique → Confrontation → Convergence → Consensus
+- Intégration dans pm-prd, code-reviewer, refactor (option [M])
+- Rapports générés dans `docs/debates/`
+- Knowledge base : agent-personalities.md, debate-templates.md
+
+**Configuration agents**
+- 3 agents gratuits : DeepSeek, GLM (Zhipu), Kimi (OpenRouter)
+- 2 agents payants (optionnels) : GPT (Codex CLI), Gemini CLI
+- Minimum 3 agents requis pour un débat valide
+
+**Skills modifiés**
+- `pm-prd/SKILL.md` : Option Multi-Mind dans Auto-Chain
+- `code-reviewer/SKILL.md` : Option Multi-Mind dans Auto-Chain
+- `refactor.md` : Option Multi-Mind dans Auto-Chain
+
+### v3.3.0
 
 **Task System automatique dans /feature**
 - `implementation-planner` crée automatiquement des Tasks si 2+ étapes
