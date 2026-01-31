@@ -211,13 +211,33 @@ Système de débat multi-agents avec 6 IA pour valider PRD et code avec des pers
 
 ### Configuration des agents
 
+#### Option 1 : Fichier `.env.local` (recommandé)
+
 ```bash
-# Agents gratuits (recommandés)
+cp .env.example .env.local
+# Éditer .env.local avec tes clés API
+```
+
+Contenu de `.env.local` :
+```
+DEEPSEEK_API_KEY=sk-ta-clé-deepseek
+GLM_API_KEY=ta-clé-glm
+OPENROUTER_API_KEY=sk-or-v1-ta-clé-openrouter
+```
+
+#### Option 2 : Variables d'environnement
+
+```bash
+# Ajouter dans ~/.zshrc
 export DEEPSEEK_API_KEY="sk-..."      # https://platform.deepseek.com/
 export GLM_API_KEY="..."              # https://open.bigmodel.cn/
 export OPENROUTER_API_KEY="sk-or-..." # https://openrouter.ai/
+source ~/.zshrc
+```
 
-# Agents payants (optionnels)
+#### Agents payants (optionnels)
+
+```bash
 npm install -g @openai/codex   # GPT via Codex CLI
 npm install -g gemini-cli      # Gemini CLI
 ```
