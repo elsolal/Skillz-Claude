@@ -97,9 +97,9 @@ detect_agents() {
   which gemini >/dev/null 2>&1 && agents+=("Gemini")
 
   # API Keys (gratuits) - depuis .env.local ou environnement
-  [ -n "$DEEPSEEK_API_KEY" ] && agents+=("DeepSeek")
   [ -n "$GLM_API_KEY" ] && agents+=("GLM")
-  [ -n "$OPENROUTER_API_KEY" ] && agents+=("Kimi")
+  # OpenRouter donne accès à DeepSeek ET Kimi
+  [ -n "$OPENROUTER_API_KEY" ] && agents+=("DeepSeek" "Kimi")
 
   echo "${agents[@]}"
 }
@@ -142,34 +142,52 @@ Le rapport final complet est généré dans `docs/debates/` et affiché à la fi
 
 ## ROUND 1 : CRITIQUE
 
-Chaque agent analyse le document **indépendamment**.
+Chaque agent analyse le document **indépendamment** avec des réponses **détaillées et argumentées**.
 
 **Pour chaque agent disponible** :
 1. Envoyer le document avec le system prompt de l'agent
-2. Demander une critique structurée :
-   - Points forts (3 max)
-   - Points faibles (5 max)
-   - Risques identifiés
-   - Score /10
+2. Demander une critique **approfondie et argumentée** :
+   - Points forts (3 max) avec **justification détaillée**
+   - Points faibles (5 max) avec **explication du problème et impact**
+   - Risques identifiés avec **scénarios concrets**
+   - Score /10 avec **justification du score**
+
+**Instructions pour les agents** (à inclure dans le prompt) :
+> "Fournir une analyse DÉTAILLÉE et ARGUMENTÉE. Pour chaque point, expliquer le POURQUOI avec des exemples concrets. Éviter les réponses synthétiques ou bullet points sans explication. Minimum 2-3 phrases par point."
 
 **Output attendu par agent** :
 ```markdown
 ### 🏛️ Claude - Architecte Prudent
 
 **Score : 7/10**
+> Justification : [Explication détaillée du score en 2-3 phrases, ce qui manque pour avoir plus, ce qui est bien fait]
 
 #### ✅ Points forts
-1. [Point fort 1]
-2. [Point fort 2]
-3. [Point fort 3]
+
+**1. [Titre du point fort]**
+[Explication détaillée de pourquoi c'est un point fort, avec exemples concrets du document. Minimum 2-3 phrases argumentées.]
+
+**2. [Titre du point fort]**
+[Explication détaillée...]
+
+**3. [Titre du point fort]**
+[Explication détaillée...]
 
 #### ⚠️ Points faibles
-1. [Point faible 1] - Sévérité: [Critique/Majeure/Mineure]
-2. [Point faible 2] - Sévérité: [Critique/Majeure/Mineure]
+
+**1. [Titre du point faible]** - Sévérité: [Critique/Majeure/Mineure]
+[Explication détaillée du problème : qu'est-ce qui ne va pas, pourquoi c'est problématique, quel impact potentiel. Proposer une piste d'amélioration. Minimum 3-4 phrases.]
+
+**2. [Titre du point faible]** - Sévérité: [Critique/Majeure/Mineure]
+[Explication détaillée...]
 
 #### 🚨 Risques
-- [Risque 1] - Probabilité: [Haute/Moyenne/Basse]
-- [Risque 2] - Probabilité: [Haute/Moyenne/Basse]
+
+**[Risque 1]** - Probabilité: [Haute/Moyenne/Basse]
+[Scénario concret : dans quelles circonstances ce risque se matérialise, quelles conséquences, comment le mitiger. Minimum 2-3 phrases.]
+
+**[Risque 2]** - Probabilité: [Haute/Moyenne/Basse]
+[Scénario concret...]
 ```
 
 *→ Continuer automatiquement vers Round 2*
@@ -491,22 +509,22 @@ codex exec -m gpt-5.2-codex -o /tmp/gpt-response.txt "[system prompt + document]
 gemini --model gemini-3 --prompt "[system prompt + document]"
 ```
 
-### DeepSeek via API REST
+### DeepSeek via OpenRouter
 ```bash
-curl -X POST "https://api.deepseek.com/v1/chat/completions" \
-  -H "Authorization: Bearer $DEEPSEEK_API_KEY" \
+curl -X POST "https://openrouter.ai/api/v1/chat/completions" \
+  -H "Authorization: Bearer $OPENROUTER_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model": "deepseek-reasoner", "messages": [...]}'
-# Alternative: "deepseek-chat" pour DeepSeek-V3
+  -d '{"model": "deepseek/deepseek-v3.2", "messages": [...]}'
+# DeepSeek V3.2 via OpenRouter (évite les quotas API directe)
 ```
 
-### GLM via API REST
+### GLM via Z.AI API
 ```bash
-curl -X POST "https://open.bigmodel.cn/api/paas/v4/chat/completions" \
+curl -X POST "https://api.z.ai/api/paas/v4/chat/completions" \
   -H "Authorization: Bearer $GLM_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model": "glm-4-0520", "messages": [...]}'
-# Dernière version: glm-4-0520 (GLM-4.7)
+  -d '{"model": "glm-4.7", "messages": [...]}'
+# GLM-4.7 via Z.AI
 ```
 
 ### Kimi via OpenRouter
@@ -540,17 +558,17 @@ cp .env.example .env.local
 
 Contenu de `.env.local` :
 ```
-DEEPSEEK_API_KEY=sk-ta-clé-deepseek
 GLM_API_KEY=ta-clé-glm
 OPENROUTER_API_KEY=sk-or-v1-ta-clé-openrouter
 ```
+
+> **Note** : DeepSeek et Kimi utilisent OpenRouter (une seule clé pour les deux).
 
 ### Option 2 : Variables d'environnement
 
 Ajouter dans `~/.zshrc` ou `~/.bashrc` :
 
 ```bash
-export DEEPSEEK_API_KEY="sk-..."
 export GLM_API_KEY="..."
 export OPENROUTER_API_KEY="sk-or-..."
 ```
@@ -561,9 +579,8 @@ Puis : `source ~/.zshrc`
 
 | Agent | URL |
 |-------|-----|
-| DeepSeek | https://platform.deepseek.com/api_keys |
-| GLM | https://open.bigmodel.cn/usercenter/apikeys |
-| OpenRouter | https://openrouter.ai/keys |
+| GLM (Z.AI) | https://docs.z.ai/ |
+| OpenRouter (DeepSeek + Kimi) | https://openrouter.ai/keys |
 
 ### Agents payants (optionnel)
 
