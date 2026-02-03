@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v3.3 Installer
-# Install Claude Code skills + RALPH Mode + 42 Knowledge Files + Templates
-# 16 skills, 15 commands, 18 templates
+# D-EPCT+R Workflow v3.7 Installer
+# Install Claude Code skills + RALPH Mode + 51 Knowledge Files + Templates
+# 18 skills, 16 commands, 18 templates
 #
 # Usage:
 #   # Fresh install
@@ -56,15 +56,15 @@ TARGET_DOCS="$TARGET_DIR/docs"
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
 if [ "$UPDATE_MODE" = true ]; then
-echo "║             D-EPCT+R Workflow v3.3 Updater                            ║"
+echo "║             D-EPCT+R Workflow v3.7 Updater                            ║"
 else
-echo "║             D-EPCT+R Workflow v3.3 Installer                          ║"
+echo "║             D-EPCT+R Workflow v3.7 Installer                          ║"
 fi
 echo "║                                                                       ║"
-echo "║   SKILLS:       16 (Planning, Design, Dev, Security, Performance)     ║"
-echo "║   COMMANDS:     15 (Manuel + RALPH + Utilitaires)                     ║"
+echo "║   SKILLS:       18 (Planning, Design, Dev, Security, Multi-Mind)      ║"
+echo "║   COMMANDS:     16 (Manuel + RALPH + Utilitaires)                     ║"
 echo "║   TEMPLATES:    18 (CI/CD, Git Hooks, DevContainer, GitHub)           ║"
-echo "║   KNOWLEDGE:    42 fichiers (testing, workflows)                      ║"
+echo "║   KNOWLEDGE:    51 fichiers (testing, workflows, security)            ║"
 echo "╚═══════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
@@ -147,7 +147,7 @@ else
 fi
 
 if [ "$UPDATE_MODE" != true ] && [ "$MERGE_MODE" != true ]; then
-    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v3.3 to $TARGET_DIR...${NC}"
+    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v3.7 to $TARGET_DIR...${NC}"
 fi
 echo ""
 
@@ -157,6 +157,9 @@ mkdir -p "$TARGET_CLAUDE/commands"
 mkdir -p "$TARGET_CLAUDE/hooks"
 mkdir -p "$TARGET_CLAUDE/knowledge/testing"
 mkdir -p "$TARGET_CLAUDE/knowledge/workflows"
+mkdir -p "$TARGET_CLAUDE/knowledge/brainstorming"
+mkdir -p "$TARGET_CLAUDE/knowledge/multi-mind"
+mkdir -p "$TARGET_CLAUDE/knowledge/supabase-security"
 mkdir -p "$TARGET_CLAUDE/templates/github-actions"
 mkdir -p "$TARGET_CLAUDE/templates/github/ISSUE_TEMPLATE"
 mkdir -p "$TARGET_CLAUDE/templates/git-hooks"
@@ -171,6 +174,8 @@ mkdir -p "$TARGET_DOCS/planning/ui"
 mkdir -p "$TARGET_DOCS/planning/architecture"
 mkdir -p "$TARGET_DOCS/stories"
 mkdir -p "$TARGET_DOCS/ralph-logs"
+mkdir -p "$TARGET_DOCS/debates"
+mkdir -p "$TARGET_DOCS/security"
 echo -e "   ${GREEN}✅ docs/planning/brainstorms/${NC}"
 echo -e "   ${GREEN}✅ docs/planning/ux/${NC}"
 echo -e "   ${GREEN}✅ docs/planning/prd/${NC}"
@@ -178,9 +183,11 @@ echo -e "   ${GREEN}✅ docs/planning/ui/${NC}"
 echo -e "   ${GREEN}✅ docs/planning/architecture/${NC}"
 echo -e "   ${GREEN}✅ docs/stories/${NC}"
 echo -e "   ${GREEN}✅ docs/ralph-logs/${NC}"
+echo -e "   ${GREEN}✅ docs/debates/${NC}"
+echo -e "   ${GREEN}✅ docs/security/${NC}"
 
 # Copy knowledge base (always update in UPDATE_MODE)
-echo -e "${GREEN}📚 Installing Knowledge Base (35+ files)...${NC}"
+echo -e "${GREEN}📚 Installing Knowledge Base (51 files)...${NC}"
 if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
     # Copy testing knowledge (32 files)
     if [ -d "$SOURCE_CLAUDE/knowledge/testing" ]; then
@@ -202,6 +209,36 @@ if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
             echo -e "   ${GREEN}✅ workflows/ ($workflows_count files)${NC}"
         fi
     fi
+    # Copy brainstorming knowledge (NEW v3.6)
+    if [ -d "$SOURCE_CLAUDE/knowledge/brainstorming" ]; then
+        cp -r "$SOURCE_CLAUDE/knowledge/brainstorming/"* "$TARGET_CLAUDE/knowledge/brainstorming/" 2>/dev/null || true
+        brain_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/brainstorming/"* 2>/dev/null | wc -l | tr -d ' ')
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 brainstorming/ ($brain_count files)${NC}"
+        else
+            echo -e "   ${GREEN}✅ brainstorming/ ($brain_count files)${NC}"
+        fi
+    fi
+    # Copy multi-mind knowledge (NEW v3.5)
+    if [ -d "$SOURCE_CLAUDE/knowledge/multi-mind" ]; then
+        cp -r "$SOURCE_CLAUDE/knowledge/multi-mind/"* "$TARGET_CLAUDE/knowledge/multi-mind/" 2>/dev/null || true
+        mm_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/multi-mind/"* 2>/dev/null | wc -l | tr -d ' ')
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 multi-mind/ ($mm_count files)${NC}"
+        else
+            echo -e "   ${GREEN}✅ multi-mind/ ($mm_count files)${NC}"
+        fi
+    fi
+    # Copy supabase-security knowledge (NEW v3.7)
+    if [ -d "$SOURCE_CLAUDE/knowledge/supabase-security" ]; then
+        cp -r "$SOURCE_CLAUDE/knowledge/supabase-security/"* "$TARGET_CLAUDE/knowledge/supabase-security/" 2>/dev/null || true
+        supa_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/supabase-security/"* 2>/dev/null | wc -l | tr -d ' ')
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 supabase-security/ ($supa_count files)${NC}"
+        else
+            echo -e "   ${GREEN}✅ supabase-security/ ($supa_count files)${NC}"
+        fi
+    fi
     # Copy index (only if source != destination)
     if [ -f "$SOURCE_CLAUDE/knowledge/tea-index.csv" ]; then
         SOURCE_INDEX="$(cd "$(dirname "$SOURCE_CLAUDE/knowledge/tea-index.csv")" && pwd)/tea-index.csv"
@@ -220,7 +257,7 @@ if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
 fi
 
 # Copy skills
-echo -e "${GREEN}📁 Installing skills (16)...${NC}"
+echo -e "${GREEN}📁 Installing skills (18)...${NC}"
 for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
     if [ -d "$skill_dir" ]; then
         skill_name=$(basename "$skill_dir")
@@ -253,7 +290,7 @@ for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
 done
 
 # Copy commands
-echo -e "${GREEN}📁 Installing commands (15)...${NC}"
+echo -e "${GREEN}📁 Installing commands (16)...${NC}"
 for cmd_file in "$SOURCE_CLAUDE/commands"/*.md; do
     if [ -f "$cmd_file" ]; then
         cmd_name=$(basename "$cmd_file")
@@ -508,6 +545,8 @@ touch "$TARGET_DOCS/planning/ui/.gitkeep"
 touch "$TARGET_DOCS/planning/architecture/.gitkeep"
 touch "$TARGET_DOCS/stories/.gitkeep"
 touch "$TARGET_DOCS/ralph-logs/.gitkeep"
+touch "$TARGET_DOCS/debates/.gitkeep"
+touch "$TARGET_DOCS/security/.gitkeep"
 
 echo ""
 if [ "$UPDATE_MODE" = true ]; then
@@ -516,10 +555,10 @@ echo -e "║                       ✅ Update Complete!                         
 echo -e "╚═══════════════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${CYAN}Updated components:${NC}"
-echo -e "   ${CYAN}🔄 Skills (16)${NC}"
-echo -e "   ${CYAN}🔄 Commands (15)${NC}"
+echo -e "   ${CYAN}🔄 Skills (18)${NC}"
+echo -e "   ${CYAN}🔄 Commands (16)${NC}"
 echo -e "   ${CYAN}🔄 Hooks${NC}"
-echo -e "   ${CYAN}🔄 Knowledge Base (42 files)${NC}"
+echo -e "   ${CYAN}🔄 Knowledge Base (51 files)${NC}"
 echo -e "   ${CYAN}🔄 Templates (18 files)${NC}"
 echo -e "   ${CYAN}🔄 Examples (3 projects)${NC}"
 echo ""
@@ -534,9 +573,12 @@ echo -e "╚══════════════════════�
 echo ""
 echo -e "${CYAN}Installed components:${NC}"
 echo ""
-echo -e "${BLUE}  📚 Knowledge Base (42 files):${NC}"
-echo "    testing/     32 files (test levels, priorities, factories, fixtures...)"
-echo "    workflows/   10 files (PRD, architecture, stories, UX, UI templates...)"
+echo -e "${BLUE}  📚 Knowledge Base (51 files):${NC}"
+echo "    testing/           32 files (test levels, priorities, factories, fixtures...)"
+echo "    workflows/         10 files (PRD, architecture, stories, UX, UI templates...)"
+echo "    brainstorming/      1 file  (61 techniques en 10 catégories)"
+echo "    multi-mind/         2 files (agent personalities, debate templates)"
+echo "    supabase-security/  7 files (RLS patterns, remediation, auth config...)"
 echo ""
 echo -e "${BLUE}  📂 Templates (18 files):${NC}"
 echo "    github-actions/  CI/CD workflows (ci, release, security, deploy)"
@@ -549,14 +591,15 @@ echo "    simple-api/      API REST simple (mode LIGHT)"
 echo "    blog-nextjs/     Blog Next.js (mode FULL)"
 echo "    saas-dashboard/  Dashboard SaaS (mode RALPH)"
 echo ""
-echo -e "${BLUE}  Skills (16):${NC}"
+echo -e "${BLUE}  Skills (18):${NC}"
 echo "    Planning:  idea-brainstorm, pm-prd, architect, pm-stories,"
 echo "               api-designer, database-designer"
 echo "    Design:    ux-designer, ui-designer (auto-triggered)"
 echo "    Dev:       github-issue-reader, codebase-explainer,"
 echo "               implementation-planner, code-implementer,"
 echo "               test-runner, code-reviewer"
-echo "    Audit:     security-auditor, performance-auditor"
+echo "    Audit:     security-auditor, performance-auditor, supabase-security"
+echo "    Multi-IA:  multi-mind (6 IA debate system)"
 echo ""
 echo -e "${BLUE}  Commands - Mode Manuel:${NC}"
 echo "    /discovery           Planning avec validation"
@@ -578,6 +621,7 @@ echo "    /docs                Génère documentation"
 echo "    /changelog           Génère CHANGELOG"
 echo "    /metrics             Dashboard métriques"
 echo "    /init                Scaffolding projet"
+echo "    /supabase-security   Audit sécurité Supabase"
 fi
 echo ""
 echo -e "${CYAN}Usage:${NC}"
