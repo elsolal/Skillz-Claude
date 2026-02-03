@@ -25,6 +25,12 @@
 > - **Git Hooks** - pre-commit, commit-msg, conventional commits
 > - **DevContainer** - Docker dev environment prêt à l'emploi
 > - **18 skills** - Du brainstorm au déploiement
+>
+> **🤖 Multi-Agent** _(NEW v3.7)_
+>
+> - **Compatible** - Claude, Codex, Gemini, OpenCode
+> - **Symlinks** - Un seul source of truth (`.claude/`)
+> - **Portable** - Même skills/knowledge partout
 
 ## Installation
 
@@ -473,6 +479,42 @@ Audit de sécurité complet pour les applications utilisant Supabase :
 - `edge-functions-security.md` - Auth, IDOR, role check
 - `realtime-security.md` - WebSocket, Broadcast, Presence
 - `auth-configuration.md` - GoTrue endpoints, OAuth, CORS
+
+### Multi-Agent Compatibility
+
+Compatibilité avec d'autres outils IA via symlinks vers `.claude/` :
+
+```
+.agents/           # Generic fallback
+├── README.md      # Documentation
+├── AGENTS.md      # Instructions
+├── skills/        → .claude/skills/
+└── knowledge/     → .claude/knowledge/
+
+.codex/            # OpenAI Codex CLI
+.gemini/           # Google Gemini CLI
+.opencode/         # OpenCode
+```
+
+**Principe** : Un seul source of truth (`.claude/`), les autres dossiers contiennent des symlinks.
+
+**Utilisation** :
+
+| Outil | Commande | Config lue |
+|-------|----------|------------|
+| Claude Code | `claude` | `.claude/CLAUDE.md` |
+| OpenAI Codex | `codex` | `.codex/AGENTS.md` |
+| Gemini CLI | `gemini` | `.gemini/GEMINI.md` |
+| OpenCode | `opencode` | `.opencode/AGENTS.md` |
+
+**Ajouter un nouvel outil** :
+
+```bash
+mkdir .newtool
+ln -sf ../.claude/skills .newtool/skills
+ln -sf ../.claude/knowledge .newtool/knowledge
+# Créer .newtool/AGENTS.md avec les instructions
+```
 
 ---
 
@@ -970,7 +1012,29 @@ docs/                                # Output documents
 ├── stories/
 │   └── EPIC-{num}-{slug}/
 ├── debates/                         # NEW v3.4 - Rapports Multi-Mind
+├── security/                        # NEW v3.7 - Rapports Supabase Audit
 └── ralph-logs/
+
+.agents/                             # NEW v3.7 - Multi-agent compatibility
+├── README.md                        # Documentation du système
+├── AGENTS.md                        # Instructions génériques
+├── skills/                          → symlink vers .claude/skills/
+└── knowledge/                       → symlink vers .claude/knowledge/
+
+.codex/                              # OpenAI Codex CLI
+├── AGENTS.md
+├── skills/                          → symlink
+└── knowledge/                       → symlink
+
+.gemini/                             # Google Gemini CLI
+├── GEMINI.md
+├── skills/                          → symlink
+└── knowledge/                       → symlink
+
+.opencode/                           # OpenCode
+├── AGENTS.md
+├── skills/                          → symlink
+└── knowledge/                       → symlink
 ```
 
 ---
@@ -1065,6 +1129,14 @@ docs/                                # Output documents
 - Evidence collection avec commandes curl reproductibles
 - 7 fichiers knowledge : checklist, severity matrix, RLS patterns, remediation templates
 - Support RLS bypass tests, Edge Functions security, Realtime channels
+
+**Multi-Agent Compatibility**
+
+- Nouveaux dossiers `.agents/`, `.codex/`, `.gemini/`, `.opencode/`
+- Symlinks vers `.claude/skills/` et `.claude/knowledge/`
+- Instructions adaptées pour chaque outil (AGENTS.md, GEMINI.md)
+- Un seul source of truth : `.claude/`
+- install.sh mis à jour pour créer automatiquement la structure
 
 ### v3.6.0
 
