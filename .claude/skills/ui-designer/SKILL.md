@@ -1,6 +1,6 @@
 ---
 name: ui-designer
-description: Définit le design system, les composants UI et les guidelines visuelles. Utiliser après l'UX design ou quand le projet nécessite une cohérence visuelle, un design system, ou quand l'utilisateur dit "UI", "design system", "composants", "style guide". Peut être déclenché automatiquement par UX designer ou PRD.
+description: Définit le design system, les composants UI et les guidelines visuelles. Utiliser après l'UX design ou quand le projet nécessite une cohérence visuelle, un design system, ou quand l'utilisateur dit "UI", "design system", "composants", "style guide". Peut être déclenché automatiquement par UX designer ou PRD. Supporte l'import depuis Figma avec --from-figma.
 model: opus
 context: fork
 agent: Plan
@@ -9,7 +9,8 @@ allowed-tools:
   - Grep
   - Glob
   - Write
-argument-hint: <ux-design-file>
+  - Bash
+argument-hint: <ux-design-file> [--from-figma]
 user-invocable: true
 trigger:
   auto_criteria:
@@ -18,6 +19,10 @@ trigger:
     - brand_consistency_needed: true
     - keywords: ["design", "composants", "couleurs", "style", "branding"]
   mode: auto | manual | skip
+knowledge:
+  advanced:
+    - figma/tokens-mapping.md
+    - figma/mcp-tools-reference.md
 ---
 
 # UI Designer
@@ -36,6 +41,9 @@ trigger:
 ### Framework frontend détecté
 !`cat package.json 2>/dev/null | grep -E '"(react|vue|angular|svelte|next|nuxt)"' || echo "Framework non détecté"`
 
+### Figma Code Connect (si configuré)
+!`cat figma.config.json 2>/dev/null && echo "✅ Code Connect disponible - import Figma possible" || echo "❌ Code Connect non configuré (optionnel)"`
+
 ---
 
 ## Activation
@@ -44,6 +52,7 @@ trigger:
 > 1. Identifier si déclenché automatiquement ou manuellement
 > 2. Analyser le contexte (UX docs / PRD existant)
 > 3. Détecter si design system existant (brownfield)
+> 4. **Vérifier si Figma disponible** (Code Connect configuré ou URL fournie)
 
 ## Rôle & Principes
 
@@ -90,6 +99,71 @@ Si design system existant détecté, s'aligner dessus plutôt que créer nouveau
 
 ## Process
 
+### 0. Import depuis Figma (optionnel)
+
+Si l'utilisateur lance avec `--from-figma`, fournit une URL Figma, ou si Code Connect est configuré :
+
+```markdown
+🎨 **Source Figma détectée**
+
+**Figma disponible :**
+- Code Connect : [Configuré/Non configuré]
+- URL fournie : [URL ou Non]
+
+**Options d'import :**
+- [F] **Importer depuis Figma** - Récupérer les tokens (couleurs, typo, spacing) depuis les variables Figma
+- [M] **Création manuelle** - Définir les tokens from scratch (processus classique)
+- [H] **Hybride** - Importer puis ajuster manuellement
+
+Je recommande **[F/M/H]** basé sur le contexte.
+```
+
+**⏸️ STOP** - Choix de la source
+
+#### Si import Figma choisi :
+
+1. **Extraction des variables Figma** via MCP `get_variable_defs`
+2. **Transformation** vers format CSS Variables (cf. knowledge/figma/tokens-mapping.md)
+3. **Présentation** des tokens extraits pour validation
+
+```markdown
+📥 **Tokens importés depuis Figma**
+
+**Fichier source** : [Figma File Name]
+
+### Couleurs extraites
+| Token Figma | CSS Variable | Valeur |
+|-------------|--------------|--------|
+| Primary/500 | --color-primary-500 | #3b82f6 |
+| Primary/600 | --color-primary-600 | #2563eb |
+| Neutral/Background | --color-background | #ffffff |
+| ... | ... | ... |
+
+### Typographie extraite
+| Token Figma | CSS Variable | Valeur |
+|-------------|--------------|--------|
+| Heading/H1 | --font-heading-1 | 700 32px/1.2 Inter |
+| Body/Regular | --font-body | 400 16px/1.5 Inter |
+| ... | ... | ... |
+
+### Spacing extrait
+| Token Figma | CSS Variable | Valeur |
+|-------------|--------------|--------|
+| Spacing/md | --space-md | 16px |
+| Spacing/lg | --space-lg | 24px |
+| ... | ... | ... |
+
+**Total** : [X] couleurs, [Y] typos, [Z] spacings
+
+Ces tokens te conviennent ? Tu peux les ajuster avant de continuer.
+```
+
+**⏸️ STOP** - Validation tokens importés
+
+Si tokens validés, passer directement à l'étape 3 (Composants UI).
+
+---
+
 ### 1. Analyse du contexte
 
 ```markdown
@@ -114,6 +188,23 @@ Je recommande le **Mode [X]**. On continue ?
 ---
 
 ### 2. Design Tokens
+
+**Source des tokens** (si Phase 0 pas exécutée) :
+
+```markdown
+🎨 **Source des Design Tokens**
+
+| Option | Description |
+|--------|-------------|
+| [F] Figma | Importer depuis les variables Figma (si configuré) |
+| [M] Manuel | Créer les tokens from scratch |
+
+Choix : [F/M]
+```
+
+Si Figma choisi, utiliser le process d'import de la Phase 0.
+
+---
 
 ```markdown
 ## 🎨 Design Tokens
@@ -512,3 +603,5 @@ Après validation de l'UI, proposer automatiquement :
 - **Vers architect** : "On intègre le design system dans l'architecture ?"
 - **Vers pm-stories** : "On crée les stories avec les specs UI ?"
 - **Vers ux-designer** : "On revoit l'UX avant de finaliser l'UI ?"
+- **Vers figma-setup** : "On configure Code Connect pour mapper les composants Figma ?"
+- **Vers figma-to-code** : "On génère du code depuis un design Figma ?"

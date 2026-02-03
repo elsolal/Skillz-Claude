@@ -7,7 +7,7 @@
 
 ## Quick Reference
 
-### Available Skills (18)
+### Available Skills (20)
 
 | Skill | Purpose |
 |-------|---------|
@@ -16,9 +16,11 @@
 | `architect` | Technical architecture |
 | `pm-stories` | Epics + User Stories |
 | `ux-designer` | UX design (personas, journeys) |
-| `ui-designer` | UI design (tokens, components) |
+| `ui-designer` | UI design (tokens, components, Figma import) |
 | `api-designer` | API design (OpenAPI) |
 | `database-designer` | Database schema (ERD) |
+| `figma-setup` | Configure Figma Code Connect (NEW v3.8) |
+| `figma-to-code` | Generate code from Figma designs (NEW v3.8) |
 | `github-issue-reader` | Parse GitHub issues |
 | `codebase-explainer` | Analyze codebase |
 | `implementation-planner` | Plan implementation |
@@ -70,6 +72,7 @@ Categories:
 - `brainstorming/` - 1 file (61 techniques)
 - `multi-mind/` - 2 files (agent personalities)
 - `supabase-security/` - 7 files (audit, RLS, remediation)
+- `figma/` - 3 files (Code Connect, MCP tools, tokens mapping) (NEW v3.8)
 
 ---
 

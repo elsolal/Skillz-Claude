@@ -24,7 +24,12 @@
 >
 > - **Git Hooks** - pre-commit, commit-msg, conventional commits
 > - **DevContainer** - Docker dev environment prêt à l'emploi
-> - **18 skills** - Du brainstorm au déploiement
+> - **20 skills** - Du brainstorm au déploiement
+>
+> **🎨 Design** _(NEW v3.8)_
+>
+> - **Figma Integration** - Import tokens, Code Connect, génération de code
+> - **MCP Figma** - Extraction design, variables, mappings automatiques
 >
 > **🤖 Multi-Agent** _(NEW v3.7)_
 >
@@ -198,6 +203,8 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /metrics                # Dashboard métriques projet
 /init [template]        # Scaffolding projet (NEW v3.0)
 /supabase-security <url> # Audit sécurité Supabase complet (NEW v3.7)
+/figma-setup [url]       # Configure Code Connect (NEW v3.8)
+/figma-to-code <url>     # Génère code depuis Figma (NEW v3.8)
 ```
 
 ### Configuration RALPH
@@ -212,7 +219,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Skills (18)
+## Skills (20)
 
 ### Phase Planning
 
@@ -227,10 +234,12 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ### Phase Design (optionnelle, auto-triggered)
 
-| Skill         | Rôle                   | Fonctionnalités clés                                                          |
-| ------------- | ---------------------- | ----------------------------------------------------------------------------- |
-| `ux-designer` | Expérience utilisateur | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen        |
-| `ui-designer` | Design system          | **Tokens** (couleurs, typo, spacing), composants UI, guidelines accessibilité |
+| Skill            | Rôle                         | Fonctionnalités clés                                                             |
+| ---------------- | ---------------------------- | -------------------------------------------------------------------------------- |
+| `ux-designer`    | Expérience utilisateur       | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen           |
+| `ui-designer`    | Design system                | **Tokens**, composants UI, **import Figma** (NEW v3.8)                           |
+| `figma-setup`    | Config Code Connect (NEW)    | Installation, **mappings .figma.tsx**, publication                               |
+| `figma-to-code`  | Génération code (NEW)        | URL Figma → code avec **composants mappés**, tokens CSS                          |
 
 ### Phase Développement
 
@@ -431,6 +440,64 @@ Multi-Mind est proposé (optionnel) après :
 - `/refactor` (3 passes) → Option **[M]** Multi-Mind
 
 **Output** : Rapport dans `docs/debates/YYYY-MM-DD-topic.md`
+
+---
+
+## Fonctionnalités v3.8
+
+### Figma Integration
+
+Intégration complète avec Figma via MCP et Code Connect :
+
+```bash
+/figma-setup                    # Configure Code Connect (one-time)
+/figma-to-code <figma-url>      # Génère code depuis Figma
+/ui-designer --from-figma       # Importe tokens depuis Figma
+```
+
+### Nouveaux skills
+
+| Skill           | Description                                              |
+| --------------- | -------------------------------------------------------- |
+| `figma-setup`   | Configure Code Connect, crée mappings `.figma.tsx`       |
+| `figma-to-code` | Génère code depuis URL Figma avec composants mappés      |
+
+### Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      FIGMA INTEGRATION                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  ONE-TIME SETUP                                                 │
+│  ┌────────────────┐    ┌────────────────┐    ┌──────────────┐  │
+│  │  /figma-setup  │ →  │ figma.config   │ →  │  *.figma.tsx │  │
+│  │                │    │     .json      │    │   mappings   │  │
+│  └────────────────┘    └────────────────┘    └──────────────┘  │
+│                                                                 │
+│  DAILY USAGE                                                    │
+│  ┌────────────────┐    ┌────────────────┐    ┌──────────────┐  │
+│  │ /figma-to-code │ →  │ MCP Extract    │ →  │  Generated   │  │
+│  │   <url>        │    │ Design+Tokens  │    │    Code      │  │
+│  └────────────────┘    └────────────────┘    └──────────────┘  │
+│                                                                 │
+│  TOKEN IMPORT                                                   │
+│  ┌────────────────┐    ┌────────────────┐    ┌──────────────┐  │
+│  │ /ui-designer   │ →  │ Figma Variables│ →  │  tokens.css  │  │
+│  │  --from-figma  │    │  get_var_defs  │    │  CSS Vars    │  │
+│  └────────────────┘    └────────────────┘    └──────────────┘  │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Knowledge Base
+
+```
+.claude/knowledge/figma/
+├── code-connect-guide.md    # Guide CLI Code Connect
+├── mcp-tools-reference.md   # Référence outils MCP Figma
+└── tokens-mapping.md        # Mapping Figma Variables → CSS
+```
 
 ---
 
@@ -974,15 +1041,19 @@ knowledge:
 │   ├── multi-mind/                  # NEW v3.4 - Débat multi-agents
 │   │   ├── agent-personalities.md
 │   │   └── debate-templates.md
-│   └── supabase-security/           # NEW v3.7 - Audit Supabase
-│       ├── audit-checklist.md
-│       ├── severity-matrix.md
-│       ├── rls-patterns.md
-│       ├── remediation-templates.md
-│       ├── edge-functions-security.md
-│       ├── realtime-security.md
-│       └── auth-configuration.md
-└── skills/                          # 18 skills
+│   ├── supabase-security/           # NEW v3.7 - Audit Supabase
+│   │   ├── audit-checklist.md
+│   │   ├── severity-matrix.md
+│   │   ├── rls-patterns.md
+│   │   ├── remediation-templates.md
+│   │   ├── edge-functions-security.md
+│   │   ├── realtime-security.md
+│   │   └── auth-configuration.md
+│   └── figma/                       # NEW v3.8 - Figma Integration
+│       ├── code-connect-guide.md
+│       ├── mcp-tools-reference.md
+│       └── tokens-mapping.md
+└── skills/                          # 20 skills
     ├── idea-brainstorm/
     ├── pm-prd/
     ├── ux-designer/
@@ -1000,7 +1071,9 @@ knowledge:
     ├── database-designer/
     ├── performance-auditor/
     ├── supabase-security/           # NEW v3.7
-    └── multi-mind/
+    ├── multi-mind/
+    ├── figma-setup/                 # NEW v3.8
+    └── figma-to-code/               # NEW v3.8
 
 docs/                                # Output documents
 ├── planning/
@@ -1119,7 +1192,19 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v3.7.0 (Current)
+### v3.8.0 (Current)
+
+**Figma Integration**
+
+- Nouveau skill `/figma-setup` pour configurer Code Connect
+- Nouveau skill `/figma-to-code` pour générer du code depuis Figma
+- Enrichissement `/ui-designer` avec option `--from-figma` pour importer tokens
+- 3 fichiers knowledge : code-connect-guide.md, mcp-tools-reference.md, tokens-mapping.md
+- Support MCP Figma : get_design_context, get_variable_defs, get_code_connect_map
+- Mapping automatique Figma Variables → CSS Variables
+- Authentification OAuth automatique (pas de token à gérer)
+
+### v3.7.0
 
 **Supabase Security Audit**
 

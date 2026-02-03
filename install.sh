@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v3.7 Installer
-# Install Claude Code skills + RALPH Mode + 51 Knowledge Files + Templates
-# 18 skills, 16 commands, 18 templates, 4 agent compatibility layers
+# D-EPCT+R Workflow v3.8 Installer
+# Install Claude Code skills + RALPH Mode + 54 Knowledge Files + Templates
+# 20 skills, 16 commands, 18 templates, 4 agent compatibility layers
 #
 # Usage:
 #   # Fresh install
@@ -56,15 +56,15 @@ TARGET_DOCS="$TARGET_DIR/docs"
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
 if [ "$UPDATE_MODE" = true ]; then
-echo "║             D-EPCT+R Workflow v3.7 Updater                            ║"
+echo "║             D-EPCT+R Workflow v3.8 Updater                            ║"
 else
-echo "║             D-EPCT+R Workflow v3.7 Installer                          ║"
+echo "║             D-EPCT+R Workflow v3.8 Installer                          ║"
 fi
 echo "║                                                                       ║"
-echo "║   SKILLS:       18 (Planning, Design, Dev, Security, Multi-Mind)      ║"
+echo "║   SKILLS:       20 (Planning, Design, Dev, Security, Figma)            ║"
 echo "║   COMMANDS:     16 (Manuel + RALPH + Utilitaires)                     ║"
 echo "║   TEMPLATES:    18 (CI/CD, Git Hooks, DevContainer, GitHub)           ║"
-echo "║   KNOWLEDGE:    51 fichiers (testing, workflows, security)            ║"
+echo "║   KNOWLEDGE:    54 fichiers (testing, workflows, security, figma)     ║"
 echo "╚═══════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
@@ -147,7 +147,7 @@ else
 fi
 
 if [ "$UPDATE_MODE" != true ] && [ "$MERGE_MODE" != true ]; then
-    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v3.7 to $TARGET_DIR...${NC}"
+    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v3.8 to $TARGET_DIR...${NC}"
 fi
 echo ""
 
@@ -160,6 +160,7 @@ mkdir -p "$TARGET_CLAUDE/knowledge/workflows"
 mkdir -p "$TARGET_CLAUDE/knowledge/brainstorming"
 mkdir -p "$TARGET_CLAUDE/knowledge/multi-mind"
 mkdir -p "$TARGET_CLAUDE/knowledge/supabase-security"
+mkdir -p "$TARGET_CLAUDE/knowledge/figma"
 mkdir -p "$TARGET_CLAUDE/templates/github-actions"
 mkdir -p "$TARGET_CLAUDE/templates/github/ISSUE_TEMPLATE"
 mkdir -p "$TARGET_CLAUDE/templates/git-hooks"
@@ -187,7 +188,7 @@ echo -e "   ${GREEN}✅ docs/debates/${NC}"
 echo -e "   ${GREEN}✅ docs/security/${NC}"
 
 # Copy knowledge base (always update in UPDATE_MODE)
-echo -e "${GREEN}📚 Installing Knowledge Base (51 files)...${NC}"
+echo -e "${GREEN}📚 Installing Knowledge Base (54 files)...${NC}"
 if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
     # Copy testing knowledge (32 files)
     if [ -d "$SOURCE_CLAUDE/knowledge/testing" ]; then
@@ -239,6 +240,16 @@ if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
             echo -e "   ${GREEN}✅ supabase-security/ ($supa_count files)${NC}"
         fi
     fi
+    # Copy figma knowledge (NEW v3.8)
+    if [ -d "$SOURCE_CLAUDE/knowledge/figma" ]; then
+        cp -r "$SOURCE_CLAUDE/knowledge/figma/"* "$TARGET_CLAUDE/knowledge/figma/" 2>/dev/null || true
+        figma_count=$(ls -1 "$SOURCE_CLAUDE/knowledge/figma/"* 2>/dev/null | wc -l | tr -d ' ')
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 figma/ ($figma_count files)${NC}"
+        else
+            echo -e "   ${GREEN}✅ figma/ ($figma_count files)${NC}"
+        fi
+    fi
     # Copy index (only if source != destination)
     if [ -f "$SOURCE_CLAUDE/knowledge/tea-index.csv" ]; then
         SOURCE_INDEX="$(cd "$(dirname "$SOURCE_CLAUDE/knowledge/tea-index.csv")" && pwd)/tea-index.csv"
@@ -257,7 +268,7 @@ if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
 fi
 
 # Copy skills
-echo -e "${GREEN}📁 Installing skills (18)...${NC}"
+echo -e "${GREEN}📁 Installing skills (20)...${NC}"
 for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
     if [ -d "$skill_dir" ]; then
         skill_name=$(basename "$skill_dir")
@@ -588,10 +599,10 @@ echo -e "║                       ✅ Update Complete!                         
 echo -e "╚═══════════════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${CYAN}Updated components:${NC}"
-echo -e "   ${CYAN}🔄 Skills (18)${NC}"
+echo -e "   ${CYAN}🔄 Skills (20)${NC}"
 echo -e "   ${CYAN}🔄 Commands (16)${NC}"
 echo -e "   ${CYAN}🔄 Hooks${NC}"
-echo -e "   ${CYAN}🔄 Knowledge Base (51 files)${NC}"
+echo -e "   ${CYAN}🔄 Knowledge Base (54 files)${NC}"
 echo -e "   ${CYAN}🔄 Templates (18 files)${NC}"
 echo -e "   ${CYAN}🔄 Examples (3 projects)${NC}"
 echo -e "   ${CYAN}🔄 Multi-agent compatibility (4 layers)${NC}"
@@ -607,12 +618,13 @@ echo -e "╚══════════════════════�
 echo ""
 echo -e "${CYAN}Installed components:${NC}"
 echo ""
-echo -e "${BLUE}  📚 Knowledge Base (51 files):${NC}"
+echo -e "${BLUE}  📚 Knowledge Base (54 files):${NC}"
 echo "    testing/           32 files (test levels, priorities, factories, fixtures...)"
 echo "    workflows/         10 files (PRD, architecture, stories, UX, UI templates...)"
 echo "    brainstorming/      1 file  (61 techniques en 10 catégories)"
 echo "    multi-mind/         2 files (agent personalities, debate templates)"
 echo "    supabase-security/  7 files (RLS patterns, remediation, auth config...)"
+echo "    figma/              3 files (Code Connect, MCP tools, tokens mapping)"
 echo ""
 echo -e "${BLUE}  📂 Templates (18 files):${NC}"
 echo "    github-actions/  CI/CD workflows (ci, release, security, deploy)"
@@ -632,10 +644,11 @@ echo "    .gemini/         Google Gemini CLI"
 echo "    .opencode/       OpenCode"
 echo "    → All symlinked to .claude/skills and .claude/knowledge"
 echo ""
-echo -e "${BLUE}  Skills (18):${NC}"
+echo -e "${BLUE}  Skills (20):${NC}"
 echo "    Planning:  idea-brainstorm, pm-prd, architect, pm-stories,"
 echo "               api-designer, database-designer"
 echo "    Design:    ux-designer, ui-designer (auto-triggered)"
+echo "    Figma:     figma-setup, figma-to-code (NEW v3.8)"
 echo "    Dev:       github-issue-reader, codebase-explainer,"
 echo "               implementation-planner, code-implementer,"
 echo "               test-runner, code-reviewer"

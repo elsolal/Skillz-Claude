@@ -15,7 +15,7 @@
 
 ---
 
-# D-EPCT+R Workflow v3.6
+# D-EPCT+R Workflow v3.8
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -87,6 +87,8 @@
 /metrics                # Dashboard métriques projet
 /init [template]        # Scaffolding projet (NEW v3.0)
 /supabase-security <url> # Audit sécurité Supabase complet (NEW v3.7)
+/figma-setup [url]       # Configure Code Connect (NEW v3.8)
+/figma-to-code <url>     # Génère code depuis Figma (NEW v3.8)
 ```
 
 ### Configuration RALPH
@@ -101,7 +103,7 @@
 
 ---
 
-## Skills (18)
+## Skills (20)
 
 ### Phase Planning
 
@@ -119,7 +121,9 @@
 | Skill | Rôle | Fonctionnalités clés |
 |-------|------|----------------------|
 | `ux-designer` | Expérience utilisateur | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen |
-| `ui-designer` | Design system | **Tokens** (couleurs, typo, spacing), composants UI, guidelines accessibilité |
+| `ui-designer` | Design system | **Tokens** (couleurs, typo, spacing), composants UI, **import Figma** (NEW v3.8) |
+| `figma-setup` | Config Code Connect (NEW v3.8) | Installation, **mappings .figma.tsx**, publication |
+| `figma-to-code` | Génération code (NEW v3.8) | URL Figma → code avec **composants mappés**, tokens CSS |
 
 ### Phase Développement
 
@@ -186,6 +190,84 @@ Audit de performance avec Core Web Vitals et bundle analysis :
 - **Bundle** : JS/CSS size, chunks, tree-shaking
 - **Lighthouse** : Score complet
 - **Dependencies** : Packages lourds, alternatives
+
+---
+
+## Fonctionnalités avancées (v3.8)
+
+### Figma Integration
+
+Intégration complète avec Figma via MCP et Code Connect pour synchroniser designs et code.
+
+```bash
+/figma-setup                    # Configure Code Connect
+/figma-to-code <figma-url>      # Génère code depuis Figma
+/ui-designer --from-figma       # Importe tokens depuis Figma
+```
+
+### Nouveaux skills Figma
+
+| Skill | Rôle | Fonctionnalités |
+|-------|------|-----------------|
+| `figma-setup` | Configuration one-time | Installe Code Connect, génère `figma.config.json`, crée mappings `.figma.tsx` |
+| `figma-to-code` | Génération quotidienne | Parse URL, utilise mappings existants, génère code avec composants réels |
+
+### Workflow Figma
+
+```
+1. /figma-setup               → Configure Code Connect une fois
+   ├── npm install @figma/code-connect
+   ├── figma.config.json
+   └── *.figma.tsx (mappings)
+
+2. /figma-to-code <url>       → Usage quotidien
+   ├── Vérifie mappings existants
+   ├── Extrait design (MCP get_design_context)
+   ├── Récupère tokens (MCP get_variable_defs)
+   └── Génère code avec composants mappés
+
+3. /ui-designer --from-figma  → Import tokens
+   ├── Extrait variables Figma
+   ├── Transforme en CSS Variables
+   └── Propose ajustements manuels
+```
+
+### MCP Figma (pré-configuré)
+
+Le serveur MCP Figma est déjà configuré dans `.claude/mcp.json` :
+
+```json
+{
+  "figma": {
+    "type": "http",
+    "url": "https://mcp.figma.com/mcp"
+  }
+}
+```
+
+**Outils MCP disponibles** :
+- `get_design_context` - Extraire design pour génération
+- `get_variable_defs` - Récupérer tokens (couleurs, typo, spacing)
+- `get_code_connect_map` - Vérifier mappings existants
+- `get_screenshot` - Capture visuelle pour validation
+
+### Knowledge Base Figma
+
+```
+.claude/knowledge/figma/
+├── code-connect-guide.md    # Guide CLI Code Connect
+├── mcp-tools-reference.md   # Référence outils MCP
+└── tokens-mapping.md        # Mapping Figma → CSS Variables
+```
+
+### Authentification
+
+| Élément | Auth | Méthode |
+|---------|------|---------|
+| **MCP Figma** | OAuth automatique | Browser popup |
+| **CLI Code Connect** | Interactive | `npx figma connect` |
+
+**Pas de token à gérer** - l'auth est automatique via le navigateur.
 
 ---
 
@@ -998,9 +1080,13 @@ triggers_ux_ui:                  # Auto-trigger UX/UI (optionnel)
 │   └── project-types.csv
 ├── brainstorming/             # NEW v3.6 - Techniques de brainstorming
 │   └── brain-techniques.csv       # 61 techniques en 10 catégories
-└── multi-mind/                # NEW v3.5 - Débat multi-agents
-    ├── agent-personalities.md     # 6 system prompts
-    └── debate-templates.md        # Templates 5 rounds (itératif)
+├── multi-mind/                # NEW v3.5 - Débat multi-agents
+│   ├── agent-personalities.md     # 6 system prompts
+│   └── debate-templates.md        # Templates 5 rounds (itératif)
+└── figma/                     # NEW v3.8 - Intégration Figma
+    ├── code-connect-guide.md      # Guide CLI Code Connect
+    ├── mcp-tools-reference.md     # Référence outils MCP Figma
+    └── tokens-mapping.md          # Mapping Figma Variables → CSS
 ```
 
 ### Chargement progressif

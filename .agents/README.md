@@ -21,8 +21,8 @@ Toutes les configurations sont dans **`.claude/`** :
 
 | Dossier | Contenu |
 |---------|---------|
-| `.claude/skills/` | 18 skills (brainstorm, PRD, architecture, etc.) |
-| `.claude/knowledge/` | 51 fichiers knowledge (testing, workflows, security) |
+| `.claude/skills/` | 20 skills (brainstorm, PRD, architecture, Figma, etc.) |
+| `.claude/knowledge/` | 54 fichiers knowledge (testing, workflows, security, Figma) |
 | `.claude/commands/` | 16 commandes (discovery, feature, etc.) |
 | `.claude/CLAUDE.md` | Instructions principales |
 
