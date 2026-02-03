@@ -19,19 +19,22 @@ hooks:
 
 # Architect
 
-## 📥 Contexte projet chargé automatiquement
+## 📥 Contexte à charger
 
-### PRD actif
-!`ls -t docs/planning/prd/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -50 || echo "Aucun PRD trouvé"`
+**Au démarrage, découvrir et charger le contexte pertinent.**
 
-### Stack technique existant (si brownfield)
-!`cat package.json 2>/dev/null | head -25 || cat pyproject.toml 2>/dev/null | head -25 || cat Cargo.toml 2>/dev/null | head -20 || cat go.mod 2>/dev/null | head -15 || echo "Pas de config projet détectée"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| PRD actif | `Glob: docs/planning/prd/*.md` → `Read` le plus récent (50 lignes) | Requis |
+| Stack technique | `Read: package.json` ou `pyproject.toml` ou `Cargo.toml` ou `go.mod` | Optionnel |
+| Architecture existante | `Glob: docs/planning/architecture/*.md` | Optionnel |
+| Structure projet | `Bash: tree -L 2 -I 'node_modules\|dist\|build\|.git'` ou `ls -la` | Optionnel |
 
-### Architecture existante
-!`ls -la docs/planning/architecture/*.md 2>/dev/null | tail -3 || echo "Pas d'architecture existante"`
-
-### Structure actuelle du projet
-!`tree -L 2 -I 'node_modules|dist|build|.git|coverage|__pycache__|.venv|venv' 2>/dev/null | head -30 || find . -maxdepth 2 -type d | head -20`
+### Instructions de chargement
+1. Utiliser `Glob` pour trouver le PRD le plus récent, puis `Read` (50 premières lignes)
+2. Détecter le stack via `Read` sur package.json (Node), pyproject.toml (Python), etc.
+3. Lister les architectures existantes pour cohérence
+4. Explorer la structure du projet avec `Bash` (tree) ou lecture de répertoires
 
 ---
 

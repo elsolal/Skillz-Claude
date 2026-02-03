@@ -6,16 +6,21 @@ description: Review une Pull Request GitHub avec les 3 passes (Correctness, Read
 
 **Session ID:** ${CLAUDE_SESSION_ID}
 
-## 📥 Contexte PR chargé automatiquement
+## 📥 Contexte à charger
 
-### PR demandée : $ARGUMENTS
-!`gh pr view $ARGUMENTS --json number,title,body,state,author,baseRefName,headRefName,additions,deletions,changedFiles,files,reviews,comments 2>/dev/null || echo "⚠️ PR non trouvée ou gh CLI non configuré"`
+**PR demandée : $ARGUMENTS**
 
-### Fichiers modifiés
-!`gh pr diff $ARGUMENTS --name-only 2>/dev/null | head -20 || echo "Impossible de récupérer les fichiers"`
+| Contexte | Action | Priorité |
+|----------|--------|----------|
+| Détails PR | `Bash: gh pr view $ARGUMENTS --json number,title,body,state,author,files,reviews` | Requis |
+| Fichiers modifiés | `Bash: gh pr diff $ARGUMENTS --name-only` | Requis |
+| Diff complet | `Bash: gh pr diff $ARGUMENTS` (200 premières lignes) | Requis |
 
-### Diff complet
-!`gh pr diff $ARGUMENTS 2>/dev/null | head -200 || echo "Impossible de récupérer le diff"`
+### Instructions de chargement
+1. Utiliser `gh pr view` pour récupérer les métadonnées de la PR
+2. Lister les fichiers modifiés avec `gh pr diff --name-only`
+3. Obtenir le diff complet pour l'analyse
+4. Si `gh` CLI non configuré, demander l'URL de la PR
 
 ---
 

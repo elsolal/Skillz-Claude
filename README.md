@@ -946,8 +946,18 @@ knowledge:
 
 # Skill Name
 
-## 📥 Contexte chargé automatiquement
-!`commande shell pour charger contexte`
+## 📥 Contexte à charger
+
+**Au démarrage, découvrir et charger le contexte pertinent.**
+
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| [Nom] | `Glob: pattern` ou `Read: fichier` ou `Bash: commande` | Requis/Optionnel |
+
+### Instructions de chargement
+1. Utiliser `Glob` pour découvrir les fichiers par pattern
+2. Utiliser `Read` pour charger le contenu (avec limite si volumineux)
+3. Si fichier absent, continuer sans erreur
 
 ## Activation
 > Checklist de démarrage obligatoire
@@ -1444,7 +1454,7 @@ docs/                                # Output documents
 **Dynamic Context Injection**
 
 - Tous les 12 skills chargent automatiquement le contexte pertinent au démarrage
-- Utilisation de la syntaxe `!`shell command`` pour injection dynamique
+- Utilisation des outils natifs Claude Code (`Glob`, `Read`, `Grep`, `Bash`) au lieu de commandes shell inline
 
 **Hooks automatiques**
 

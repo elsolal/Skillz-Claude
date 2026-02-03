@@ -12,11 +12,12 @@ Je vais analyser les logs RALPH pour reprendre là où on s'est arrêté.
 
 ### Sessions RALPH disponibles
 
-!`ls -la docs/ralph-logs/*.md 2>/dev/null | tail -10 || echo "Aucun log RALPH trouvé"`
+| Contexte | Action | Priorité |
+|----------|--------|----------|
+| Logs RALPH | `Glob: docs/ralph-logs/*.md` | Requis |
+| Dernière session | Prendre le fichier le plus récent | Requis |
 
-### Dernière session (si pas d'argument)
-
-!`ls -t docs/ralph-logs/*.md 2>/dev/null | head -1 || echo ""`
+**Instructions :** Utiliser `Glob` pour lister les sessions disponibles, puis `Read` pour charger le log de la session à reprendre.
 
 ---
 

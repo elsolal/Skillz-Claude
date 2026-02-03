@@ -10,18 +10,20 @@ Je vais analyser les commits et issues pour générer un changelog structuré.
 
 ---
 
-## 📥 Contexte chargé
+## 📥 Contexte à charger
 
-```bash
-# Dernier tag
-!`git describe --tags --abbrev=0 2>/dev/null || echo "No tags"`
+**Collecter l'historique git pour générer le changelog.**
 
-# Commits depuis le dernier tag
-!`git log $(git describe --tags --abbrev=0 2>/dev/null || echo "HEAD~20")..HEAD --oneline 2>/dev/null | head -30`
+| Contexte | Action | Priorité |
+|----------|--------|----------|
+| Dernier tag | `Bash: git describe --tags --abbrev=0` | Requis |
+| Commits récents | `Bash: git log [dernier-tag]..HEAD --oneline` | Requis |
+| CHANGELOG existant | `Read: CHANGELOG.md` (50 lignes) | Optionnel |
 
-# CHANGELOG existant
-!`head -50 CHANGELOG.md 2>/dev/null || echo "No CHANGELOG.md"`
-```
+### Instructions de chargement
+1. Trouver le dernier tag git (ou utiliser HEAD~20 si aucun tag)
+2. Lister les commits depuis ce tag
+3. Lire le CHANGELOG existant pour continuer le format
 
 ---
 

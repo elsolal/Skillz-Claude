@@ -943,7 +943,7 @@ Options disponibles :
 
 ### Dynamic Context Injection
 
-Tous les skills chargent automatiquement le contexte pertinent au démarrage :
+Tous les skills incluent une section `## 📥 Contexte à charger` qui liste les fichiers et patterns à découvrir au démarrage. Cette approche utilise les outils natifs de Claude Code (`Glob`, `Read`, `Grep`, `Bash`) au lieu de commandes shell inline.
 
 | Skill | Contexte auto-chargé |
 |-------|---------------------|
@@ -1020,8 +1020,18 @@ triggers_ux_ui:                  # Auto-trigger UX/UI (optionnel)
 
 # Skill Name
 
-## 📥 Contexte chargé automatiquement
-!`commande shell pour charger contexte`
+## 📥 Contexte à charger
+
+**Au démarrage, découvrir et charger le contexte pertinent.**
+
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| [Nom] | `Glob: pattern` ou `Read: fichier` ou `Bash: commande` | Requis/Optionnel |
+
+### Instructions de chargement
+1. Utiliser `Glob` pour découvrir les fichiers par pattern
+2. Utiliser `Read` pour charger le contenu (avec limite si volumineux)
+3. Si fichier absent, continuer sans erreur
 
 ## Activation
 > Checklist de démarrage obligatoire

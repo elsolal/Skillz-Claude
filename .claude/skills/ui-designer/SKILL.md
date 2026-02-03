@@ -27,22 +27,24 @@ knowledge:
 
 # UI Designer
 
-## 📥 Contexte UI chargé automatiquement
+## 📥 Contexte à charger
 
-### UX Design source
-!`ls -t docs/planning/ux/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -50 || echo "Pas d'UX design trouvé"`
+**Au démarrage, découvrir et charger le contexte pertinent.**
 
-### Design tokens existants
-!`cat docs/planning/ui/tokens.css src/styles/tokens.css src/theme/tokens.* 2>/dev/null | head -40 || echo "Pas de tokens existants"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| UX Design source | `Glob: docs/planning/ux/*.md` → `Read` le plus récent (50 lignes) | Optionnel |
+| Design tokens existants | `Read: docs/planning/ui/tokens.css` ou `src/styles/tokens.css` | Optionnel |
+| UI existant | `Glob: docs/planning/ui/*.md` | Optionnel |
+| Framework frontend | `Grep: package.json` pour react/vue/angular/svelte/next/nuxt | Optionnel |
+| Figma Code Connect | `Read: figma.config.json` | Optionnel |
 
-### UI existant (pour cohérence)
-!`ls -la docs/planning/ui/*.md 2>/dev/null | tail -5 || echo "Pas d'UI design existant"`
-
-### Framework frontend détecté
-!`cat package.json 2>/dev/null | grep -E '"(react|vue|angular|svelte|next|nuxt)"' || echo "Framework non détecté"`
-
-### Figma Code Connect (si configuré)
-!`cat figma.config.json 2>/dev/null && echo "✅ Code Connect disponible - import Figma possible" || echo "❌ Code Connect non configuré (optionnel)"`
+### Instructions de chargement
+1. Utiliser `Glob` pour trouver l'UX design source (si existe)
+2. Chercher les tokens existants dans les paths connus
+3. Détecter le framework frontend via `Grep` sur package.json
+4. Vérifier si Figma Code Connect est configuré (optionnel)
+5. Si Code Connect configuré → import Figma possible
 
 ---
 

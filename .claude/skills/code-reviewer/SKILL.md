@@ -30,19 +30,22 @@ knowledge:
 
 # Code Reviewer (3 Passes)
 
-## 📥 Contexte review chargé automatiquement
+## 📥 Contexte à charger
 
-### Fichiers modifiés récemment
-!`git diff --name-only HEAD~5 2>/dev/null | head -15 || echo "Pas de commits récents"`
+**Au démarrage, analyser les changements à reviewer.**
 
-### Diff actuel (staged + unstaged)
-!`git diff --stat 2>/dev/null | tail -20 || echo "Pas de changements en cours"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Fichiers modifiés | `Bash: git diff --name-only HEAD~5` | Requis |
+| Diff actuel | `Bash: git diff --stat` | Requis |
+| Derniers commits | `Bash: git log --oneline -5` | Optionnel |
+| Erreurs lint/types | `Bash: npm run lint` et `npm run typecheck` | Recommandé |
 
-### Derniers commits
-!`git log --oneline -5 2>/dev/null || echo "Pas d'historique git"`
-
-### ESLint/TypeScript errors actuels
-!`npm run lint 2>&1 | tail -20 || npm run typecheck 2>&1 | tail -20 || echo "Pas de linter configuré"`
+### Instructions de chargement
+1. Lister les fichiers modifiés récemment via `git diff`
+2. Obtenir les stats du diff actuel (staged + unstaged)
+3. Voir les derniers commits pour le contexte
+4. Exécuter lint/typecheck pour identifier les erreurs existantes
 
 ---
 

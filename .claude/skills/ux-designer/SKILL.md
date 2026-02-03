@@ -22,16 +22,21 @@ trigger:
 
 # UX Designer
 
-## 📥 Contexte UX chargé automatiquement
+## 📥 Contexte à charger
 
-### PRD source (si existant)
-!`ls -t docs/planning/prd/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -40 || echo "Pas de PRD trouvé"`
+**Au démarrage, découvrir et charger le contexte pertinent.**
 
-### Brainstorm source (si existant)
-!`ls -t docs/planning/brainstorms/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -40 || echo "Pas de brainstorm trouvé"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| PRD source | `Glob: docs/planning/prd/*.md` → `Read` le plus récent (40 lignes) | Optionnel |
+| Brainstorm source | `Glob: docs/planning/brainstorms/*.md` → `Read` le plus récent (40 lignes) | Optionnel |
+| UX existant | `Glob: docs/planning/ux/*.md` | Optionnel |
 
-### UX existant (pour éviter doublons)
-!`ls -la docs/planning/ux/*.md 2>/dev/null | tail -5 || echo "Pas d'UX design existant"`
+### Instructions de chargement
+1. Utiliser `Glob` pour trouver PRD et/ou brainstorm récent
+2. `Read` le contenu source (PRD ou brainstorm) pour le contexte
+3. Lister les UX designs existants pour éviter les doublons
+4. Si aucune source trouvée, demander le contexte à l'utilisateur
 
 ---
 

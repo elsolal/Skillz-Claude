@@ -39,19 +39,22 @@ knowledge:
 
 # Test Runner
 
-## 📥 Contexte test chargé automatiquement
+## 📥 Contexte à charger
 
-### Configuration test détectée
-!`cat jest.config.* vitest.config.* pytest.ini setup.cfg pyproject.toml 2>/dev/null | head -30 || echo "Aucune config test standard trouvée"`
+**Au démarrage, détecter l'environnement de test du projet.**
 
-### Tests existants (structure)
-!`find . -name "*.test.*" -o -name "*.spec.*" -o -name "test_*.py" 2>/dev/null | head -20 || echo "Aucun test trouvé"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Configuration test | `Glob: jest.config.*` ou `vitest.config.*` ou `pytest.ini` → `Read` | Requis |
+| Tests existants | `Glob: **/*.test.* **/*.spec.* **/test_*.py` | Requis |
+| Dernière exécution | `Read: test-results.json` ou `coverage/coverage-summary.json` | Optionnel |
+| Scripts npm test | `Grep: package.json` pour "scripts" et "test" | Optionnel |
 
-### Dernière exécution (si log disponible)
-!`cat test-results.json coverage/coverage-summary.json 2>/dev/null | head -20 || echo "Pas de résultats de tests récents"`
-
-### Package.json scripts test
-!`cat package.json 2>/dev/null | grep -A5 '"scripts"' | grep -i test || echo "Pas de script test trouvé"`
+### Instructions de chargement
+1. Détecter le framework de test (Jest, Vitest, Pytest, etc.)
+2. Lister les tests existants pour comprendre la structure
+3. Charger les résultats récents si disponibles
+4. Identifier la commande de test dans package.json
 
 ---
 

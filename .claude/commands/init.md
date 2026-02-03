@@ -10,21 +10,21 @@ Je vais initialiser un nouveau projet avec la structure et configuration appropr
 
 ---
 
-## 📥 Contexte détecté
+## 📥 Contexte à détecter
 
-```bash
-# Dossier actuel
-!`pwd`
+**Vérifier l'état du dossier avant initialisation.**
 
-# Fichiers existants
-!`ls -la 2>/dev/null | head -10`
+| Contexte | Action | Priorité |
+|----------|--------|----------|
+| Dossier actuel | `Bash: pwd` | Requis |
+| Fichiers existants | `Bash: ls -la` | Requis |
+| Git initialisé | `Bash: git status` | Optionnel |
+| Package.json | `Read: package.json` (5 lignes) | Optionnel |
 
-# Git initialisé ?
-!`git status 2>/dev/null | head -1 || echo "Not a git repo"`
-
-# Package.json existant ?
-!`cat package.json 2>/dev/null | head -5 || echo "No package.json"`
-```
+### Instructions de chargement
+1. Vérifier si le dossier est vide ou contient déjà du code
+2. Détecter si git est déjà initialisé
+3. Si package.json existe, lire le nom et la description
 
 ---
 

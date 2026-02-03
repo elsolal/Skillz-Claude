@@ -41,24 +41,23 @@ Je vais concevoir une API complète avec spécification OpenAPI, documentation e
 
 ---
 
-## 📥 Contexte chargé automatiquement
+## 📥 Contexte à charger
 
-```bash
-# PRD existant
-!`ls -la docs/planning/prd/*.md 2>/dev/null | head -5`
+**Au démarrage, rassembler le contexte pour concevoir l'API.**
 
-# Architecture existante
-!`ls -la docs/planning/architecture/*.md 2>/dev/null | head -5`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| PRD existant | `Glob: docs/planning/prd/*.md` | Optionnel |
+| Architecture | `Glob: docs/planning/architecture/*.md` | Optionnel |
+| APIs existantes | `Glob: openapi*.yaml openapi*.json swagger*.yaml` | Optionnel |
+| Routes existantes | `Glob: **/api/**/*.ts` | Optionnel |
+| Framework backend | `Grep: package.json` pour express/fastify/hono/next/nestjs | Requis |
 
-# APIs existantes dans le projet
-!`find . -name "openapi*.yaml" -o -name "openapi*.json" -o -name "swagger*.yaml" 2>/dev/null | head -5`
-
-# Routes existantes (Next.js/Express)
-!`find . -path "*/api/*" -name "*.ts" 2>/dev/null | head -10`
-
-# Package.json pour détecter le framework
-!`cat package.json 2>/dev/null | grep -E '"(express|fastify|hono|next|nestjs)"' | head -5`
-```
+### Instructions de chargement
+1. Chercher le PRD pour comprendre les besoins fonctionnels
+2. Vérifier l'architecture technique si existante
+3. Scanner les APIs existantes pour cohérence
+4. Détecter le framework backend utilisé
 
 ---
 

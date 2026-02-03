@@ -27,19 +27,22 @@ knowledge:
 
 # Implementation Planner
 
-## 📥 Contexte chargé automatiquement
+## 📥 Contexte à charger
 
-### PRD actif (si existant)
-!`ls -la docs/planning/prd/*.md 2>/dev/null | tail -3 || echo "Aucun PRD trouvé"`
+**Au démarrage, rassembler les inputs pour créer le plan.**
 
-### Architecture existante (si applicable)
-!`ls -la docs/planning/architecture/*.md 2>/dev/null | tail -3 || echo "Aucune architecture trouvée"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| PRD actif | `Glob: docs/planning/prd/*.md` | Optionnel |
+| Architecture | `Glob: docs/planning/architecture/*.md` | Optionnel |
+| Stories liées | `Glob: docs/stories/*/STORY-*.md` | Optionnel |
+| Analyse codebase | `Glob: docs/planning/codebase-analysis-*.md` → `Read` (50 lignes) | Recommandé |
 
-### Stories liées (si existantes)
-!`ls -la docs/stories/*/STORY-*.md 2>/dev/null | tail -5 || echo "Aucune story trouvée"`
-
-### Analyse codebase (output de codebase-explainer)
-!`cat docs/planning/codebase-analysis-*.md 2>/dev/null | head -50 || echo "Pas d'analyse codebase récente"`
+### Instructions de chargement
+1. Utiliser `Glob` pour lister les documents de planning existants
+2. Charger l'analyse codebase si disponible (output de codebase-explainer)
+3. Vérifier les requirements (de github-issue-reader)
+4. **STOP si analyse manquante** → utiliser `codebase-explainer` d'abord
 
 ---
 

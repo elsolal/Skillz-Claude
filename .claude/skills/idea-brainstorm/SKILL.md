@@ -28,16 +28,20 @@ triggers_ux_ui:
 
 # Idea Brainstorm
 
-## 📥 Contexte existant
+## 📥 Contexte à charger
 
-### Brainstorms précédents (si existants)
-!`ls -la docs/planning/brainstorms/*.md 2>/dev/null | tail -5 || echo "Aucun brainstorm précédent"`
+**Au démarrage, découvrir et charger le contexte pertinent.**
 
-### PRDs existants (pour éviter les doublons)
-!`ls -la docs/planning/prd/*.md 2>/dev/null | tail -5 || echo "Aucun PRD existant"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Brainstorms précédents | `Glob: docs/planning/brainstorms/*.md` | Optionnel |
+| PRDs existants | `Glob: docs/planning/prd/*.md` | Optionnel |
+| Techniques disponibles | `Read: .claude/knowledge/brainstorming/brain-techniques.csv` | Requis |
 
-### Techniques disponibles
-!`cat .claude/knowledge/brainstorming/brain-techniques.csv 2>/dev/null | head -1 && cat .claude/knowledge/brainstorming/brain-techniques.csv 2>/dev/null | wc -l | xargs echo "techniques disponibles:"`
+### Instructions de chargement
+1. Utiliser `Glob` pour lister les brainstorms et PRDs existants (éviter doublons)
+2. Utiliser `Read` pour charger le CSV des techniques (header + comptage)
+3. Si fichiers absents, continuer sans erreur - ce sont des contextes optionnels
 
 ---
 

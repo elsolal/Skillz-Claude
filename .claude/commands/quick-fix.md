@@ -6,16 +6,20 @@ description: Fix rapide sans passer par tout le workflow EPCT+R. Pour les petits
 
 **Session ID:** ${CLAUDE_SESSION_ID}
 
-## 📥 Contexte projet chargé automatiquement
+## 📥 Contexte à charger
 
-### État git actuel
-!`git status --short 2>/dev/null | head -10 || echo "Pas de repo git"`
+**Identifier rapidement le problème à corriger.**
 
-### Fichiers modifiés récemment
-!`git diff --name-only HEAD~3 2>/dev/null | head -10 || echo "Pas de commits récents"`
+| Contexte | Action | Priorité |
+|----------|--------|----------|
+| État git | `Bash: git status --short` | Optionnel |
+| Fichiers récents | `Bash: git diff --name-only HEAD~3` | Optionnel |
+| Erreurs lint/types | `Bash: npm run lint` et `npm run typecheck` | Optionnel |
 
-### Erreurs lint/types actuelles
-!`npm run lint 2>&1 | grep -E "error|warning" | head -10 || npm run typecheck 2>&1 | grep -E "error" | head -10 || echo "Pas d'erreurs détectées"`
+### Instructions de chargement
+1. Vérifier l'état git actuel
+2. Identifier les erreurs lint/types existantes
+3. Localiser rapidement le fichier concerné
 
 ---
 

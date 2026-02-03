@@ -6,22 +6,23 @@ description: Génère ou met à jour la documentation du projet. Crée README, A
 
 **Session ID:** ${CLAUDE_SESSION_ID}
 
-## 📥 Contexte projet chargé automatiquement
+## 📥 Contexte à charger
 
-### Structure du projet
-!`tree -L 2 -I 'node_modules|dist|build|.git|coverage|__pycache__|.venv|venv' 2>/dev/null | head -30 || find . -maxdepth 2 -type d | head -20`
+**Rassembler le contexte pour générer la documentation.**
 
-### Package.json (nom, description, scripts)
-!`cat package.json 2>/dev/null | head -40 || echo "Pas de package.json"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Structure projet | `Bash: tree -L 2` ou listing de répertoires | Requis |
+| Package.json | `Read: package.json` (40 lignes) | Requis |
+| README existant | `Read: README.md` (30 lignes) | Optionnel |
+| Docs existantes | `Glob: docs/*.md docs/**/*.md` | Optionnel |
+| Exports API | `Grep: "export"` dans src/index.ts, lib/index.ts | Optionnel |
 
-### README existant
-!`cat README.md 2>/dev/null | head -30 || echo "Pas de README.md existant"`
-
-### Documentation existante
-!`ls -la docs/*.md docs/**/*.md 2>/dev/null | head -10 || echo "Pas de documentation existante"`
-
-### Exports principaux (API)
-!`grep -r "export" src/index.ts src/main.ts lib/index.ts 2>/dev/null | head -20 || echo "Pas d'exports trouvés"`
+### Instructions de chargement
+1. Explorer la structure du projet
+2. Lire package.json pour nom, description, scripts
+3. Vérifier si un README existe déjà
+4. Lister la documentation existante pour éviter les doublons
 
 ---
 

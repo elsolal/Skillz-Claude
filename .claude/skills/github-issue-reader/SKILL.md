@@ -20,13 +20,21 @@ knowledge:
 
 # GitHub Issue Reader
 
-## 📥 Contexte chargé automatiquement
+## 📥 Contexte à charger
 
-### Issue demandée : $ARGUMENTS
-!`gh issue view $ARGUMENTS --json number,title,body,state,labels,assignees,milestone,comments,projectItems 2>/dev/null || echo "⚠️ Issue non trouvée ou gh CLI non configuré - utiliser MCP GitHub"`
+**Au démarrage, récupérer l'issue GitHub demandée.**
 
-### PRs liées
-!`gh pr list --search "linked:$ARGUMENTS" --json number,title,state,url 2>/dev/null || echo "Aucune PR liée trouvée"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Issue demandée | `Bash: gh issue view $ARGUMENTS --json ...` ou MCP `mcp__github__get_issue` | **Requis** |
+| PRs liées | `Bash: gh pr list --search "linked:$ARGUMENTS"` | Optionnel |
+
+### Instructions de chargement
+1. Récupérer l'issue via `gh issue view` ou `mcp__github__get_issue`
+2. Extraire : number, title, body, state, labels, assignees, milestone, comments
+3. Si CLI échoue → fallback sur MCP GitHub
+4. Chercher les PRs liées pour contexte supplémentaire
+5. **STOP si issue non trouvée** → demander à l'utilisateur
 
 ---
 

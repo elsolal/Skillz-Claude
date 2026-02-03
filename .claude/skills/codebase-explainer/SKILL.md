@@ -21,16 +21,21 @@ knowledge:
 
 # Codebase Explainer
 
-## 📥 Contexte projet chargé automatiquement
+## 📥 Contexte à charger
 
-### Structure du projet
-!`tree -L 2 -I 'node_modules|dist|build|.git|coverage|__pycache__|.venv|venv' 2>/dev/null || find . -maxdepth 2 -type d | head -30`
+**Au démarrage, explorer le projet pour comprendre son architecture.**
 
-### Configuration détectée
-!`cat package.json 2>/dev/null | head -30 || cat pyproject.toml 2>/dev/null | head -30 || cat Cargo.toml 2>/dev/null | head -30 || cat go.mod 2>/dev/null | head -15 || echo "Aucun fichier de config standard trouvé"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Structure projet | `Bash: tree -L 2 -I 'node_modules\|dist\|.git'` ou `Glob: **/` | Requis |
+| Configuration | `Read: package.json` ou `pyproject.toml` ou `Cargo.toml` ou `go.mod` | Requis |
+| Conventions projet | `Read: CLAUDE.md` ou `.claude/CLAUDE.md` | Optionnel |
 
-### Conventions projet (CLAUDE.md)
-!`cat CLAUDE.md 2>/dev/null | head -50 || cat .claude/CLAUDE.md 2>/dev/null | head -50 || echo "Pas de CLAUDE.md trouvé"`
+### Instructions de chargement
+1. Explorer la structure avec `Bash` (tree) ou listing de répertoires
+2. Détecter le type de projet via `Read` sur les fichiers de config
+3. Lire CLAUDE.md si présent pour les conventions
+4. **STOP si pas de contexte issue** → utiliser `github-issue-reader` d'abord
 
 ---
 

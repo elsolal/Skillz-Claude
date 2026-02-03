@@ -21,19 +21,22 @@ knowledge:
 
 # Figma Setup
 
-## 📥 Contexte chargé automatiquement
+## 📥 Contexte à charger
 
-### Package.json
-!`cat package.json 2>/dev/null | head -30 || echo "Pas de package.json"`
+**Au démarrage, vérifier les prérequis pour Code Connect.**
 
-### Framework détecté
-!`cat package.json 2>/dev/null | grep -E '"(react|vue|angular|svelte|next|nuxt)"' || echo "Framework non détecté"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Package.json | `Read: package.json` (30 lignes) | Requis |
+| Framework | `Grep: package.json` pour react/vue/angular/next | Requis |
+| Code Connect existant | `Read: figma.config.json` | Optionnel |
+| Composants UI | `Glob: src/components/ui/*.{tsx,jsx,vue}` | Requis |
 
-### Code Connect existant
-!`cat figma.config.json 2>/dev/null && echo "✅ Code Connect déjà configuré" || echo "❌ Pas de Code Connect"`
-
-### Composants UI existants
-!`ls -la src/components/ui/*.{tsx,jsx,vue} 2>/dev/null | head -20 || ls -la components/ui/*.{tsx,jsx,vue} 2>/dev/null | head -20 || echo "Pas de composants UI détectés"`
+### Instructions de chargement
+1. Lire package.json pour vérifier Node.js et les dépendances
+2. Détecter le framework frontend
+3. Vérifier si Code Connect est déjà configuré
+4. Scanner les composants UI existants à mapper
 
 ---
 

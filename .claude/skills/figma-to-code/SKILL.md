@@ -23,22 +23,23 @@ knowledge:
 
 # Figma to Code
 
-## 📥 Contexte chargé automatiquement
+## 📥 Contexte à charger
 
-### Code Connect configuré
-!`cat figma.config.json 2>/dev/null && echo "✅ Code Connect disponible" || echo "❌ Code Connect non configuré"`
+**Au démarrage, vérifier l'environnement Figma et les composants existants.**
 
-### Composants existants
-!`ls -la src/components/ui/*.{tsx,jsx,vue} 2>/dev/null | head -15 || ls -la components/ui/*.{tsx,jsx,vue} 2>/dev/null | head -15 || echo "Pas de composants UI"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Code Connect | `Read: figma.config.json` | Recommandé |
+| Composants existants | `Glob: src/components/ui/*.{tsx,jsx,vue}` | Requis |
+| Mappings Figma | `Glob: src/components/**/*.figma.tsx` | Optionnel |
+| Framework | `Grep: package.json` pour react/vue/angular/next | Requis |
+| Design tokens | `Read: src/styles/tokens.css` ou `docs/planning/ui/tokens.css` | Optionnel |
 
-### Mappings Figma existants
-!`ls -la src/components/**/*.figma.tsx 2>/dev/null | head -10 || echo "Pas de mappings .figma.tsx"`
-
-### Framework détecté
-!`cat package.json 2>/dev/null | grep -E '"(react|vue|angular|svelte|next|nuxt)"' || echo "Framework non détecté"`
-
-### Design tokens existants
-!`cat src/styles/tokens.css docs/planning/ui/tokens.css 2>/dev/null | head -20 || echo "Pas de tokens CSS"`
+### Instructions de chargement
+1. Vérifier si Code Connect est configuré (figma.config.json)
+2. Scanner les composants UI existants pour réutilisation
+3. Identifier les mappings .figma.tsx existants
+4. Détecter le framework pour générer le bon code
 
 ---
 

@@ -39,24 +39,23 @@ Je vais analyser les performances de l'application et proposer des optimisations
 
 ---
 
-## 📥 Contexte chargé automatiquement
+## 📥 Contexte à charger
 
-```bash
-# Framework détecté
-!`cat package.json 2>/dev/null | grep -E '"(next|react|vue|svelte|nuxt|astro)"' | head -3`
+**Au démarrage, identifier l'environnement de performance.**
 
-# Bundle analyzer disponible ?
-!`cat package.json 2>/dev/null | grep -E '"(@next/bundle-analyzer|webpack-bundle-analyzer|source-map-explorer)"'`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Framework | `Grep: package.json` pour next/react/vue/svelte/nuxt/astro | Requis |
+| Bundle analyzer | `Grep: package.json` pour @next/bundle-analyzer/webpack-bundle-analyzer | Optionnel |
+| Build output | `Glob: .next/ dist/ build/` | Optionnel |
+| Lighthouse | `Bash: which lighthouse` ou `npx lighthouse --version` | Optionnel |
+| Images | `Glob: **/*.{png,jpg,jpeg}` (compter) | Optionnel |
 
-# Build output
-!`ls -la .next 2>/dev/null | head -3 || ls -la dist 2>/dev/null | head -3 || ls -la build 2>/dev/null | head -3`
-
-# Lighthouse disponible ?
-!`which lighthouse 2>/dev/null || npx lighthouse --version 2>/dev/null | head -1`
-
-# Images
-!`find . -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" 2>/dev/null | grep -v node_modules | wc -l`
-```
+### Instructions de chargement
+1. Détecter le framework frontend
+2. Vérifier si un bundle analyzer est disponible
+3. Localiser le build output
+4. Vérifier la disponibilité de Lighthouse pour les audits
 
 ---
 

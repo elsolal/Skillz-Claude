@@ -6,29 +6,27 @@ description: Affiche l'état actuel du projet - documents existants, issues GitH
 
 **Session ID:** ${CLAUDE_SESSION_ID}
 
-## 📥 État du projet chargé automatiquement
+## 📥 Contexte à charger
 
-### Documents Planning
-!`echo "=== Brainstorms ===" && ls -la docs/planning/brainstorms/*.md 2>/dev/null | tail -5 || echo "Aucun brainstorm"`
-!`echo "=== UX Design ===" && ls -la docs/planning/ux/*.md 2>/dev/null | tail -5 || echo "Aucun UX design"`
-!`echo "=== PRD ===" && ls -la docs/planning/prd/*.md 2>/dev/null | tail -5 || echo "Aucun PRD"`
-!`echo "=== UI Design ===" && ls -la docs/planning/ui/*.md 2>/dev/null | tail -5 || echo "Aucun UI design"`
-!`echo "=== Architecture ===" && ls -la docs/planning/architecture/*.md 2>/dev/null | tail -5 || echo "Aucune architecture"`
+**Découvrir l'état complet du projet.**
 
-### Stories
-!`echo "=== Stories ===" && ls -la docs/stories/*/STORY-*.md 2>/dev/null | tail -10 || echo "Aucune story locale"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Brainstorms | `Glob: docs/planning/brainstorms/*.md` | Optionnel |
+| UX Design | `Glob: docs/planning/ux/*.md` | Optionnel |
+| PRD | `Glob: docs/planning/prd/*.md` | Optionnel |
+| UI Design | `Glob: docs/planning/ui/*.md` | Optionnel |
+| Architecture | `Glob: docs/planning/architecture/*.md` | Optionnel |
+| Stories | `Glob: docs/stories/*/STORY-*.md` | Optionnel |
+| GitHub Issues | `Bash: gh issue list --limit 10` | Optionnel |
+| Logs RALPH | `Glob: docs/ralph-logs/*.md` | Optionnel |
+| Git Status | `Bash: git status --short` | Optionnel |
+| Derniers commits | `Bash: git log --oneline -5` | Optionnel |
 
-### GitHub Issues (si configuré)
-!`gh issue list --limit 10 2>/dev/null || echo "GitHub CLI non configuré ou pas de repo"`
-
-### Logs RALPH
-!`echo "=== Derniers logs RALPH ===" && ls -lt docs/ralph-logs/*.md 2>/dev/null | head -5 || echo "Aucun log RALPH"`
-
-### Git Status
-!`git status --short 2>/dev/null | head -15 || echo "Pas de repo git"`
-
-### Derniers commits
-!`git log --oneline -5 2>/dev/null || echo "Pas d'historique"`
+### Instructions de chargement
+1. Utiliser `Glob` pour scanner tous les documents de planning
+2. Vérifier les stories et logs RALPH
+3. Utiliser `Bash` pour les commandes git et GitHub CLI
 
 ---
 

@@ -6,19 +6,22 @@ description: Refactoring ciblé avec les 3 passes de review. Améliore la qualit
 
 **Session ID:** ${CLAUDE_SESSION_ID}
 
-## 📥 Contexte refactoring chargé automatiquement
+## 📥 Contexte à charger
 
-### Cible du refactoring : $ARGUMENTS
-!`cat $ARGUMENTS 2>/dev/null | head -100 || echo "Fichier non trouvé, je vais chercher..."`
+**Cible du refactoring : $ARGUMENTS**
 
-### Tests existants pour cette cible
-!`find . -name "*.test.*" -o -name "*.spec.*" | xargs grep -l "$ARGUMENTS" 2>/dev/null | head -5 || echo "Pas de tests trouvés pour cette cible"`
+| Contexte | Action | Priorité |
+|----------|--------|----------|
+| Fichier cible | `Read: $ARGUMENTS` (100 premières lignes) | Requis |
+| Tests existants | `Grep: *.test.* *.spec.*` pour $ARGUMENTS | Requis |
+| Dépendances | `Grep: "from.*$ARGUMENTS\|import.*$ARGUMENTS"` | Requis |
+| État lint/types | `Bash: npm run lint` et `npm run typecheck` | Optionnel |
 
-### Dépendances de ce fichier
-!`grep -r "from.*$ARGUMENTS\|import.*$ARGUMENTS" --include="*.ts" --include="*.tsx" --include="*.js" 2>/dev/null | head -10 || echo "Pas de dépendances trouvées"`
-
-### État lint/types actuel
-!`npm run lint -- $ARGUMENTS 2>&1 | tail -15 || npm run typecheck 2>&1 | grep "$ARGUMENTS" | head -10 || echo "Lint OK ou non configuré"`
+### Instructions de chargement
+1. Lire le fichier cible avec `Read`
+2. Identifier les tests existants pour ne pas casser le comportement
+3. Mapper les dépendances pour évaluer l'impact
+4. Vérifier l'état lint/types actuel
 
 ---
 

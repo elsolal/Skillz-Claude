@@ -32,16 +32,20 @@ triggers_ux_ui:
 
 # PM-PRD (Product Requirements Document)
 
-## 📥 Contexte existant chargé automatiquement
+## 📥 Contexte à charger
 
-### Brainstorms existants
-!`ls -la docs/planning/brainstorms/*.md 2>/dev/null | tail -5 || echo "Aucun brainstorm trouvé"`
+**Au démarrage, découvrir et charger le contexte pertinent.**
 
-### PRDs existants (pour éviter doublons)
-!`ls -la docs/planning/prd/*.md 2>/dev/null | tail -5 || echo "Aucun PRD existant"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Brainstorms existants | `Glob: docs/planning/brainstorms/*.md` | Optionnel |
+| PRDs existants | `Glob: docs/planning/prd/*.md` | Optionnel |
+| UX Design existant | `Glob: docs/planning/ux/*.md` | Optionnel |
 
-### UX Design existant (si applicable)
-!`ls -la docs/planning/ux/*.md 2>/dev/null | tail -3 || echo "Pas d'UX design existant"`
+### Instructions de chargement
+1. Utiliser `Glob` pour découvrir les fichiers existants
+2. Si brainstorm récent trouvé, utiliser `Read` pour charger le contenu (40 premières lignes)
+3. Si fichiers absents, continuer sans erreur - le PRD peut être créé from scratch
 
 ---
 

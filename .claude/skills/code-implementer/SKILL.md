@@ -29,19 +29,24 @@ knowledge:
 
 # Code Implementer
 
-## 📥 Contexte projet chargé automatiquement
+## 📥 Contexte à charger
 
-### Conventions de code (CLAUDE.md / .eslintrc / etc.)
-!`cat CLAUDE.md .claude/CLAUDE.md 2>/dev/null | head -30 || echo "Pas de CLAUDE.md"`
+**Au démarrage, charger les conventions et le plan actif.**
 
-### ESLint / Prettier config
-!`cat .eslintrc* .prettierrc* 2>/dev/null | head -20 || echo "Pas de config linter trouvée"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Conventions de code | `Read: CLAUDE.md` ou `.claude/CLAUDE.md` (30 lignes) | Optionnel |
+| ESLint / Prettier | `Glob: .eslintrc*` et `.prettierrc*` → `Read` | Optionnel |
+| TypeScript config | `Read: tsconfig.json` (20 lignes) | Optionnel |
+| Plan actif | `Glob: docs/planning/implementation-plan-*.md` | Recommandé |
+| Tasks existantes | `TaskList` | Recommandé |
 
-### TypeScript config
-!`cat tsconfig.json 2>/dev/null | head -20 || echo "Pas de tsconfig.json"`
-
-### Plan d'implémentation actif
-!`ls -la docs/planning/implementation-plan-*.md 2>/dev/null | tail -1 || echo "Pas de plan trouvé"`
+### Instructions de chargement
+1. Charger CLAUDE.md pour les coding standards
+2. Lire les configs linter si présentes
+3. Vérifier le plan d'implémentation actif
+4. Lister les Tasks existantes pour tracking
+5. **STOP si pas de plan** → utiliser `implementation-planner` d'abord
 
 ---
 

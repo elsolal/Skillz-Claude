@@ -34,18 +34,21 @@ knowledge:
 
 # Security Auditor 🔒
 
-## 📥 Contexte chargé automatiquement
+## 📥 Contexte à charger
 
-```bash
-# Structure du projet
-!`find . -name "package*.json" -o -name "requirements*.txt" -o -name "Gemfile*" -o -name "go.mod" -o -name "Cargo.toml" 2>/dev/null | head -20`
+**Au démarrage, identifier les surfaces d'attaque potentielles.**
 
-# Fichiers de config sensibles
-!`find . -name ".env*" -o -name "*.config.js" -o -name "*.config.ts" -o -name "docker-compose*.yml" 2>/dev/null | head -20`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| Dépendances | `Glob: package*.json requirements*.txt Gemfile* go.mod Cargo.toml` | Requis |
+| Config sensibles | `Glob: .env* *.config.js *.config.ts docker-compose*.yml` | Requis |
+| Fichiers auth | `Grep: *auth* *login* *password* *token*` (exclure node_modules) | Requis |
 
-# Fichiers d'authentification
-!`find . -type f \( -name "*auth*" -o -name "*login*" -o -name "*password*" -o -name "*token*" \) 2>/dev/null | grep -v node_modules | grep -v ".git" | head -20`
-```
+### Instructions de chargement
+1. Scanner les fichiers de dépendances pour identifier le stack
+2. Lister les fichiers de configuration potentiellement sensibles
+3. Identifier les fichiers liés à l'authentification
+4. NE PAS exposer de secrets dans le rapport - juste indiquer leur présence
 
 ---
 

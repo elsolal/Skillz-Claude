@@ -23,19 +23,22 @@ hooks:
 
 # PM-Stories
 
-## 📥 Contexte projet chargé automatiquement
+## 📥 Contexte à charger
 
-### PRD actif
-!`ls -t docs/planning/prd/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -60 || echo "Aucun PRD trouvé - REQUIS"`
+**Au démarrage, découvrir et charger le contexte pertinent.**
 
-### Architecture (si mode FULL)
-!`ls -t docs/planning/architecture/*.md 2>/dev/null | head -1 | xargs cat 2>/dev/null | head -40 || echo "Pas d'architecture trouvée"`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| PRD actif | `Glob: docs/planning/prd/*.md` → `Read` le plus récent (60 lignes) | **Requis** |
+| Architecture | `Glob: docs/planning/architecture/*.md` → `Read` le plus récent (40 lignes) | Requis si mode FULL |
+| Stories existantes | `Glob: docs/stories/*/STORY-*.md` | Optionnel |
+| GitHub repo info | `Bash: gh repo view --json name,owner,url` ou MCP GitHub | Optionnel |
 
-### Stories existantes (pour éviter doublons)
-!`ls -la docs/stories/*/STORY-*.md 2>/dev/null | tail -10 || echo "Aucune story existante"`
-
-### GitHub repo info
-!`gh repo view --json name,owner,url 2>/dev/null || echo "⚠️ GitHub CLI non configuré - MCP GitHub sera utilisé"`
+### Instructions de chargement
+1. Utiliser `Glob` pour trouver le PRD → **STOP si aucun PRD** (requis)
+2. Si mode FULL, charger aussi l'architecture
+3. Lister les stories existantes pour éviter les doublons
+4. Vérifier la config GitHub (CLI ou MCP) pour la publication des issues
 
 ---
 

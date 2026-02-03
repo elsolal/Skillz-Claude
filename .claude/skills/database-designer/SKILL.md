@@ -41,27 +41,24 @@ Je vais concevoir un schéma de base de données complet avec ERD, migrations et
 
 ---
 
-## 📥 Contexte chargé automatiquement
+## 📥 Contexte à charger
 
-```bash
-# PRD existant
-!`ls -la docs/planning/prd/*.md 2>/dev/null | head -5`
+**Au démarrage, identifier l'environnement de base de données.**
 
-# Architecture existante
-!`ls -la docs/planning/architecture/*.md 2>/dev/null | head -5`
+| Contexte | Pattern/Action | Priorité |
+|----------|----------------|----------|
+| PRD existant | `Glob: docs/planning/prd/*.md` | Optionnel |
+| Architecture | `Glob: docs/planning/architecture/*.md` | Optionnel |
+| API existante | `Glob: docs/api/*.yaml` | Optionnel |
+| Schémas existants | `Glob: schema.prisma *.sql drizzle.config.*` | Optionnel |
+| ORM détecté | `Grep: package.json` pour prisma/drizzle-orm/typeorm/sequelize/knex | Requis |
+| Base de données | `Grep: package.json` pour pg/mysql2/better-sqlite3/@libsql/mongodb | Requis |
 
-# API existante
-!`ls -la docs/api/*.yaml 2>/dev/null | head -5`
-
-# Schémas existants
-!`find . -name "schema.prisma" -o -name "*.sql" -o -name "drizzle.config.*" 2>/dev/null | grep -v node_modules | head -5`
-
-# ORM détecté
-!`cat package.json 2>/dev/null | grep -E '"(prisma|drizzle-orm|typeorm|sequelize|knex|kysely)"' | head -5`
-
-# Base de données détectée
-!`cat package.json 2>/dev/null | grep -E '"(pg|mysql2|better-sqlite3|@libsql|mongodb)"' | head -5`
-```
+### Instructions de chargement
+1. Chercher le PRD pour les entités métier
+2. Vérifier l'architecture technique
+3. Scanner les schémas existants pour cohérence
+4. Détecter l'ORM et le type de base de données
 
 ---
 

@@ -10,37 +10,25 @@ Je vais collecter et afficher les métriques clés du projet.
 
 ---
 
-## 📥 Données collectées
+## 📥 Données à collecter
 
-```bash
-# Git stats
-!`git rev-list --count HEAD 2>/dev/null || echo "0"`
-!`git log --oneline -1 2>/dev/null`
-!`git branch --show-current 2>/dev/null`
+**Métriques à récupérer avec les outils disponibles.**
 
-# Issues GitHub (si gh disponible)
-!`gh issue list --state open --limit 100 2>/dev/null | wc -l | tr -d ' '`
-!`gh pr list --state open --limit 100 2>/dev/null | wc -l | tr -d ' '`
+| Catégorie | Métriques | Action |
+|-----------|-----------|--------|
+| **Git** | Commits, branche, dernier commit | `Bash: git rev-list --count HEAD`, `git log --oneline -1` |
+| **GitHub** | Issues ouvertes, PRs ouvertes | `Bash: gh issue list --state open`, `gh pr list --state open` |
+| **Code** | Fichiers source, fichiers test | `Glob: **/*.ts **/*.tsx` (compter) |
+| **Coverage** | Pourcentage | `Read: coverage/coverage-summary.json` |
+| **Dependencies** | Vulnérabilités | `Bash: npm audit --json` |
+| **RALPH** | Sessions | `Glob: docs/ralph-logs/*.md` (compter) |
+| **Docs** | PRDs, Architecture, Stories | `Glob: docs/planning/**/*.md docs/stories/**/*.md` |
 
-# Code stats
-!`find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" 2>/dev/null | grep -v node_modules | grep -v dist | wc -l | tr -d ' '`
-!`find . -name "*.test.*" -o -name "*.spec.*" 2>/dev/null | grep -v node_modules | wc -l | tr -d ' '`
-
-# Coverage (si disponible)
-!`cat coverage/coverage-summary.json 2>/dev/null | grep -o '"pct":[0-9.]*' | head -1`
-
-# Dependencies
-!`cat package.json 2>/dev/null | grep -c '"' | head -1`
-!`npm audit --json 2>/dev/null | grep -o '"vulnerabilities":{[^}]*}' | head -1`
-
-# RALPH sessions
-!`ls -la docs/ralph-logs/*.md 2>/dev/null | wc -l | tr -d ' '`
-
-# Docs
-!`ls docs/planning/prd/*.md 2>/dev/null | wc -l | tr -d ' '`
-!`ls docs/planning/architecture/*.md 2>/dev/null | wc -l | tr -d ' '`
-!`ls docs/stories/*/*.md 2>/dev/null | wc -l | tr -d ' '`
-```
+### Instructions de chargement
+1. Exécuter les commandes git pour les stats de repo
+2. Utiliser `gh` CLI pour GitHub si disponible
+3. Compter les fichiers avec `Glob`
+4. Lire les fichiers de coverage si existants
 
 ---
 
