@@ -3,7 +3,7 @@
 # ============================================================
 # D-EPCT+R Workflow v3.7 Installer
 # Install Claude Code skills + RALPH Mode + 51 Knowledge Files + Templates
-# 18 skills, 16 commands, 18 templates
+# 18 skills, 16 commands, 18 templates, 4 agent compatibility layers
 #
 # Usage:
 #   # Fresh install
@@ -450,6 +450,39 @@ if [ -d "$SOURCE_CLAUDE/templates" ]; then
     fi
 fi
 
+# Create multi-agent compatibility layer (NEW v3.7)
+echo -e "${GREEN}📁 Installing multi-agent compatibility (.agents, .codex, .gemini, .opencode)...${NC}"
+for agent_dir in .agents .codex .gemini .opencode; do
+    SOURCE_AGENT="$SOURCE_CLAUDE/../$agent_dir"
+    TARGET_AGENT="$TARGET_DIR/$agent_dir"
+
+    if [ -d "$SOURCE_AGENT" ]; then
+        mkdir -p "$TARGET_AGENT"
+
+        # Copy instruction files (AGENTS.md, GEMINI.md, README.md)
+        for file in "$SOURCE_AGENT"/*.md; do
+            if [ -f "$file" ]; then
+                filename=$(basename "$file")
+                cp "$file" "$TARGET_AGENT/"
+            fi
+        done
+
+        # Create symlinks to .claude/skills and .claude/knowledge
+        if [ ! -L "$TARGET_AGENT/skills" ]; then
+            ln -sf ../.claude/skills "$TARGET_AGENT/skills"
+        fi
+        if [ ! -L "$TARGET_AGENT/knowledge" ]; then
+            ln -sf ../.claude/knowledge "$TARGET_AGENT/knowledge"
+        fi
+
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 $agent_dir/${NC}"
+        else
+            echo -e "   ${GREEN}✅ $agent_dir/${NC}"
+        fi
+    fi
+done
+
 # Copy mcp.json (PRESERVE in update mode)
 echo -e "${GREEN}📄 Installing mcp.json...${NC}"
 if [ -f "$SOURCE_CLAUDE/mcp.json" ]; then
@@ -561,6 +594,7 @@ echo -e "   ${CYAN}🔄 Hooks${NC}"
 echo -e "   ${CYAN}🔄 Knowledge Base (51 files)${NC}"
 echo -e "   ${CYAN}🔄 Templates (18 files)${NC}"
 echo -e "   ${CYAN}🔄 Examples (3 projects)${NC}"
+echo -e "   ${CYAN}🔄 Multi-agent compatibility (4 layers)${NC}"
 echo ""
 echo -e "${GREEN}Preserved (your customizations):${NC}"
 echo -e "   ${GREEN}✅ CLAUDE.md PROJECT-RULES section${NC}"
@@ -590,6 +624,13 @@ echo -e "${BLUE}  📂 Examples (3 projects):${NC}"
 echo "    simple-api/      API REST simple (mode LIGHT)"
 echo "    blog-nextjs/     Blog Next.js (mode FULL)"
 echo "    saas-dashboard/  Dashboard SaaS (mode RALPH)"
+echo ""
+echo -e "${BLUE}  🤖 Multi-Agent Compatibility:${NC}"
+echo "    .agents/         Generic fallback (AGENTS.md)"
+echo "    .codex/          OpenAI Codex CLI"
+echo "    .gemini/         Google Gemini CLI"
+echo "    .opencode/       OpenCode"
+echo "    → All symlinked to .claude/skills and .claude/knowledge"
 echo ""
 echo -e "${BLUE}  Skills (18):${NC}"
 echo "    Planning:  idea-brainstorm, pm-prd, architect, pm-stories,"
