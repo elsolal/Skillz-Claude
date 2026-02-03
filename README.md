@@ -2,18 +2,25 @@
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
-> ✅ **Brainstorming Enhanced** - 61 techniques en 10 catégories, 4 approches, anti-biais (NEW v3.6)
-> ✅ **Multi-Mind** - Débat multi-agents avec 6 IA pour valider PRD et code (v3.4)
-> ✅ **Task System auto** - Tracking automatique si 2+ étapes dans /feature (v3.3)
-> ✅ **Task System** - Système de tracking (remplace TodoWrite) (v3.2)
-> ✅ **Plan Mode** - Workflow Explore → Plan → Code documenté (v3.2)
-> ✅ **Skills Merger** - Slash commands et skills fusionnés (v3.2)
-> ✅ **Mode Manuel** - Validation humaine à chaque étape
-> ✅ **Mode RALPH** - Boucle autonome avec métriques détaillées
-> ✅ **Git Hooks** - pre-commit, commit-msg
-> ✅ **DevContainer** - Docker dev environment
-> ✅ **44 fichiers Knowledge** - Base de connaissances testing & workflows
-> ✅ **Claude Opus** - Intelligence maximale sur tous les skills
+> **🧠 Intelligence**
+> - **Multi-Mind** - Débat avec 6 IA (Claude, GPT, Gemini, DeepSeek, GLM, Kimi)
+> - **Brainstorming** - 61 techniques créatives, anti-biais, 4 approches
+> - **Claude Opus** - Modèle le plus intelligent sur tous les skills
+>
+> **🔒 Sécurité** *(NEW v3.7)*
+> - **Supabase Audit** - RLS, buckets, auth, keys exposées, CVSS scoring
+> - **Security Auditor** - OWASP Top 10, CVE, secrets
+> - **51 fichiers Knowledge** - Base de connaissances testing, workflows, sécurité
+>
+> **⚡ Automatisation**
+> - **Mode RALPH** - Boucle autonome jusqu'à completion
+> - **Task System** - Tracking auto si 2+ étapes
+> - **Plan Mode** - Explore → Plan → Code
+>
+> **🛠️ DevOps**
+> - **Git Hooks** - pre-commit, commit-msg, conventional commits
+> - **DevContainer** - Docker dev environment prêt à l'emploi
+> - **18 skills** - Du brainstorm au déploiement
 
 ## Installation
 
@@ -143,7 +150,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Commandes (15)
+## Commandes (16)
 
 ### Mode Manuel (avec validation)
 
@@ -173,6 +180,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /changelog [version]    # Génère CHANGELOG.md
 /metrics                # Dashboard métriques projet
 /init [template]        # Scaffolding projet (NEW v3.0)
+/supabase-security <url> # Audit sécurité Supabase complet (NEW v3.7)
 ```
 
 ### Configuration RALPH
@@ -187,7 +195,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Skills (17)
+## Skills (18)
 
 ### Phase Planning
 
@@ -219,7 +227,8 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
 | `performance-auditor` | Audit performance | **Core Web Vitals**, bundle size, Lighthouse |
-| `multi-mind` | Débat multi-agents (NEW) | **6 IA**, 5 rounds itératifs, consensus/divergences |
+| `supabase-security` | Audit Supabase (NEW) | **RLS**, buckets, auth, keys exposées, **CVSS** |
+| `multi-mind` | Débat multi-agents | **6 IA**, 5 rounds itératifs, consensus/divergences |
 
 ---
 
@@ -403,6 +412,52 @@ Multi-Mind est proposé (optionnel) après :
 - `/refactor` (3 passes) → Option **[M]** Multi-Mind
 
 **Output** : Rapport dans `docs/debates/YYYY-MM-DD-topic.md`
+
+---
+
+## Fonctionnalités v3.7
+
+### Supabase Security Audit
+
+Audit de sécurité complet pour les applications utilisant Supabase :
+
+```bash
+/supabase-security https://myapp.com         # Audit complet
+/supabase-security https://myapp.com --quick # Audit rapide
+/supabase-security https://myapp.com --skip-auth-test  # Sans création user test
+```
+
+**Phases d'audit :**
+
+| Phase | Tests effectués |
+|-------|-----------------|
+| **Detection** | Patterns Supabase dans le code client |
+| **Extraction** | Anon key, service key (CRITIQUE), JWT, DB strings |
+| **API Audit** | Tables exposées, RLS policies, RPC functions |
+| **Storage Audit** | Buckets publics, fichiers sensibles |
+| **Auth Audit** | Config, signup, password policy, IDOR |
+| **Functions** | Edge Functions, Realtime channels |
+
+**Findings par sévérité :**
+
+| Sévérité | Exemples | Délai |
+|----------|----------|-------|
+| 🔴 **P0** | Service key exposée, table users sans RLS | Immédiat |
+| 🟠 **P1** | Email confirm désactivé, bucket documents public | 7 jours |
+| 🟡 **P2** | Source maps exposées, password < 8 chars | 30 jours |
+
+**Output :**
+- `docs/security/supabase-audit-YYYY-MM-DD.md` - Rapport complet
+- `.supabase-audit/` - Evidence et commandes curl reproductibles
+
+**Knowledge base (7 fichiers) :**
+- `audit-checklist.md` - Checklist complète des 7 phases
+- `severity-matrix.md` - P0/P1/P2 avec scores CVSS
+- `rls-patterns.md` - Patterns corrects/incorrects + bypass tests
+- `remediation-templates.md` - Templates SQL de fix
+- `edge-functions-security.md` - Auth, IDOR, role check
+- `realtime-security.md` - WebSocket, Broadcast, Presence
+- `auth-configuration.md` - GoTrue endpoints, OAuth, CORS
 
 ---
 
@@ -826,7 +881,7 @@ knowledge:
 │       ├── devcontainer.json
 │       ├── Dockerfile
 │       └── docker-compose.yml
-├── knowledge/                       # 42 fichiers
+├── knowledge/                       # 51 fichiers
 │   ├── tea-index.csv                # Index des fragments
 │   ├── testing/                     # 32 fichiers
 │   │   ├── test-levels-framework.md
@@ -850,10 +905,18 @@ knowledge:
 │   │   └── project-types.csv
 │   ├── brainstorming/               # NEW v3.6 - Techniques brainstorming
 │   │   └── brain-techniques.csv     # 61 techniques en 10 catégories
-│   └── multi-mind/                  # NEW v3.4 - Débat multi-agents
-│       ├── agent-personalities.md
-│       └── debate-templates.md
-└── skills/                          # 17 skills
+│   ├── multi-mind/                  # NEW v3.4 - Débat multi-agents
+│   │   ├── agent-personalities.md
+│   │   └── debate-templates.md
+│   └── supabase-security/           # NEW v3.7 - Audit Supabase
+│       ├── audit-checklist.md
+│       ├── severity-matrix.md
+│       ├── rls-patterns.md
+│       ├── remediation-templates.md
+│       ├── edge-functions-security.md
+│       ├── realtime-security.md
+│       └── auth-configuration.md
+└── skills/                          # 18 skills
     ├── idea-brainstorm/
     ├── pm-prd/
     ├── ux-designer/
@@ -870,7 +933,8 @@ knowledge:
     ├── api-designer/
     ├── database-designer/
     ├── performance-auditor/
-    └── multi-mind/                  # NEW v3.4
+    ├── supabase-security/           # NEW v3.7
+    └── multi-mind/
 
 docs/                                # Output documents
 ├── planning/
@@ -897,7 +961,7 @@ docs/                                # Output documents
 | **advanced** | Si complexe | `fixture-architecture.md` |
 | **debugging** | Si problème | `test-healing-patterns.md` |
 
-### Contenu (44 fichiers)
+### Contenu (51 fichiers)
 
 #### Testing (32 fichiers)
 
@@ -928,6 +992,16 @@ docs/                                # Output documents
 - `agent-personalities.md` - System prompts pour les 6 agents IA
 - `debate-templates.md` - Templates pour les 5 rounds de débat itératif
 
+#### Supabase Security (7 fichiers) - NEW v3.7
+
+- `audit-checklist.md` - Checklist complète des 7 phases d'audit
+- `severity-matrix.md` - P0/P1/P2 avec scores CVSS
+- `rls-patterns.md` - Patterns RLS corrects/incorrects + bypass tests
+- `remediation-templates.md` - Templates SQL de fix par sévérité
+- `edge-functions-security.md` - Auth, IDOR, role check, validation
+- `realtime-security.md` - WebSocket, Broadcast, Presence
+- `auth-configuration.md` - GoTrue endpoints, OAuth, CORS
+
 ---
 
 ## Checkpoints obligatoires
@@ -957,7 +1031,17 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v3.6.0 (Current)
+### v3.7.0 (Current)
+
+**Supabase Security Audit**
+- Nouveau skill `/supabase-security` pour audit complet des projets Supabase
+- 7 phases : Detection, Extraction, API, Storage, Auth, Realtime, Functions
+- Scoring sévérité P0/P1/P2 aligné sur CVSS
+- Evidence collection avec commandes curl reproductibles
+- 7 fichiers knowledge : checklist, severity matrix, RLS patterns, remediation templates
+- Support RLS bypass tests, Edge Functions security, Realtime channels
+
+### v3.6.0
 
 **Brainstorming Enhanced (inspiré BMAD)**
 - **61 techniques** de brainstorming en **10 catégories** (collaborative, creative, deep, introspective, structured, theatrical, wild, biomimetic, quantum, cultural)
