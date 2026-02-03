@@ -1,8 +1,9 @@
-# D-EPCT+R Workflow v3.5
+# D-EPCT+R Workflow v3.6
 
 > **Skills Claude Code pour un workflow de développement structuré et professionnel**
 >
-> ✅ **Multi-Mind** - Débat multi-agents avec 6 IA pour valider PRD et code (NEW v3.4)
+> ✅ **Brainstorming Enhanced** - 61 techniques en 10 catégories, 4 approches, anti-biais (NEW v3.6)
+> ✅ **Multi-Mind** - Débat multi-agents avec 6 IA pour valider PRD et code (v3.4)
 > ✅ **Task System auto** - Tracking automatique si 2+ étapes dans /feature (v3.3)
 > ✅ **Task System** - Système de tracking (remplace TodoWrite) (v3.2)
 > ✅ **Plan Mode** - Workflow Explore → Plan → Code documenté (v3.2)
@@ -192,7 +193,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 | Skill | Rôle | Fonctionnalités clés |
 |-------|------|----------------------|
-| `idea-brainstorm` | Exploration créative | Mode **Creative** ou **Research-first**, SCAMPER, Five Whys, **auto-trigger UX/UI** |
+| `idea-brainstorm` | Exploration créative | **61 techniques** en 10 catégories, **4 approches**, **anti-biais protocol**, **auto-trigger UX/UI** (NEW v3.6) |
 | `pm-prd` | Product Requirements | Mode **FULL/LIGHT** auto-détecté, templates, **auto-trigger UX/UI** |
 | `architect` | Architecture technique | Stack, structure, data model, APIs, ADRs |
 | `pm-stories` | Epics + Stories | INVEST, Given/When/Then, **Readiness Check /15** |
@@ -847,6 +848,8 @@ knowledge:
 │   │   ├── risk-assessment.md
 │   │   ├── domain-complexity.csv
 │   │   └── project-types.csv
+│   ├── brainstorming/               # NEW v3.6 - Techniques brainstorming
+│   │   └── brain-techniques.csv     # 61 techniques en 10 catégories
 │   └── multi-mind/                  # NEW v3.4 - Débat multi-agents
 │       ├── agent-personalities.md
 │       └── debate-templates.md
@@ -954,7 +957,21 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v3.5.0 (Current)
+### v3.6.0 (Current)
+
+**Brainstorming Enhanced (inspiré BMAD)**
+- **61 techniques** de brainstorming en **10 catégories** (collaborative, creative, deep, introspective, structured, theatrical, wild, biomimetic, quantum, cultural)
+- **4 approches de session** : User-Selected, AI-Recommended, Random Discovery, Progressive Flow
+- **Anti-Bias Protocol** : Pivot de domaine tous les 10 idées pour éviter le clustering sémantique
+- **Energy Checkpoints** : Toutes les 4-5 échanges pour maintenir le momentum
+- **Idea Format Template** : Capture structurée avec Novelty tracking
+- **Objectif quantité** : Viser 50-100+ idées avant organisation
+- **Mindset facilitateur** : Coach créatif interactif, pas Q&A
+
+**Knowledge Base**
+- Nouveau fichier `.claude/knowledge/brainstorming/brain-techniques.csv`
+
+### v3.5.0
 
 **Multi-Mind v3.5 - Débat Itératif**
 - **5 rounds** au lieu de 4 : nouveau Round "Frictions" + débat ping-pong

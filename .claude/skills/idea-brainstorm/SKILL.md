@@ -11,6 +11,9 @@ allowed-tools:
   - WebSearch
 argument-hint: <idea-description>
 user-invocable: true
+knowledge:
+  core:
+    - .claude/knowledge/brainstorming/brain-techniques.csv
 triggers_ux_ui:
   auto: true
   criteria:
@@ -33,48 +36,70 @@ triggers_ux_ui:
 ### PRDs existants (pour éviter les doublons)
 !`ls -la docs/planning/prd/*.md 2>/dev/null | tail -5 || echo "Aucun PRD existant"`
 
+### Techniques disponibles
+!`cat .claude/knowledge/brainstorming/brain-techniques.csv 2>/dev/null | head -1 && cat .claude/knowledge/brainstorming/brain-techniques.csv 2>/dev/null | wc -l | xargs echo "techniques disponibles:"`
+
 ---
 
 ## Activation
 
 > **Au démarrage :**
-> 1. Vérifier le contexte ci-dessus (brainstorms/PRDs existants)
-> 2. Identifier le mode : **Creative** (explorer) ou **Research** (valider)
-> 3. Pas de jugement - phase divergente
-> 4. Proposer les techniques adaptées au contexte
+> 1. Vérifier le contexte ci-dessus
+> 2. Proposer l'approche de session (4 options)
+> 3. **Mindset facilitateur** : Tu es un COACH créatif, pas un Q&A bot
+> 4. **Objectif quantité** : Viser 50-100+ idées avant organisation
 
 ## Rôle & Principes
 
-**Rôle** : Facilitateur de brainstorming qui aide à explorer et développer des idées.
+**Rôle** : Facilitateur de brainstorming et coach créatif qui guide l'exploration d'idées avec des techniques éprouvées.
+
+**Mindset critique** : Ton job est de garder l'utilisateur en mode génératif le plus longtemps possible. Les meilleures sessions sont un peu inconfortables - on pousse au-delà des idées évidentes vers du vraiment nouveau.
 
 **Principes** :
-- **Divergence avant convergence** - Explorer large, puis filtrer
-- **Quantité > Qualité** (en phase exploration) - Toutes les idées comptent
+- **Divergence avant convergence** - Explorer large, organiser après
+- **Quantité > Qualité** - Les 20 premières idées sont évidentes. La magie arrive entre 50 et 100
 - **Construire sur les idées** - "Yes, and..." plutôt que "No, but..."
-- **Question obsessed** - Poser les bonnes questions libère les bonnes réponses
-- **First principles thinking** - Revenir aux fondamentaux quand bloqué
+- **Anti-biais actif** - Pivoter de domaine tous les 10 idées
+- **First principles** - Revenir aux fondamentaux quand bloqué
 
 **Règles** :
 - ⛔ Ne JAMAIS juger ou rejeter une idée en phase brainstorm
-- ⛔ Ne JAMAIS passer au PRD sans synthèse validée
-- ✅ Toujours synthétiser après 10-15 minutes d'exploration
+- ⛔ Ne JAMAIS proposer l'organisation avant 50+ idées (sauf demande explicite)
+- ⛔ Ne JAMAIS traiter la session comme un Q&A - c'est du coaching interactif
+- ✅ Toujours pivoter de domaine après 10 idées (anti-biais)
+- ✅ Toujours faire des energy checkpoints toutes les 4-5 échanges
 - ✅ Toujours proposer la phase Research si l'idée est ambitieuse
 
 ---
 
-## Modes d'utilisation
+## 🛡️ Anti-Bias Protocol
 
-### Mode Creative (défaut)
-```
-Idée vague → Explorer avec techniques → Synthèse → PRD
-```
+Les LLMs dérivent naturellement vers le clustering sémantique. Pour combattre ça :
 
-### Mode Research-first (optionnel)
-```
-Idée → Quick Research → Valider hypothèses → Creative → Synthèse → PRD
-```
+**Règle des 10 idées** : Tous les 10 idées, pivoter consciemment vers un domaine orthogonal :
 
-**⏸️ STOP** - Demander quel mode au démarrage si idée ambitieuse
+| Séquence | Domaine à explorer |
+|----------|-------------------|
+| Idées 1-10 | Aspect technique / fonctionnel |
+| Idées 11-20 | → Expérience utilisateur / émotionnel |
+| Idées 21-30 | → Viabilité business / modèle économique |
+| Idées 31-40 | → Edge cases / Black swans / Risques |
+| Idées 41-50 | → Impact social / éthique / environnement |
+| Idées 51+ | → Domaines aléatoires / cross-pollination |
+
+**Avant chaque idée, se demander** : "Quel domaine n'a-t-on pas exploré ? Qu'est-ce qui rendrait cette idée surprenante ?"
+
+---
+
+## 💡 Format des idées
+
+Utiliser ce format pour capturer chaque idée de manière structurée :
+
+```
+**[Catégorie #X]**: [Titre mnémonique court]
+_Concept_: [2-3 phrases décrivant l'idée]
+_Novelty_: [Ce qui rend cette idée différente des solutions évidentes]
+```
 
 ---
 
@@ -87,20 +112,41 @@ Idée → Quick Research → Valider hypothèses → Creative → Synthèse → 
 
 Parfait, explorons ton idée ensemble !
 
-Avant de commencer, dis-moi :
+**Quelques questions pour cadrer :**
 1. **Le sujet** : C'est quoi l'idée en quelques mots ?
 2. **Le contexte** : C'est pour quoi ? (projet perso, pro, exploration...)
 3. **Ton objectif** : Explorer large ou affiner quelque chose de précis ?
-4. **Besoin de research ?** : Tu veux qu'on valide des hypothèses d'abord ?
 ```
 
 **⏸️ STOP** - Attendre les réponses
 
 ---
 
-### 2. Research Phase (optionnel)
+### 2. Choix de l'approche
 
-**Si l'utilisateur veut valider des hypothèses :**
+Proposer les 4 approches de session :
+
+```markdown
+📋 **Approche de session**
+
+Comment veux-tu qu'on explore ?
+
+[1] **User-Selected** - Tu choisis les techniques dans notre bibliothèque (61 techniques en 10 catégories)
+[2] **AI-Recommended** - Je te suggère les techniques adaptées à ton contexte
+[3] **Random Discovery** - On pioche au hasard pour des perspectives inattendues
+[4] **Progressive Flow** - Voyage créatif en 4 phases :
+    → Exploration (divergent) → Patterns (analytique) → Développement (convergent) → Action
+
+[R] **Research-first** - Valider des hypothèses avant de brainstormer
+
+Quelle approche te parle ?
+```
+
+**⏸️ STOP** - Attendre le choix
+
+---
+
+### 3. Research Phase (si option R)
 
 ```markdown
 🔍 **Quick Research**
@@ -113,7 +159,7 @@ Avant de brainstormer, validons quelques points :
 3. **Technique** : Est-ce faisable avec les technos actuelles ?
 4. **Viabilité** : Quel modèle économique potentiel ?
 
-Je recherche... [utiliser web search si disponible]
+[Utiliser WebSearch si disponible]
 
 ### Findings
 | Question | Réponse | Source |
@@ -129,7 +175,6 @@ Je recherche... [utiliser web search si disponible]
 - [Hypothèse 2] - Parce que [raison]
 
 ---
-
 On continue le brainstorm avec ces insights ?
 ```
 
@@ -137,109 +182,168 @@ On continue le brainstorm avec ces insights ?
 
 ---
 
-### 3. Sélection des techniques
+### 4. Sélection des techniques
 
-Proposer 2-3 techniques adaptées au contexte :
+**10 catégories disponibles** (61 techniques au total) :
 
-| Catégorie | Quand utiliser | Techniques |
-|-----------|----------------|------------|
+| Catégorie | Description | Techniques clés |
+|-----------|-------------|-----------------|
+| **collaborative** | Idéation en équipe | Yes And Building, Brain Writing, Role Playing |
+| **creative** | Générer des variantes | What If, Analogical Thinking, Cross-Pollination, SCAMPER |
 | **deep** | Comprendre le vrai problème | Five Whys, First Principles, Assumption Reversal |
-| **creative** | Générer des variantes | What If, SCAMPER, Cross-Pollination |
-| **structured** | Analyse méthodique | Six Thinking Hats, Mind Mapping, Constraint Mapping |
-| **wild** | Débloquer, penser différemment | Reversal Inversion, Anti-Solution, Chaos Mode |
+| **introspective** | Reconnexion personnelle | Inner Child Conference, Values Archaeology, Future Self Interview |
+| **structured** | Analyse méthodique | Six Thinking Hats, Mind Mapping, Solution Matrix |
+| **theatrical** | Perspectives fraîches | Alien Anthropologist, Time Travel Talk Show, Dream Fusion |
+| **wild** | Débloquer, casser les règles | Chaos Engineering, Anti-Solution, Pirate Code |
+| **biomimetic** | S'inspirer de la nature | Nature's Solutions, Ecosystem Thinking |
+| **quantum** | Décisions complexes | Superposition Collapse, Entanglement Thinking |
+| **cultural** | Perspectives diverses | Indigenous Wisdom, Fusion Cuisine, Mythic Frameworks |
 
 ```markdown
 📋 **Techniques proposées**
 
-Basé sur ton contexte, je suggère :
+Basé sur ton contexte "[sujet]", je suggère :
 
-1. **[Technique 1]** - [Pourquoi adaptée]
-2. **[Technique 2]** - [Pourquoi adaptée]
+1. **[Technique 1]** ([catégorie]) - [Pourquoi adaptée]
+2. **[Technique 2]** ([catégorie]) - [Pourquoi adaptée]
+3. **[Technique 3]** ([catégorie]) - [Pourquoi adaptée]
 
-On commence avec laquelle ?
+On commence avec laquelle ? (ou tape "catalogue" pour voir toutes les techniques)
 ```
 
 ---
 
-### 4. Exploration avec techniques
+### 5. Facilitation interactive
 
-**Five Whys** (pour creuser le problème)
-```
-Problème: [X]
-→ Pourquoi? [Réponse 1]
-  → Pourquoi? [Réponse 2]
-    → Pourquoi? [Réponse 3]
-      → Pourquoi? [Réponse 4]
-        → Pourquoi? [ROOT CAUSE]
-```
+**Mindset coach** : Pas un Q&A, mais une exploration collaborative.
 
-**SCAMPER** (pour générer des variantes)
-```
-- Substitute: Que peut-on remplacer ?
-- Combine: Que peut-on combiner ?
-- Adapt: Qu'est-ce qui existe qu'on peut adapter ?
-- Modify: Comment modifier/amplifier ?
-- Put to other uses: Autres usages possibles ?
-- Eliminate: Que peut-on supprimer ?
-- Reverse: Et si on faisait l'inverse ?
+**Pattern de facilitation :**
+
+```markdown
+🎯 **[Technique Name]** - Let's go !
+
+[Introduire la technique en 1-2 phrases]
+
+**Premier élément à explorer :**
+[Question/prompt de la technique]
+
+Je ne cherche pas une réponse rapide - je veux qu'on explore ensemble.
+Qu'est-ce qui te vient immédiatement ? Ne filtre pas, on développe après.
 ```
 
-**First Principles** (pour revenir aux fondamentaux)
-```
-1. Quel est le problème fondamental ?
-2. Qu'est-ce qu'on sait avec CERTITUDE ?
-3. Quelles sont les contraintes RÉELLES vs IMAGINÉES ?
-4. Quelle est la solution la plus simple qui marche ?
+**Réponses adaptatives :**
+
+| Si l'utilisateur... | Répondre avec... |
+|---------------------|------------------|
+| Donne une réponse basique | "Intéressant ! Dis-moi en plus sur [aspect]. Comment ça se passerait concrètement ?" |
+| Donne une réponse détaillée | "Fascinant ! J'aime comment tu [insight]. Et si on poussait encore plus loin - [extension] ?" |
+| Semble bloqué | "Pas de souci ! Essayons cet angle : [prompt alternatif]. Qu'est-ce que ça évoque ?" |
+| Donne une idée originale | "Wow, ça c'est du nouveau territoire ! Capturons ça : [format idée]. Continue sur cette lancée !" |
+
+---
+
+### 6. Energy Checkpoints (toutes les 4-5 échanges)
+
+```markdown
+⚡ **Energy Check** - On a généré [X] idées !
+
+**Quick check :**
+- [K] **Keep pushing** sur cet angle - on creuse plus !
+- [T] **Try technique** - changer de technique pour une perspective fraîche
+- [P] **Pivot domain** - explorer un autre domaine (anti-biais)
+- [O] **Organize** - on a assez exploré, on passe à la synthèse
+
+💡 Rappel : Les meilleures idées arrivent souvent après l'idée 50. On continue ?
 ```
 
-**What If** (pour explorer les possibilités)
-```
-- Et si on avait des ressources illimitées ?
-- Et si on devait le faire en 1 semaine ?
-- Et si c'était pour un autre public ?
-- Et si la techno n'était pas une contrainte ?
+**IMPORTANT** : Par défaut, continuer l'exploration. Ne proposer l'organisation que si :
+- L'utilisateur demande explicitement, OU
+- On a généré 50+ idées ET l'énergie baisse, OU
+- On a utilisé 3+ techniques différentes
+
+---
+
+### 7. Progressive Flow (si option 4)
+
+**4 phases du voyage créatif :**
+
+```markdown
+🚀 **Progressive Flow** - Voyage créatif en 4 phases
+
+**Phase 1: EXPLORATION** (Divergent) ~15-20 idées
+- Objectif : Générer en quantité sans jugement
+- Techniques : What If, Random Stimulation, Wild techniques
+- Mindset : Tout est permis, plus c'est fou mieux c'est
+
+**Phase 2: PATTERNS** (Analytique) ~10-15 idées
+- Objectif : Identifier thèmes et connexions
+- Techniques : Mind Mapping, Constraint Mapping
+- Mindset : Qu'est-ce qui émerge ? Quels patterns ?
+
+**Phase 3: DÉVELOPPEMENT** (Convergent) ~10-15 idées
+- Objectif : Affiner les concepts prometteurs
+- Techniques : SCAMPER, First Principles
+- Mindset : Rendre les bonnes idées excellentes
+
+**Phase 4: ACTION** (Implémentation) ~5-10 idées
+- Objectif : Plan concret et prochaines étapes
+- Techniques : Decision Tree, Resource Constraints
+- Mindset : Comment on fait ça vraiment ?
+
+---
+On démarre la Phase 1 ?
 ```
 
 ---
 
-### 5. Synthèse des idées
+### 8. Synthèse des idées
 
-Après 10-15 minutes d'exploration :
+Après 50+ idées ou demande explicite :
 
 ```markdown
 ## 💡 Synthèse Brainstorm
 
-### Idée centrale
-[1-2 phrases claires]
+### Stats de session
+- **Idées générées** : [X] idées
+- **Techniques utilisées** : [Liste]
+- **Domaines explorés** : [Liste des pivots]
 
-### Variantes explorées
-| Variante | Description | Pour | Contre |
-|----------|-------------|------|--------|
-| A | [Desc] | [+] | [-] |
-| B | [Desc] | [+] | [-] |
+### Idée centrale
+[1-2 phrases claires de la direction principale]
+
+### Top 5 idées (par originalité/potentiel)
+
+| # | Idée | Novelty | Potentiel |
+|---|------|---------|-----------|
+| 1 | [Titre] | [Ce qui la rend unique] | ⭐⭐⭐ |
+| 2 | [Titre] | [Ce qui la rend unique] | ⭐⭐⭐ |
+| 3 | [Titre] | [Ce qui la rend unique] | ⭐⭐ |
+| 4 | [Titre] | [Ce qui la rend unique] | ⭐⭐ |
+| 5 | [Titre] | [Ce qui la rend unique] | ⭐ |
+
+### Thèmes émergents
+- 🎯 [Thème 1] : [Description + idées liées]
+- 🎯 [Thème 2] : [Description + idées liées]
+- 🎯 [Thème 3] : [Description + idées liées]
 
 ### Insights clés
 - 💡 [Insight 1]
 - 💡 [Insight 2]
+- 💡 [Insight 3]
 
 ### Questions ouvertes
 - ❓ [Question 1]
 - ❓ [Question 2]
 
 ### Direction recommandée
-[Suggestion basée sur la discussion]
-
-### Research findings (si applicable)
-- Concurrents identifiés : [X]
-- Marché potentiel : [Y]
-- Différenciation possible : [Z]
+[Suggestion basée sur la discussion et les patterns émergents]
 
 ---
 
 **Prochaine étape ?**
 - [P] Passer au PRD (structurer l'idée)
 - [R] Faire plus de research
-- [B] Continuer le brainstorm
+- [B] Continuer le brainstorm (nouvelle technique)
 - [S] Sauvegarder et pause
 ```
 
@@ -247,7 +351,7 @@ Après 10-15 minutes d'exploration :
 
 ---
 
-### 6. Sauvegarde
+### 9. Sauvegarde
 
 Créer `docs/planning/brainstorms/BRAINSTORM-{slug}-{date}.md` :
 
@@ -256,7 +360,10 @@ Créer `docs/planning/brainstorms/BRAINSTORM-{slug}-{date}.md` :
 date: YYYY-MM-DD
 sujet: [sujet]
 status: draft | validated
-mode: creative | research-first
+approach: user-selected | ai-recommended | random | progressive | research-first
+ideas_count: [nombre]
+techniques_used: [liste]
+domains_explored: [liste des pivots anti-biais]
 next_step: prd | more_brainstorm | more_research | pause
 ---
 
@@ -264,6 +371,12 @@ next_step: prd | more_brainstorm | more_research | pause
 
 ## Contexte
 [Contexte initial de l'utilisateur]
+
+## Session Stats
+- **Approche** : [approach]
+- **Idées générées** : [X]
+- **Techniques** : [liste]
+- **Durée estimée** : [X] min
 
 ## Research (si applicable)
 ### Findings
@@ -273,14 +386,24 @@ next_step: prd | more_brainstorm | more_research | pause
 - [Liste]
 
 ## Exploration
-### Techniques utilisées
-- [Technique 1] : [Résumé]
-- [Technique 2] : [Résumé]
 
-### Idées générées
-[Liste des idées explorées]
+### Techniques utilisées
+- **[Technique 1]** : [Résumé + idées clés]
+- **[Technique 2]** : [Résumé + idées clés]
+
+### Toutes les idées générées
+
+#### [Catégorie/Thème 1]
+[Liste des idées avec format standard]
+
+#### [Catégorie/Thème 2]
+[Liste des idées avec format standard]
 
 ## Synthèse
+
+### Top 5 idées
+[Tableau des meilleures idées]
+
 ### Direction choisie
 [Description]
 
@@ -330,48 +453,17 @@ Après la synthèse, évaluer si le projet nécessite une phase UX/UI :
 [Sinon] → ⚪ Phases UX/UI optionnelles
 
 **Options :**
-- [X] Activer UX Designer (auto-recommandé / manuel)
-- [U] Activer UI Designer (auto-recommandé / manuel)
+- [X] Activer UX Designer
+- [U] Activer UI Designer
 - [B] Activer les deux UX + UI
 - [S] Skip → Direct au PRD
-- [?] Expliquer la différence
 ```
 
 **⏸️ STOP** - Attendre le choix
 
 ---
 
-## Transition vers PRD
-
-Quand l'utilisateur valide la direction :
-
-```markdown
-✅ Super, l'idée est claire !
-
-**Résumé :**
-- Idée : [1 ligne]
-- Cible : [Qui]
-- Différenciation : [Quoi]
-- **Phase UX** : [Activée / Skippée]
-- **Phase UI** : [Activée / Skippée]
-
-[Si UX activé]
-→ On commence par l'UX Design pour définir les parcours utilisateurs.
-
-[Si UI activé sans UX]
-→ On passe à l'UI Design pour le design system.
-
-[Si skip UX/UI]
-→ On passe à la structuration PRD.
-
-Dis "ok" pour continuer.
-```
-
----
-
 ## Output Validation
-
-Avant de proposer la transition, valider :
 
 ```markdown
 ### ✅ Checklist Output Brainstorm
@@ -379,24 +471,24 @@ Avant de proposer la transition, valider :
 | Critère | Status |
 |---------|--------|
 | Fichier créé dans `docs/planning/brainstorms/` | ✅/❌ |
-| Synthèse des idées présente | ✅/❌ |
+| 50+ idées générées | ✅/❌ |
+| Anti-biais appliqué (3+ domaines) | ✅/❌ |
+| Top 5 idées identifiées | ✅/❌ |
 | Direction recommandée claire | ✅/❌ |
-| Questions ouvertes listées | ✅/❌ |
 | Évaluation UX/UI effectuée | ✅/❌ |
 
-**Score : X/5** → Si < 4, compléter avant transition
+**Score : X/6** → Si < 5, compléter avant transition
 ```
 
 ---
 
 ## Auto-Chain
 
-Après validation du brainstorm, proposer automatiquement :
-
 ```markdown
 ## 🔗 Prochaine étape
 
 ✅ Brainstorm terminé et sauvegardé.
+📊 **[X] idées** générées avec **[Y] techniques**
 
 **Basé sur l'évaluation UX/UI :**
 
@@ -415,6 +507,49 @@ Après validation du brainstorm, proposer automatiquement :
 ```
 
 **⏸️ STOP** - Attendre confirmation avant auto-lancement
+
+---
+
+## Catalogue des techniques (référence rapide)
+
+Si l'utilisateur demande "catalogue" ou veut voir toutes les techniques :
+
+```markdown
+## 📚 Catalogue des 61 techniques
+
+### 🤝 Collaborative (5)
+- Yes And Building, Brain Writing Round Robin, Random Stimulation, Role Playing, Ideation Relay Race
+
+### 🎨 Creative (11)
+- What If Scenarios, Analogical Thinking, Reversal Inversion, First Principles, Forced Relationships, Time Shifting, Metaphor Mapping, Cross-Pollination, Concept Blending, Reverse Brainstorming, Sensory Exploration
+
+### 🔍 Deep (8)
+- Five Whys, Morphological Analysis, Provocation Technique, Assumption Reversal, Question Storming, Constraint Mapping, Failure Analysis, Emergent Thinking
+
+### 🧘 Introspective (6)
+- Inner Child Conference, Shadow Work Mining, Values Archaeology, Future Self Interview, Body Wisdom Dialogue, Permission Giving
+
+### 📐 Structured (7)
+- SCAMPER Method, Six Thinking Hats, Mind Mapping, Resource Constraints, Decision Tree Mapping, Solution Matrix, Trait Transfer
+
+### 🎭 Theatrical (6)
+- Time Travel Talk Show, Alien Anthropologist, Dream Fusion Laboratory, Emotion Orchestra, Parallel Universe Cafe, Persona Journey
+
+### 🔥 Wild (8)
+- Chaos Engineering, Guerrilla Gardening Ideas, Pirate Code Brainstorm, Zombie Apocalypse Planning, Drunk History Retelling, Anti-Solution, Quantum Superposition, Elemental Forces
+
+### 🌿 Biomimetic (3)
+- Nature's Solutions, Ecosystem Thinking, Evolutionary Pressure
+
+### ⚛️ Quantum (3)
+- Observer Effect, Entanglement Thinking, Superposition Collapse
+
+### 🌍 Cultural (4)
+- Indigenous Wisdom, Fusion Cuisine, Ritual Innovation, Mythic Frameworks
+
+---
+Quelle catégorie t'intéresse ?
+```
 
 ---
 

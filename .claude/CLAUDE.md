@@ -15,7 +15,7 @@
 
 ---
 
-# D-EPCT+R Workflow v3.5
+# D-EPCT+R Workflow v3.6
 
 > Skills Claude Code pour un workflow de développement structuré et professionnel.
 
@@ -106,7 +106,7 @@
 
 | Skill | Rôle | Fonctionnalités clés |
 |-------|------|----------------------|
-| `idea-brainstorm` | Exploration créative | Mode **Creative** ou **Research-first**, techniques SCAMPER/Five Whys, **auto-trigger UX/UI** |
+| `idea-brainstorm` | Exploration créative | **61 techniques** en 10 catégories, **4 approches** (User/AI/Random/Progressive), **anti-biais protocol**, **auto-trigger UX/UI** (NEW v3.6) |
 | `pm-prd` | Product Requirements | Mode **FULL** (complet) ou **LIGHT** (simplifié), auto-détection, **auto-trigger UX/UI** |
 | `architect` | Architecture technique | Stack, structure, data model, APIs, ADRs |
 | `pm-stories` | Epics + Stories | INVEST, Given/When/Then, **Implementation Readiness Check** (score /15) |
@@ -940,6 +940,8 @@ triggers_ux_ui:                  # Auto-trigger UX/UI (optionnel)
 │   ├── risk-assessment.md         # NEW v2.7 - Framework de risques
 │   ├── domain-complexity.csv
 │   └── project-types.csv
+├── brainstorming/             # NEW v3.6 - Techniques de brainstorming
+│   └── brain-techniques.csv       # 61 techniques en 10 catégories
 └── multi-mind/                # NEW v3.5 - Débat multi-agents
     ├── agent-personalities.md     # 6 system prompts
     └── debate-templates.md        # Templates 5 rounds (itératif)
