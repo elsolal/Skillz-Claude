@@ -56,7 +56,7 @@
 
 ---
 
-## Commandes (15)
+## Commandes (16)
 
 ### Mode Manuel (avec validation)
 
@@ -86,6 +86,7 @@
 /changelog [version]    # Génère CHANGELOG.md
 /metrics                # Dashboard métriques projet
 /init [template]        # Scaffolding projet (NEW v3.0)
+/supabase-security <url> # Audit sécurité Supabase complet (NEW v3.7)
 ```
 
 ### Configuration RALPH
@@ -100,7 +101,7 @@
 
 ---
 
-## Skills (17)
+## Skills (18)
 
 ### Phase Planning
 
@@ -132,6 +133,7 @@
 | `code-reviewer` | Review (3 passes) | Correctness → Readability → Performance |
 | `security-auditor` | Audit sécurité | **OWASP Top 10**, dépendances, secrets, scoring |
 | `performance-auditor` | Audit performance (NEW v3.1) | **Core Web Vitals**, bundle size, Lighthouse |
+| `supabase-security` | Audit Supabase (NEW v3.7) | **RLS**, buckets, auth, keys exposées, **evidence collection**, CVSS |
 | `multi-mind` | Débat multi-agents (NEW v3.5) | **6 IA**, **5 rounds avec débat itératif**, consensus/divergences |
 
 ---
@@ -184,6 +186,60 @@ Audit de performance avec Core Web Vitals et bundle analysis :
 - **Bundle** : JS/CSS size, chunks, tree-shaking
 - **Lighthouse** : Score complet
 - **Dependencies** : Packages lourds, alternatives
+
+---
+
+## Fonctionnalités avancées (v3.7)
+
+### Supabase Security Audit
+
+Audit de sécurité complet pour les applications utilisant Supabase :
+
+```bash
+/supabase-security https://myapp.com         # Audit complet
+/supabase-security https://myapp.com --quick # Audit rapide
+/supabase-security https://myapp.com --skip-auth-test  # Sans création user test
+```
+
+**Phases d'audit** :
+
+| Phase | Tests effectués |
+|-------|-----------------|
+| **Detection** | Patterns Supabase dans le code client |
+| **Extraction** | Anon key, service key (CRITIQUE), JWT, DB strings |
+| **API Audit** | Tables exposées, RLS policies, RPC functions |
+| **Storage Audit** | Buckets publics, fichiers sensibles |
+| **Auth Audit** | Config, signup, password policy, IDOR (optionnel) |
+| **Functions** | Edge Functions, Realtime channels |
+
+**Findings par sévérité** :
+
+| Sévérité | Exemples | Délai |
+|----------|----------|-------|
+| 🔴 **P0** | Service key exposée, table users sans RLS | Immédiat |
+| 🟠 **P1** | Email confirm désactivé, bucket documents public | 7 jours |
+| 🟡 **P2** | Source maps exposées, password < 8 chars | 30 jours |
+
+**Output** :
+
+```
+docs/security/supabase-audit-YYYY-MM-DD.md  # Rapport
+.supabase-audit/                             # Evidence
+├── context.json
+├── curl-commands.sh                         # Commandes reproductibles
+├── timeline.md
+└── evidence/
+```
+
+**Knowledge base** :
+
+```
+.claude/knowledge/supabase-security/
+├── audit-checklist.md      # Checklist complète
+├── severity-matrix.md      # Matrice CVSS
+├── rls-patterns.md         # Patterns RLS corrects/incorrects
+└── remediation-templates.md # Templates SQL de fix
+```
 
 ---
 
