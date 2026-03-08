@@ -71,6 +71,24 @@ Remove-Item -Recurse -Force Skillz-Claude
 
 > **Note Windows :** Sur Mac/Linux, les dossiers multi-agent (`.agents/`, `.codex/`, etc.) utilisent des **symlinks** vers `.claude/` — une seule source de vérité, les mises à jour se propagent automatiquement. Sur Windows, ce sont des **copies** (les symlinks nécessitent le [mode développeur](https://learn.microsoft.com/fr-fr/windows/apps/get-started/enable-your-device-for-development)). En cas de mise à jour, relancez les commandes `Copy-Item` ci-dessus.
 
+### Claude Code uniquement (sans Codex, Gemini, OpenCode)
+
+Si tu utilises uniquement Claude Code et ne veux pas les dossiers multi-agent :
+
+```bash
+# Mac / Linux
+git clone --depth 1 https://github.com/elsolal/Skillz-Claude.git
+cp -r Skillz-Claude/.claude/ .claude/
+rm -rf Skillz-Claude
+```
+
+```powershell
+# Windows (PowerShell)
+git clone --depth 1 https://github.com/elsolal/Skillz-Claude.git
+Copy-Item -Recurse -Force Skillz-Claude\.claude\ .\.claude\
+Remove-Item -Recurse -Force Skillz-Claude
+```
+
 ### Installation manuelle (Mac / Linux)
 
 ```bash
