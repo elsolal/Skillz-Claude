@@ -1,26 +1,25 @@
 ---
-description: Implémente une feature GitHub en mode RALPH autonome (Explain → Plan → Code → Test → Review ×3). L'IA travaille seule jusqu'à ce que tout soit terminé et testé.
+description: Implémente une feature GitHub en mode RALPH autonome avec multi-agent parallèle (Explore → Plan → Code+Tests // → Review ×3 //).
 ---
 
-# Auto-Feature - RALPH Mode 🔄
+# Auto-Feature - RALPH Mode
 
 **Session ID:** ${CLAUDE_SESSION_ID}
 
-## Mode RALPH + Implémentation activé
-
-Je vais exécuter **tout le workflow de développement en autonome** :
+## Mode RALPH + Multi-Agent activé
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                     AUTO-FEATURE (RALPH MODE)                               │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  🔍 Explain ──→ 📝 Plan ──→ 💻 Code ──→ 🧪 Test ──→ 🔄 Review ×3            │
-│      AUTO         AUTO        AUTO        AUTO         AUTO                 │
-│                                                                             │
-│  ⚠️ Pas de validation intermédiaire - Full autonome                         │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│                     AUTO-FEATURE (RALPH MODE)                           │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  EXPLORE    →  PLAN     →  IMPLEMENT      →  REVIEW         → DONE     │
+│  Agent         Plan        ┌─ Code Agent     ┌─ Correctness            │
+│  Explore       Mode        └─ Test Agent     ├─ Readability            │
+│  (AUTO)       (AUTO)        (PARALLEL)       └─ Performance            │
+│                                               (PARALLEL)               │
+│  Pas de validation intermédiaire - Full autonome                       │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Configuration RALPH
@@ -28,61 +27,51 @@ Je vais exécuter **tout le workflow de développement en autonome** :
 | Paramètre | Valeur |
 |-----------|--------|
 | Session | `${CLAUDE_SESSION_ID}` |
-| Max iterations | **50** (dev = beaucoup d'itérations possibles) |
+| Max iterations | **50** |
 | Timeout | **2h** |
 | Completion promise | **"FEATURE COMPLETE"** |
 | Logs | `docs/ralph-logs/${CLAUDE_SESSION_ID}.md` |
-| Verbose | OFF (use `--verbose` to enable) |
 
-## Ce que je vais faire automatiquement
+## Exécution automatique
 
-### Phase 1: EXPLAIN 🔍
+### Phase 1: EXPLORE (Agent Explore natif)
 - Lire et parser l'issue GitHub
-- Analyser le codebase existant
-- Identifier les fichiers à modifier
-- Comprendre les patterns en place
+- Lancer Agent Explore pour analyser le codebase
+- Identifier fichiers à modifier, patterns, risques
 
-### Phase 2: PLAN 📝
-- Décomposer en étapes atomiques
-- Définir l'ordre d'implémentation
-- Identifier les risques
+### Phase 2: PLAN (Plan Mode natif)
+- Entrer en Plan Mode, créer le plan
+- TaskCreate si 2+ étapes
+- Valider automatiquement (pas de STOP)
 
-### Phase 3: CODE 💻
-- Implémenter étape par étape
-- Respecter les conventions du projet
-- Commiter régulièrement
+### Phase 3: IMPLEMENT (2 agents parallèles)
+- **Agent Code** : Implémenter selon le plan, lint/types obligatoires
+- **Agent Tests** : Écrire tests P0-P3, risk-based
+- Les 2 agents tournent en parallèle
 
-### Phase 4: TEST 🧪
-- Écrire les tests unitaires
-- Écrire les tests d'intégration
-- S'assurer que tout passe
+### Phase 4: REVIEW (3 agents parallèles)
+- **Correctness** : Bugs, logique, sécurité
+- **Readability** : Nommage, structure, DRY
+- **Performance** : Optimisations
+- Corriger automatiquement les issues 🔴 Critical
 
-### Phase 5: REVIEW ×3 🔄
-- **Pass 1**: Correctness - Bugs, logique, sécurité
-- **Pass 2**: Readability - Nommage, structure, DRY
-- **Pass 3**: Performance - Optimisations
-
-### Phase 6: Finalisation
-- Vérifier que tous les tests passent
+### Phase 5: FINALIZE
+- Vérifier tous les tests passent
 - Créer un résumé des changements
 - Préparer pour PR
 
 ## Critères de succès automatiques
 
 Le loop considère la feature "COMPLETE" quand :
-- ✅ Code implémenté selon le plan
-- ✅ Tous les tests passent
-- ✅ 3 passes de review effectuées
-- ✅ Aucune issue critique restante
+- Code implémenté selon le plan
+- Tous les tests passent
+- 3 passes de review effectuées
+- Aucune issue 🔴 Critical restante
 
----
-
-## 📊 Métriques RALPH
-
-Le log inclut automatiquement les métriques suivantes :
+## Métriques RALPH
 
 ```markdown
-## 📊 Métriques Feature
+## Métriques Feature
 
 | Métrique | Valeur |
 |----------|--------|
@@ -93,13 +82,10 @@ Le log inclut automatiquement les métriques suivantes :
 ### Temps par phase
 | Phase | Durée | Status |
 |-------|-------|--------|
-| Explain | [X]m | ✅ |
-| Plan | [X]m | ✅ |
-| Code | [X]m | ✅ |
-| Test | [X]m | ✅ |
-| Review Pass 1 | [X]m | ✅ |
-| Review Pass 2 | [X]m | ✅ |
-| Review Pass 3 | [X]m | ✅ |
+| Explore | [X]m | ? |
+| Plan | [X]m | ? |
+| Code + Tests (parallel) | [X]m | ? |
+| Review ×3 (parallel) | [X]m | ? |
 
 ### Code Metrics
 | Métrique | Valeur |
@@ -108,25 +94,6 @@ Le log inclut automatiquement les métriques suivantes :
 | Fichiers modifiés | [X] |
 | Lignes ajoutées | +[X] |
 | Lignes supprimées | -[X] |
-| Fonctions ajoutées | [X] |
-
-### Tests
-| Métrique | Valeur |
-|----------|--------|
-| Tests écrits | [X] |
-| Tests P0 | [X] |
-| Tests P1 | [X] |
-| Coverage | [X]% |
-| Flaky runs | [X] |
-
-### Auto-corrections
-| Type | Count |
-|------|-------|
-| Lint errors corrigés | [X] |
-| Type errors corrigés | [X] |
-| Tests fixés | [X] |
-| Review issues résolues | [X] |
-| Retours arrière | [X] |
 
 ### Review Summary
 | Pass | Issues trouvées | Issues résolues |
@@ -152,25 +119,9 @@ Le log inclut automatiquement les métriques suivantes :
 | `--timeout Xh` | Override timeout (default: 2h) |
 | `--verbose` | Mode debug avec logs détaillés |
 
-## Exemples
-
-```bash
-# Par numéro
-/auto-feature #123
-
-# Par URL
-/auto-feature https://github.com/owner/repo/issues/123
-
-# Avec options
-/auto-feature #123 --max 100 --timeout 4h
-
-# Mode verbose (debug)
-/auto-feature #123 --verbose
-```
-
 ---
 
-## Démarrage 🚀
+## Démarrage
 
 **Issue à implémenter :** $ARGUMENTS
 
@@ -182,7 +133,7 @@ Le log inclut automatiquement les métriques suivantes :
   "iteration": 1,
   "maxIterations": 50,
   "completionPromise": "FEATURE COMPLETE",
-  "originalPrompt": "AUTO-FEATURE: Implement $ARGUMENTS following the full EPCT+R workflow",
+  "originalPrompt": "AUTO-FEATURE: Implement $ARGUMENTS using multi-agent workflow",
   "startTime": [TIMESTAMP],
   "timeoutSeconds": 7200,
   "logEnabled": true,
@@ -191,12 +142,4 @@ Le log inclut automatiquement les métriques suivantes :
 }
 ```
 
-**🚀 Auto-Feature démarré - Mode RALPH**
-
-Je commence par lire l'issue : **$ARGUMENTS**
-
----
-
-## Phase 1: EXPLAIN
-
-Je vais d'abord récupérer et analyser l'issue GitHub...
+Je commence par **Phase 1: EXPLORE** — lecture de l'issue et analyse du codebase...

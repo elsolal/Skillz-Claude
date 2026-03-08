@@ -131,7 +131,7 @@ knowledge:
 
 **Produire l'output standardisé (voir template ci-dessous)**
 
-**⏸️ STOP** - Attendre validation avant de passer au codebase-explainer
+**⏸️ STOP** - Attendre validation avant de passer à l'exploration du codebase
 
 ---
 
@@ -267,11 +267,11 @@ Après validation de l'analyse, proposer automatiquement :
 → ⚠️ Résoudre les questions 🔴 avant de continuer
 
 [Sinon]
-→ 🔍 **Lancer l'analyse codebase ?** (comprendre l'implémentation existante)
+→ 🔍 **Lancer Agent Explore ?** (comprendre le codebase pour cette issue)
 
 ---
 
-**[Y] Oui, analyser le code** | **[N] Non, je choisis** | **[Q] Poser des questions**
+**[Y] Oui, explorer le code** | **[N] Non, je choisis** | **[Q] Poser des questions**
 ```
 
 **⏸️ STOP** - Attendre confirmation avant auto-lancement
@@ -280,6 +280,6 @@ Après validation de l'analyse, proposer automatiquement :
 
 ## Transitions
 
-- **Vers codebase-explainer** : "Issue analysée, on explore le code pour comprendre l'implémentation ?"
+- **Vers Agent Explore** : "Issue analysée, on explore le code avec Agent Explore ?"
 - **Vers pm-prd** : "Issue complexe, besoin d'un PRD détaillé ?"
 - **Retour utilisateur** : "Des clarifications nécessaires sur l'issue ?"

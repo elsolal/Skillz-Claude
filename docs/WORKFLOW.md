@@ -17,7 +17,7 @@
 Un ensemble de **Skills** et **Commands** pour Claude Code qui automatise ton workflow de développement :
 
 ```
-DISCOVERY → EXPLAIN → PLAN → CODE → TEST → REVIEW (×3)
+DISCOVERY → EXPLORE → PLAN → CODE+TESTS (//) → REVIEW ×3 (//)
 ```
 
 ### Pourquoi Skills plutôt qu'Agents ?
@@ -54,10 +54,6 @@ d-epct-workflow/
         │   └── 📄 SKILL.md               ← 🎯 Session PM
         ├── 📁 github-issue-reader/
         │   └── 📄 SKILL.md               ← 📋 Lecture issues
-        ├── 📁 codebase-explainer/
-        │   └── 📄 SKILL.md               ← 🔍 Analyse code
-        ├── 📁 implementation-planner/
-        │   └── 📄 SKILL.md               ← 📝 Planification
         ├── 📁 code-implementer/
         │   └── 📄 SKILL.md               ← 💻 Implémentation
         ├── 📁 test-runner/
@@ -104,8 +100,6 @@ Tu dois voir :
 └── skills/
     ├── pm-discovery/
     ├── github-issue-reader/
-    ├── codebase-explainer/
-    ├── implementation-planner/
     ├── code-implementer/
     ├── test-runner/
     └── code-reviewer/
@@ -182,13 +176,13 @@ claude
 # Exemples :
 
 > Analyse-moi le codebase pour comprendre l'architecture
-# → Déclenche codebase-explainer
+# → Agent Explore (natif)
 
 > Fais une code review de mes dernières modifications
 # → Déclenche code-reviewer
 
 > Aide-moi à planifier l'implémentation de cette feature
-# → Déclenche implementation-planner
+# → Plan Mode (natif)
 ```
 
 ---
@@ -273,7 +267,7 @@ claude
 - [ ] Given X, when Y, then Z
 ```
 
-#### 📋 EXPLAIN (github-issue-reader + codebase-explainer)
+#### 📋 EXPLORE (github-issue-reader + Agent Explore)
 
 **Objectif** : Comprendre le contexte avant de coder.
 
@@ -284,7 +278,7 @@ claude
 4. Identifie les fichiers à modifier
 5. Note les patterns existants à respecter
 
-#### 📝 PLAN (implementation-planner)
+#### 📝 PLAN (Plan Mode natif)
 
 **Objectif** : Créer un plan d'implémentation validé.
 
@@ -432,6 +426,6 @@ Dis-le à Claude :
 ## Changelog
 
 - **v1.0.0** - Version initiale
-  - 7 skills : pm-discovery, github-issue-reader, codebase-explainer, implementation-planner, code-implementer, test-runner, code-reviewer
+  - 5 skills : pm-discovery, github-issue-reader, code-implementer, test-runner, code-reviewer
   - 2 commands : /discovery, /feature
   - Documentation complète

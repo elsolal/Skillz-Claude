@@ -1,144 +1,124 @@
 ---
-description: Lance le workflow EPCT+R complet pour implémenter une feature à partir d'une issue GitHub.
+description: Lance le workflow multi-agent pour implémenter une feature. Explore → Plan → Code+Tests parallèles → Review ×3 parallèle → Commit+PR.
 ---
 
-# 🚀 Feature Implementation: $ARGUMENTS
+# Feature Implementation: $ARGUMENTS
 
-## Workflow EPCT+R
+## Workflow Multi-Agent
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  📋 EXPLAIN  →  📝 PLAN  →  💻 CODE  →  🧪 TEST  →  🔍 REVIEW   │
-│       ↓            ↓           ↓           ↓         ↓×3       │
-│    [STOP]       [STOP]      [STOP]      [STOP]     [STOP]      │
-│   Validation   Validation  Validation  Validation  Validation  │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│  EXPLORE       PLAN         IMPLEMENT          REVIEW        FINALIZE   │
+│  (natif)     (natif)      (2 agents //)     (3 agents //)              │
+│                                                                         │
+│  Agent    →  Plan Mode  →  ┌─ Code Agent  →  ┌─ Correctness  → Commit  │
+│  Explore     + Tasks       └─ Test Agent     ├─ Readability     + PR   │
+│                                               └─ Performance            │
+│                                                                         │
+│  [STOP]      [STOP]         [STOP]             [STOP]        [STOP]    │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Task System (tracking automatique)
+---
 
-Si la feature a **2+ étapes**, des Tasks sont créées automatiquement pour :
-- Visualiser la progression en temps réel
-- Permettre la reprise en cas d'interruption
-- Documenter le travail effectué
+## Phase 1: EXPLORE
 
-Utiliser `TaskList` à tout moment pour voir l'état des Tasks.
+Utiliser **Agent Explore** (natif) pour comprendre le codebase :
+
+1. Lancer un agent `subagent_type: Explore` avec comme prompt :
+   - "Analyse le codebase pour comprendre comment implémenter **$ARGUMENTS**. Identifie : architecture, fichiers impactés, patterns existants, dépendances, risques."
+2. Récupérer et lire l'issue GitHub si `$ARGUMENTS` contient un numéro d'issue
+3. Synthétiser : requirements, fichiers à modifier, patterns à suivre
+
+**⏸️ CHECKPOINT 1** — Présenter la synthèse. Validation avant de planifier.
 
 ---
 
-## Phase 1: EXPLAIN 📋
+## Phase 2: PLAN
 
-### 1.1 Lecture de l'issue
-Récupérer et analyser: **$ARGUMENTS**
+Utiliser **Plan Mode** (natif) :
 
-Extraire:
-- Requirements et critères d'acceptance
-- Contexte et dépendances
-- Questions ouvertes
+1. Entrer en Plan Mode (`EnterPlanMode`)
+2. Créer un plan d'implémentation avec étapes atomiques
+3. Si **2+ étapes** → créer des Tasks (`TaskCreate`) pour tracking
+4. Faire valider le plan
 
-### 1.2 Analyse du codebase
-- Architecture existante
-- Fichiers impactés
-- Patterns à suivre
-
-**⏸️ CHECKPOINT 1** - Validation avant de planifier.
+**⏸️ CHECKPOINT 2** — Validation du plan avant implémentation.
 
 ---
 
-## Phase 2: PLAN 📝
+## Phase 3: IMPLEMENT (2 agents parallèles)
 
-### 2.1 Plan d'implémentation
-- Décomposition en étapes atomiques
-- Ordre des tâches
-- Risques identifiés
+Lancer **2 agents en parallèle** dans un seul message :
 
-### 2.2 Critères de validation
-- Comment vérifier chaque étape ?
-- Quels tests écrire ?
-
-**⏸️ CHECKPOINT 2** - Validation du plan avant implémentation.
-
----
-
-## Phase 3: CODE 💻
-
-### Pour chaque étape du plan :
-1. Implémenter
-2. Vérifier lint/types
-3. Montrer le diff
-4. Obtenir validation
-
-**⏸️ CHECKPOINT 3** - Validation à chaque étape.
-
----
-
-## Phase 4: TEST 🧪
-
-### 4.1 Écrire les tests
-- Tests unitaires
-- Tests d'intégration
-- Edge cases
-
-### 4.2 Exécuter
-- Tous les tests doivent passer
-- Coverage acceptable
-
-**⏸️ CHECKPOINT 4** - Validation des tests.
-
----
-
-## Phase 5: REVIEW 🔍 (×3)
-
-### Pass 1: Correctness
-Logique correcte ? Bugs ? Sécurité ?
-→ Corrections → Validation
-
-### Pass 2: Readability
-Code lisible ? Maintenable ? DRY ?
-→ Améliorations → Validation
-
-### Pass 3: Performance
-Optimal ? Memory leaks ? Scale ?
-→ Optimisations → Validation finale
-
----
-
-## Checklist globale
-
-```markdown
-## Feature: $ARGUMENTS
-
-### EXPLAIN
-- [ ] Issue comprise
-- [ ] Codebase analysé
-- [ ] ✅ Validé
-
-### PLAN
-- [ ] Plan créé
-- [ ] Tasks créées (si 2+ étapes)
-- [ ] ✅ Validé
-
-### CODE
-- [ ] Étapes implémentées
-- [ ] Tasks mises à jour (completed)
-- [ ] ✅ Validé
-
-### TEST
-- [ ] Tests écrits et passent
-- [ ] ✅ Validé
-
-### REVIEW
-- [ ] Pass 1: Correctness ✅
-- [ ] Pass 2: Readability ✅
-- [ ] Pass 3: Performance ✅
-
-### 🎉 COMPLETE
+### Agent 1 : Code
 ```
+Agent(subagent_type: "general-purpose", mode: "auto")
+Prompt: "Implémente le plan validé. Respecte les conventions du projet.
+Vérifie lint + types après chaque modification.
+Knowledge refs: .claude/knowledge/testing/error-handling.md, feature-flags.md"
+```
+
+### Agent 2 : Tests
+```
+Agent(subagent_type: "general-purpose", mode: "auto")
+Prompt: "Écris les tests pour la feature. Priorités P0-P3, risk-based.
+Knowledge refs: .claude/knowledge/testing/test-levels-framework.md,
+test-priorities-matrix.md, test-quality.md, data-factories.md,
+fixture-architecture.md, network-first.md, component-tdd.md,
+test-healing-patterns.md, selector-resilience.md"
+```
+
+> **Note :** Si la feature est simple (1 étape), les 2 agents peuvent être fusionnés en un seul.
+
+**⏸️ CHECKPOINT 3** — Vérifier que code + tests passent. Validation.
+
+---
+
+## Phase 4: REVIEW (3 agents parallèles)
+
+Lancer **3 agents review en parallèle** dans un seul message :
+
+### Agent Correctness
+```
+Agent(subagent_type: "general-purpose")
+Prompt: "Review Pass 1 - CORRECTNESS. Vérifie : logique métier, edge cases, bugs,
+types, failles sécurité. Classifie : 🔴 Critical, 🟡 Medium, 🟢 Minor.
+Knowledge: .claude/knowledge/testing/error-handling.md, risk-governance.md,
+probability-impact.md"
+```
+
+### Agent Readability
+```
+Agent(subagent_type: "general-purpose")
+Prompt: "Review Pass 2 - READABILITY. Vérifie : nommage, taille des fonctions,
+commentaires utiles, structure logique, DRY, abstractions.
+Knowledge: .claude/knowledge/testing/test-quality.md, nfr-criteria.md"
+```
+
+### Agent Performance
+```
+Agent(subagent_type: "general-purpose")
+Prompt: "Review Pass 3 - PERFORMANCE. Vérifie : O(n²) évitables, re-renders,
+queries optimisées, memory leaks, lazy loading, caching.
+Knowledge: .claude/knowledge/testing/nfr-criteria.md"
+```
+
+Synthétiser les 3 rapports. Corriger les issues 🔴 Critical.
+
+**⏸️ CHECKPOINT 4** — Présenter le résumé review. Validation.
+
+---
+
+## Phase 5: FINALIZE
+
+1. Vérifier que tous les tests passent après corrections review
+2. Proposer : **[C] Commit** | **[P] Commit + PR** | **[R] Réviser encore**
 
 ---
 
 ## Démarrage
 
-Commençons par **Phase 1: EXPLAIN**.
-
 Issue à traiter : **$ARGUMENTS**
+
+Je commence par **Phase 1: EXPLORE**.

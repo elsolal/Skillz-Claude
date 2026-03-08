@@ -7,7 +7,7 @@
 
 ## Quick Reference
 
-### Available Skills (20)
+### Available Skills (21)
 
 | Skill | Purpose |
 |-------|---------|
@@ -19,14 +19,15 @@
 | `ui-designer` | UI design (tokens, components, Figma import) |
 | `api-designer` | API design (OpenAPI) |
 | `database-designer` | Database schema (ERD) |
-| `figma-setup` | Configure Figma Code Connect (NEW v3.8) |
-| `figma-to-code` | Generate code from Figma designs (NEW v3.8) |
+| `figma-setup` | Configure Figma Code Connect |
+| `figma-to-code` | Generate code from Figma designs |
+| `figma-designer` | Create designs in Figma (NEW v4.0) |
+| `figma-design-system` | Design system management (NEW v4.0) |
+| `figma-design-code-sync` | Bidirectional design-code sync (NEW v4.0) |
 | `github-issue-reader` | Parse GitHub issues |
-| `codebase-explainer` | Analyze codebase |
-| `implementation-planner` | Plan implementation |
-| `code-implementer` | Write code |
-| `test-runner` | Run tests |
-| `code-reviewer` | Review code (3 passes) |
+| `code-implementer` | Write code (multi-agent worker) |
+| `test-runner` | Run tests (multi-agent worker) |
+| `code-reviewer` | Review code (3 passes, parallel-ready) |
 | `security-auditor` | Security audit (OWASP) |
 | `performance-auditor` | Performance audit |
 | `supabase-security` | Supabase security audit |
@@ -39,9 +40,9 @@
 Brainstorm → PRD → Architecture → Stories → GitHub Issues
 ```
 
-**Development** (Feature):
+**Development** (Feature) — Multi-Agent v4.0:
 ```
-Explain → Plan → Code → Test → Review ×3
+Explore (native) → Plan (native) → Code+Tests (2 agents //) → Review ×3 (3 agents //)
 ```
 
 ### Key Principles
@@ -56,23 +57,9 @@ Explain → Plan → Code → Test → Review ×3
 
 Skills are in `./skills/` (symlinked to `.claude/skills/`).
 
-Each skill has a `SKILL.md` file with:
-- Activation checklist
-- Process steps
-- Output template
-- Validation criteria
-
 ### Accessing Knowledge
 
 Knowledge files are in `./knowledge/` (symlinked to `.claude/knowledge/`).
-
-Categories:
-- `testing/` - 32 files (test patterns, fixtures, etc.)
-- `workflows/` - 10 files (templates)
-- `brainstorming/` - 1 file (61 techniques)
-- `multi-mind/` - 2 files (agent personalities)
-- `supabase-security/` - 7 files (audit, RLS, remediation)
-- `figma/` - 3 files (Code Connect, MCP tools, tokens mapping) (NEW v3.8)
 
 ---
 

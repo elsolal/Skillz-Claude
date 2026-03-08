@@ -24,7 +24,7 @@
 >
 > - **Git Hooks** - pre-commit, commit-msg, conventional commits
 > - **DevContainer** - Docker dev environment prêt à l'emploi
-> - **20 skills** - Du brainstorm au déploiement
+> - **21 skills** - Du brainstorm au déploiement
 >
 > **🎨 Design** _(NEW v3.8)_
 >
@@ -39,32 +39,44 @@
 
 ## Installation
 
-### Installation en une ligne
+### Mac / Linux
 
 ```bash
+# Installation en une ligne
 curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- .
-```
 
-### Mise à jour
-
-```bash
-# Met à jour skills, commands, hooks, knowledge, examples
-# Préserve tes customisations: CLAUDE.md, settings.json, mcp.json
+# Mise à jour (préserve CLAUDE.md, settings.json, mcp.json)
 curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- . --update
 ```
 
-### Installation manuelle
+### Windows (PowerShell)
 
-```bash
+```powershell
 # Cloner le repo
 git clone https://github.com/elsolal/Skillz-Claude.git
 
-# Installer dans ton projet
+# Copier dans ton projet
+Copy-Item -Recurse -Force Skillz-Claude\.claude\ .\.claude\
+Copy-Item -Recurse -Force Skillz-Claude\.agents\ .\.agents\
+Copy-Item -Recurse -Force Skillz-Claude\.codex\ .\.codex\
+Copy-Item -Recurse -Force Skillz-Claude\.gemini\ .\.gemini\
+Copy-Item -Recurse -Force Skillz-Claude\.opencode\ .\.opencode\
+
+# Créer les dossiers docs
+New-Item -ItemType Directory -Force -Path docs\planning\brainstorms, docs\planning\ux, docs\planning\prd, docs\planning\ui, docs\planning\architecture, docs\stories, docs\ralph-logs, docs\debates, docs\security
+
+# Nettoyage
+Remove-Item -Recurse -Force Skillz-Claude
+```
+
+> **Note Windows :** Sur Mac/Linux, les dossiers multi-agent (`.agents/`, `.codex/`, etc.) utilisent des **symlinks** vers `.claude/` — une seule source de vérité, les mises à jour se propagent automatiquement. Sur Windows, ce sont des **copies** (les symlinks nécessitent le [mode développeur](https://learn.microsoft.com/fr-fr/windows/apps/get-started/enable-your-device-for-development)). En cas de mise à jour, relancez les commandes `Copy-Item` ci-dessus.
+
+### Installation manuelle (Mac / Linux)
+
+```bash
+git clone https://github.com/elsolal/Skillz-Claude.git
 cd Skillz-Claude
 ./install.sh /chemin/vers/ton-projet
-
-# Ou mettre à jour
-./install.sh /chemin/vers/ton-projet --update
 ```
 
 ---
@@ -73,10 +85,13 @@ cd Skillz-Claude
 
 ### 1. Installer dans ton projet
 
+**Mac / Linux :**
 ```bash
 cd mon-projet
 curl -fsSL https://raw.githubusercontent.com/elsolal/Skillz-Claude/main/install.sh | bash -s -- .
 ```
+
+**Windows :** voir la [section Installation](#installation) ci-dessus.
 
 ### 2. Lancer Claude Code
 
@@ -157,16 +172,17 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 │  │ journeys │    │components│                                              │
 │  └──────────┘    └──────────┘                                              │
 │                                                                             │
-│  DÉVELOPPEMENT                                                              │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────┐  │
-│  │   🔍     │    │   📝     │    │   💻     │    │   🧪     │    │  🔄  │  │
-│  │ Explain  │ →  │  Plan    │ →  │  Code    │ →  │  Test    │ →  │Review│  │
-│  │          │    │          │    │+Lint/Type│    │ATDD/Std  │    │  ×3  │  │
-│  └──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────┘  │
+│  DÉVELOPPEMENT (Multi-Agent v4.0)                                           │
+│  ┌──────────┐    ┌──────────┐    ┌──────────────┐  ┌──────────────┐        │
+│  │  EXPLORE │    │   PLAN   │    │  IMPLEMENT   │  │   REVIEW     │        │
+│  │  Agent   │ →  │  Plan    │ →  │ ┌─ Code //  │→ │ ┌─ Correct  │→ DONE  │
+│  │  Explore │    │  Mode    │    │ └─ Tests //  │  │ ├─ Read     │        │
+│  │ (natif)  │    │ (natif)  │    │ (2 agents)   │  │ └─ Perf     │        │
+│  └──────────┘    └──────────┘    └──────────────┘  └──────────────┘        │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  MODE MANUEL: ⏸️ Validation humaine à chaque étape                          │
-│  MODE RALPH:  🔄 Autonome jusqu'à completion promise / max iter / timeout   │
+│  MODE MANUEL: ⏸️ Validation humaine à chaque phase                          │
+│  MODE RALPH:  🔄 Autonome avec agents parallèles                            │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -219,7 +235,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Skills (20)
+## Skills (21)
 
 ### Phase Planning
 
@@ -230,31 +246,32 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `architect`         | Architecture technique | Stack, structure, data model, APIs, ADRs                                                                        |
 | `pm-stories`        | Epics + Stories        | INVEST, Given/When/Then, **Readiness Check /15**                                                                |
 | `api-designer`      | Design d'API           | **OpenAPI 3.1**, REST/GraphQL, versioning, rate limiting                                                        |
-| `database-designer` | Design de BDD (NEW)    | **ERD**, migrations, indexes, Prisma/Drizzle                                                                    |
+| `database-designer` | Design de BDD          | **ERD**, migrations, indexes, Prisma/Drizzle                                                                    |
 
 ### Phase Design (optionnelle, auto-triggered)
 
-| Skill            | Rôle                         | Fonctionnalités clés                                                             |
-| ---------------- | ---------------------------- | -------------------------------------------------------------------------------- |
-| `ux-designer`    | Expérience utilisateur       | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen           |
-| `ui-designer`    | Design system                | **Tokens**, composants UI, **import Figma** (NEW v3.8)                           |
-| `figma-setup`    | Config Code Connect (NEW)    | Installation, **mappings .figma.tsx**, publication                               |
-| `figma-to-code`  | Génération code (NEW)        | URL Figma → code avec **composants mappés**, tokens CSS                          |
+| Skill                    | Rôle                              | Fonctionnalités clés                                                     |
+| ------------------------ | --------------------------------- | ------------------------------------------------------------------------ |
+| `ux-designer`            | Expérience utilisateur            | Personas, **user journeys**, wireframes textuels, heuristiques Nielsen   |
+| `ui-designer`            | Design system                     | **Tokens**, composants UI, **import Figma**                              |
+| `figma-setup`            | Config Code Connect               | Installation, **mappings .figma.tsx**, publication                        |
+| `figma-to-code`          | Génération code                   | URL Figma → code avec **composants mappés**, tokens CSS                  |
+| `figma-designer`         | Design dans Figma (NEW v4.0)      | Crée des designs directement dans Figma via MCP Console                  |
+| `figma-design-system`    | Gestion DS (NEW v4.0)             | Tokens, audit, code→Figma, détection drift                              |
+| `figma-design-code-sync` | Sync design-code (NEW v4.0)       | Sync bidirectionnelle composants, prop mappings                          |
 
 ### Phase Développement
 
-| Skill                    | Rôle                 | Fonctionnalités clés                                              |
-| ------------------------ | -------------------- | ----------------------------------------------------------------- |
-| `github-issue-reader`    | Lecture d'issues     | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), G/W/T      |
-| `codebase-explainer`     | Analyse du code      | **Impact mapping**, patterns, flux, risques                       |
-| `implementation-planner` | Planification        | **Complexité S/M/L**, étapes atomiques, **TaskCreate auto** (NEW) |
-| `code-implementer`       | Implémentation       | **Lint/types obligatoires**, **TaskUpdate auto** (NEW)            |
-| `test-runner`            | Tests                | Mode **ATDD** (tests first), priorités P0-P3, **hook coverage**   |
-| `code-reviewer`          | Review (3 passes)    | Correctness → Readability → Performance                           |
-| `security-auditor`       | Audit sécurité       | **OWASP Top 10**, dépendances, secrets, scoring                   |
-| `performance-auditor`    | Audit performance    | **Core Web Vitals**, bundle size, Lighthouse                      |
-| `supabase-security`      | Audit Supabase (NEW) | **RLS**, buckets, auth, keys exposées, **CVSS**                   |
-| `multi-mind`             | Débat multi-agents   | **6 IA**, 5 rounds itératifs, consensus/divergences               |
+| Skill                 | Rôle                 | Fonctionnalités clés                                              |
+| --------------------- | -------------------- | ----------------------------------------------------------------- |
+| `github-issue-reader` | Lecture d'issues     | Catégorisation, **ambiguïtés classifiées** (🔴/🟡/🟢), G/W/T      |
+| `code-implementer`    | Implémentation       | **Lint/types obligatoires**, agent worker multi-agent              |
+| `test-runner`         | Tests                | Priorités **P0-P3**, risk-based, **9 knowledge refs**             |
+| `code-reviewer`       | Review (3 passes)    | Correctness → Readability → Performance, **parallel-ready**       |
+| `security-auditor`    | Audit sécurité       | **OWASP Top 10**, dépendances, secrets, scoring                   |
+| `performance-auditor` | Audit performance    | **Core Web Vitals**, bundle size, Lighthouse                      |
+| `supabase-security`   | Audit Supabase       | **RLS**, buckets, auth, keys exposées, **CVSS**                   |
+| `multi-mind`          | Débat multi-agents   | **6 IA**, 5 rounds itératifs, consensus/divergences               |
 
 ---
 
@@ -614,8 +631,8 @@ Le Task System est maintenant **automatiquement utilisé** dans le workflow `/fe
 
 **Skills mis à jour :**
 
-- `implementation-planner` : Crée les Tasks si 2+ étapes
-- `code-implementer` : Met à jour les Tasks automatiquement
+- `/feature` : Orchestrateur multi-agent, crée les Tasks si 2+ étapes
+- `code-implementer` : Agent worker avec lint/types obligatoires
 
 ---
 
@@ -868,20 +885,18 @@ Reprendre une session RALPH interrompue :
 
 Tous les skills chargent automatiquement le contexte pertinent au démarrage :
 
-| Skill                    | Contexte auto-chargé                               |
-| ------------------------ | -------------------------------------------------- |
-| `github-issue-reader`    | Issue GitHub, PRs liées                            |
-| `codebase-explainer`     | Structure projet, package.json, CLAUDE.md          |
-| `idea-brainstorm`        | Brainstorms existants, PRDs                        |
-| `implementation-planner` | PRD, architecture, stories, analyse codebase       |
-| `test-runner`            | Config test, tests existants, scripts npm          |
-| `code-implementer`       | CLAUDE.md, ESLint, tsconfig, plan actif            |
-| `pm-prd`                 | Brainstorms, PRDs existants, UX design             |
-| `architect`              | PRD actif, stack existant, structure projet        |
-| `pm-stories`             | PRD, architecture, stories existantes, GitHub repo |
-| `code-reviewer`          | Fichiers modifiés, diff git, erreurs lint          |
-| `ux-designer`            | PRD, brainstorm, UX existant                       |
-| `ui-designer`            | UX design, tokens existants, framework détecté     |
+| Skill                 | Contexte auto-chargé                               |
+| --------------------- | -------------------------------------------------- |
+| `github-issue-reader` | Issue GitHub, PRs liées                            |
+| `idea-brainstorm`     | Brainstorms existants, PRDs                        |
+| `test-runner`         | Config test, tests existants, scripts npm          |
+| `code-implementer`    | CLAUDE.md, ESLint, tsconfig                        |
+| `pm-prd`              | Brainstorms, PRDs existants, UX design             |
+| `architect`           | PRD actif, stack existant, structure projet        |
+| `pm-stories`          | PRD, architecture, stories existantes, GitHub repo |
+| `code-reviewer`       | Fichiers modifiés, diff git, erreurs lint          |
+| `ux-designer`         | PRD, brainstorm, UX existant                       |
+| `ui-designer`         | UX design, tokens existants, framework détecté     |
 
 ### Hooks automatiques
 
@@ -904,7 +919,6 @@ Chaque skill affiche un hint pour guider l'utilisateur :
 ```bash
 /idea-brainstorm <idea-description>
 /github-issue-reader <issue-number-or-url>
-/implementation-planner <prd-or-issue-reference>
 /test-runner <file-or-directory-to-test>
 /code-reviewer <file-or-pr-number>
 ```
@@ -1063,7 +1077,7 @@ knowledge:
 │       ├── code-connect-guide.md
 │       ├── mcp-tools-reference.md
 │       └── tokens-mapping.md
-└── skills/                          # 20 skills
+└── skills/                          # 21 skills
     ├── idea-brainstorm/
     ├── pm-prd/
     ├── ux-designer/
@@ -1071,19 +1085,20 @@ knowledge:
     ├── architect/
     ├── pm-stories/
     ├── github-issue-reader/
-    ├── codebase-explainer/
-    ├── implementation-planner/
-    ├── code-implementer/
-    ├── test-runner/
-    ├── code-reviewer/
+    ├── code-implementer/            # Slimmed v4.0 (agent worker)
+    ├── test-runner/                 # Slimmed v4.0 (agent worker)
+    ├── code-reviewer/               # Restructured v4.0 (parallel-ready)
     ├── security-auditor/
     ├── api-designer/
     ├── database-designer/
     ├── performance-auditor/
-    ├── supabase-security/           # NEW v3.7
+    ├── supabase-security/
     ├── multi-mind/
-    ├── figma-setup/                 # NEW v3.8
-    └── figma-to-code/               # NEW v3.8
+    ├── figma-setup/
+    ├── figma-to-code/
+    ├── figma-designer/              # NEW v4.0
+    ├── figma-design-system/         # NEW v4.0
+    └── figma-design-code-sync/      # NEW v4.0
 
 docs/                                # Output documents
 ├── planning/
@@ -1190,19 +1205,33 @@ docs/                                # Output documents
 
 ### Développement
 
-| Checkpoint | Skill                    | Gate                  |
-| ---------- | ------------------------ | --------------------- |
-| Explain    | `codebase-explainer`     | Architecture comprise |
-| Plan       | `implementation-planner` | Étapes approuvées     |
-| Code       | `code-implementer`       | **Lint ✅ Types ✅**  |
-| Test       | `test-runner`            | **100% pass, 3 runs** |
-| Review     | `code-reviewer`          | **3 passes OK**       |
+| Checkpoint | Outil                     | Gate                  |
+| ---------- | ------------------------- | --------------------- |
+| Explore    | Agent Explore (natif)     | Architecture comprise |
+| Plan       | Plan Mode (natif)         | Étapes approuvées     |
+| Code+Tests | 2 agents parallèles      | **Lint ✅ Types ✅**  |
+| Review     | 3 agents parallèles      | **3 passes OK**       |
 
 ---
 
 ## Changelog
 
-### v3.8.0 (Current)
+### v4.0.0 (Current)
+
+**Multi-Agent Architecture**
+
+- `/feature` réécrit : orchestrateur multi-agent (Explore → Plan → Code+Tests // → Review ×3 //)
+- `/auto-feature` réécrit : même workflow en mode RALPH autonome
+- `/pr-review` réécrit : 3 agents review en parallèle
+- `code-implementer` slimmed (336→100 lignes) : agent worker sans orchestration
+- `test-runner` slimmed (376→170 lignes) : agent worker, 9 knowledge refs préservés
+- `code-reviewer` restructuré (287→150 lignes) : 3 passes auto-contenues, parallel-ready
+- Suppression `codebase-explainer` (remplacé par Agent Explore natif)
+- Suppression `implementation-planner` (remplacé par Plan Mode natif)
+- 3 nouveaux skills Figma : `figma-designer`, `figma-design-system`, `figma-design-code-sync`
+- Skill count : 20 → 21 (−2 supprimés, +3 Figma ajoutés)
+
+### v3.8.0
 
 **Figma Integration**
 

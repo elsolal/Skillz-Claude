@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v3.8 Installer
+# D-EPCT+R Workflow v4.0 Installer
 # Install Claude Code skills + RALPH Mode + 54 Knowledge Files + Templates
-# 20 skills, 16 commands, 18 templates, 4 agent compatibility layers
+# 21 skills, 16 commands, 18 templates, 4 agent compatibility layers
 #
 # Usage:
 #   # Fresh install
@@ -56,12 +56,12 @@ TARGET_DOCS="$TARGET_DIR/docs"
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
 if [ "$UPDATE_MODE" = true ]; then
-echo "║             D-EPCT+R Workflow v3.8 Updater                            ║"
+echo "║             D-EPCT+R Workflow v4.0 Updater                            ║"
 else
-echo "║             D-EPCT+R Workflow v3.8 Installer                          ║"
+echo "║             D-EPCT+R Workflow v4.0 Installer                          ║"
 fi
 echo "║                                                                       ║"
-echo "║   SKILLS:       20 (Planning, Design, Dev, Security, Figma)            ║"
+echo "║   SKILLS:       21 (Planning, Design, Dev, Security, Figma)            ║"
 echo "║   COMMANDS:     16 (Manuel + RALPH + Utilitaires)                     ║"
 echo "║   TEMPLATES:    18 (CI/CD, Git Hooks, DevContainer, GitHub)           ║"
 echo "║   KNOWLEDGE:    54 fichiers (testing, workflows, security, figma)     ║"
@@ -147,7 +147,7 @@ else
 fi
 
 if [ "$UPDATE_MODE" != true ] && [ "$MERGE_MODE" != true ]; then
-    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v3.8 to $TARGET_DIR...${NC}"
+    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v4.0 to $TARGET_DIR...${NC}"
 fi
 echo ""
 
@@ -268,7 +268,7 @@ if [ -d "$SOURCE_CLAUDE/knowledge" ]; then
 fi
 
 # Copy skills
-echo -e "${GREEN}📁 Installing skills (20)...${NC}"
+echo -e "${GREEN}📁 Installing skills (21)...${NC}"
 for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
     if [ -d "$skill_dir" ]; then
         skill_name=$(basename "$skill_dir")
@@ -599,7 +599,7 @@ echo -e "║                       ✅ Update Complete!                         
 echo -e "╚═══════════════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${CYAN}Updated components:${NC}"
-echo -e "   ${CYAN}🔄 Skills (20)${NC}"
+echo -e "   ${CYAN}🔄 Skills (21)${NC}"
 echo -e "   ${CYAN}🔄 Commands (16)${NC}"
 echo -e "   ${CYAN}🔄 Hooks${NC}"
 echo -e "   ${CYAN}🔄 Knowledge Base (54 files)${NC}"
@@ -644,13 +644,13 @@ echo "    .gemini/         Google Gemini CLI"
 echo "    .opencode/       OpenCode"
 echo "    → All symlinked to .claude/skills and .claude/knowledge"
 echo ""
-echo -e "${BLUE}  Skills (20):${NC}"
+echo -e "${BLUE}  Skills (21):${NC}"
 echo "    Planning:  idea-brainstorm, pm-prd, architect, pm-stories,"
 echo "               api-designer, database-designer"
 echo "    Design:    ux-designer, ui-designer (auto-triggered)"
-echo "    Figma:     figma-setup, figma-to-code (NEW v3.8)"
-echo "    Dev:       github-issue-reader, codebase-explainer,"
-echo "               implementation-planner, code-implementer,"
+echo "    Figma:     figma-setup, figma-to-code, figma-designer,"
+echo "               figma-design-system, figma-design-code-sync"
+echo "    Dev:       github-issue-reader, code-implementer,"
 echo "               test-runner, code-reviewer"
 echo "    Audit:     security-auditor, performance-auditor, supabase-security"
 echo "    Multi-IA:  multi-mind (6 IA debate system)"
@@ -695,7 +695,7 @@ if [ "$UPDATE_MODE" != true ]; then
 echo -e "${CYAN}Workflow:${NC}"
 echo ""
 echo "  Planning:  🧠 Brainstorm → 📋 PRD → 🏗️ Architecture → 📝 Stories"
-echo "  Dev:       🔍 Explain → 📝 Plan → 💻 Code → 🧪 Test → 🔄 Review ×3"
+echo "  Dev:       🔍 Explore → 📝 Plan → 💻 Code+Tests (//) → 🔄 Review ×3 (//)"
 echo ""
 echo -e "${CYAN}Documentation:${NC}"
 echo ""
