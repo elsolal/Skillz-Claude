@@ -25,7 +25,7 @@ tests/
 
 ```bash
 # Explain
-/feature #1
+/dev #1
 
 # Plan validé, puis Code
 # Lint ✅ Types ✅ à chaque étape

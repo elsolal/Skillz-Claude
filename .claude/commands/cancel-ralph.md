@@ -42,5 +42,5 @@ docs/ralph-logs/ralph-session-[SESSION_ID].md
 ## Reprendre le travail
 
 Tu peux maintenant :
-- Continuer manuellement avec `/feature`
-- Relancer en mode auto avec `/auto-loop`, `/auto-discovery` ou `/auto-feature`
+- Continuer manuellement avec `/dev`
+- Relancer en mode auto avec `/auto-loop`, `/auto-discovery` ou `/auto-dev`

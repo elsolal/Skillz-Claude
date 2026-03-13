@@ -34,7 +34,7 @@ Je vais analyser les logs RALPH pour reprendre là où on s'est arrêté.
 ### État récupéré
 | Paramètre | Valeur |
 |-----------|--------|
-| Mode | [auto-loop / auto-discovery / auto-feature] |
+| Mode | [auto-loop / auto-discovery / auto-dev] |
 | Prompt original | [Récupéré du log] |
 | Dernière itération | [N] |
 | Max iterations | [M] |
@@ -158,7 +158,7 @@ Selon le mode RALPH :
 - [ ] Issues GitHub créées ?
 ```
 
-### Si auto-feature
+### Si auto-dev
 ```markdown
 ### Contexte Feature récupéré
 - [ ] Issue lue ?
@@ -184,7 +184,7 @@ Selon le mode RALPH :
 ```markdown
 ## 🔄 Session RALPH reprise
 
-**Mode:** [auto-loop / auto-discovery / auto-feature]
+**Mode:** [auto-loop / auto-discovery / auto-dev]
 **Session originale:** [ID]
 **Nouvelle session:** ${CLAUDE_SESSION_ID}
 

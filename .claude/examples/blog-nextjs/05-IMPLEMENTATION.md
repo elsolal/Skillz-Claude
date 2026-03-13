@@ -13,8 +13,8 @@
 # 4. Stories (Readiness Check 15/15)
 
 # Phase Développement
-/feature #1  # Story 1.1 - Setup
-/feature #2  # Story 1.2 - Liste articles
+/dev #1  # Story 1.1 - Setup
+/dev #2  # Story 1.2 - Liste articles
 # ... etc
 ```
 

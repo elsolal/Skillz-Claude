@@ -24,7 +24,7 @@
 >
 > - **Git Hooks** - pre-commit, commit-msg, conventional commits
 > - **DevContainer** - Docker dev environment prêt à l'emploi
-> - **21 skills** - Du brainstorm au déploiement
+> - **21 skills + 20 commandes** - Du brainstorm au déploiement
 >
 > **🎨 Design** _(NEW v3.8)_
 >
@@ -129,7 +129,7 @@ claude
 **Option B : Implémenter une feature (issue existante)**
 
 ```
-/feature #123
+/dev #123
 ```
 
 **Option C : Mode autonome RALPH**
@@ -193,7 +193,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 │  DÉVELOPPEMENT (Multi-Agent v4.0)                                           │
 │  ┌──────────┐    ┌──────────┐    ┌──────────────┐  ┌──────────────┐        │
 │  │  EXPLORE │    │   PLAN   │    │  IMPLEMENT   │  │   REVIEW     │        │
-│  │  Agent   │ →  │  Plan    │ →  │ ┌─ Code //  │→ │ ┌─ Correct  │→ DONE  │
+│  │  Agent   │ →  │  Plan    │ →  │ ┌─ Code //  │→ │ ┌─ Correct  │→ SHIP  │
 │  │  Explore │    │  Mode    │    │ └─ Tests //  │  │ ├─ Read     │        │
 │  │ (natif)  │    │ (natif)  │    │ (2 agents)   │  │ └─ Perf     │        │
 │  └──────────┘    └──────────┘    └──────────────┘  └──────────────┘        │
@@ -206,13 +206,14 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 
 ---
 
-## Commandes (16)
+## Commandes (20)
 
 ### Mode Manuel (avec validation)
 
 ```bash
 /discovery              # Planning complet avec validation à chaque étape
-/feature [issue]        # Implémentation avec validation à chaque étape
+/dev [issue]            # Implémentation multi-agent avec validation
+/ship [branch]          # Ship: merge → tests → review → changelog → PR (NEW v5.0)
 ```
 
 ### Mode RALPH (autonome)
@@ -220,9 +221,18 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 ```bash
 /auto-loop "prompt"     # Boucle générique sur une tâche
 /auto-discovery "idée"  # Planning complet en autonome
-/auto-feature #123      # Implémentation complète en autonome
+/auto-dev #123          # Implémentation complète en autonome
 /cancel-ralph           # Arrêter le mode RALPH
 /resume-ralph [session-id]  # Reprendre une session RALPH
+```
+
+### Ship & QA (NEW v5.0)
+
+```bash
+/ship [branch]          # Ship workflow automatisé (merge → tests → review → PR)
+/qa [url]               # QA testing systématique + health score (3 modes)
+/plan-review <doc>      # Review CEO/Founder — 3 modes (Expansion/Hold/Reduction)
+/retro [--since 7d]     # Rétrospective engineering (sessions, streaks, tendances)
 ```
 
 ### Utilitaires
@@ -235,10 +245,10 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 /docs [type]            # Génère documentation (readme|api|guide|all)
 /changelog [version]    # Génère CHANGELOG.md
 /metrics                # Dashboard métriques projet
-/init [template]        # Scaffolding projet (NEW v3.0)
-/supabase-security <url> # Audit sécurité Supabase complet (NEW v3.7)
-/figma-setup [url]       # Configure Code Connect (NEW v3.8)
-/figma-to-code <url>     # Génère code depuis Figma (NEW v3.8)
+/init [template]        # Scaffolding projet
+/supabase-security <url> # Audit sécurité Supabase complet
+/figma-setup [url]       # Configure Code Connect
+/figma-to-code <url>     # Génère code depuis Figma
 ```
 
 ### Configuration RALPH
@@ -247,7 +257,7 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | ----------------- | -------- | ------- | -------------------- |
 | `/auto-loop`      | 20       | 1h      | "DONE"               |
 | `/auto-discovery` | 30       | 1h      | "DISCOVERY COMPLETE" |
-| `/auto-feature`   | 50       | 2h      | "FEATURE COMPLETE"   |
+| `/auto-dev`       | 50       | 2h      | "DEV COMPLETE"       |
 
 **Options:** `--max N`, `--timeout Xh`, `--promise "TEXT"`, `--no-log`, `--verbose`
 
@@ -290,6 +300,55 @@ Voir le dossier [`.claude/examples/`](./.claude/examples/) avec 3 projets docume
 | `performance-auditor` | Audit performance    | **Core Web Vitals**, bundle size, Lighthouse                      |
 | `supabase-security`   | Audit Supabase       | **RLS**, buckets, auth, keys exposées, **CVSS**                   |
 | `multi-mind`          | Débat multi-agents   | **6 IA**, 5 rounds itératifs, consensus/divergences               |
+
+---
+
+## Fonctionnalités v5.0
+
+### Nouvelles commandes
+
+4 nouvelles commandes inspirées de [gstack](https://github.com/garrytan/gstack) (par Garry Tan, CEO Y Combinator) :
+
+| Commande        | Mode cognitif         | Fonctionnalités clés                                                    |
+| --------------- | --------------------- | ----------------------------------------------------------------------- |
+| `/ship`         | Release Engineer      | Merge main → tests → pre-landing review → changelog → bisectable commits → PR |
+| `/qa`           | QA Engineer           | Health score pondéré, 3 modes (full/quick/regression), screenshots     |
+| `/plan-review`  | CEO/Founder           | 3 modes (Expansion/Hold/Reduction), Error & Rescue Map, 10 sections    |
+| `/retro`        | Engineering Manager   | Sessions de travail, streaks, analyse per-author, tendances JSON       |
+
+### Renommage `/feature` → `/dev`
+
+La commande `/feature` a été renommée `/dev` (et `/auto-feature` → `/auto-dev`) pour éviter les conflits et mieux refléter le mode cognitif "développeur".
+
+### Review Checklist externalisée
+
+Le fichier `.claude/knowledge/review-checklist.md` centralise les critères de review en deux catégories :
+- **CRITICAL** — bloque le `/ship` si non-résolu
+- **INFORMATIONAL** — inclus dans le body de la PR
+
+### Workflow complet v5.0
+
+```
+/discovery → /dev → /ship
+     │          │       │
+     │          │       ├── merge main
+     │          │       ├── tests
+     │          │       ├── pre-landing review (checklist)
+     │          │       ├── changelog
+     │          │       ├── bisectable commits
+     │          │       └── PR
+     │          │
+     │          ├── EXPLORE (Agent Explore)
+     │          ├── PLAN (Plan Mode)
+     │          ├── IMPLEMENT (2 agents //)
+     │          ├── REVIEW (3 agents //)
+     │          └── SHIP
+     │
+     ├── Brainstorm
+     ├── PRD
+     ├── Architecture
+     └── Stories → GitHub Issues
+```
 
 ---
 
@@ -622,9 +681,9 @@ ln -sf ../.claude/knowledge .newtool/knowledge
 
 ## Fonctionnalités v3.3
 
-### Task System automatique dans /feature
+### Task System automatique dans /dev
 
-Le Task System est maintenant **automatiquement utilisé** dans le workflow `/feature` :
+Le Task System est maintenant **automatiquement utilisé** dans le workflow `/dev` :
 
 | Étapes        | Comportement                               |
 | ------------- | ------------------------------------------ |
@@ -634,7 +693,7 @@ Le Task System est maintenant **automatiquement utilisé** dans le workflow `/fe
 **Workflow :**
 
 ```
-/feature #123
+/dev #123
     │
     ├── PLAN → TaskCreate pour chaque étape (avec dépendances)
     │
@@ -649,7 +708,7 @@ Le Task System est maintenant **automatiquement utilisé** dans le workflow `/fe
 
 **Skills mis à jour :**
 
-- `/feature` : Orchestrateur multi-agent, crée les Tasks si 2+ étapes
+- `/dev` : Orchestrateur multi-agent, crée les Tasks si 2+ étapes
 - `code-implementer` : Agent worker avec lint/types obligatoires
 
 ---
@@ -1234,12 +1293,24 @@ docs/                                # Output documents
 
 ## Changelog
 
-### v4.0.0 (Current)
+### v5.0.0 (Current)
+
+**New Commands & Rename (inspired by gstack)**
+
+- `/feature` → `/dev` : renommé pour éviter conflits, meilleur nom
+- `/auto-feature` → `/auto-dev` : même renommage en RALPH
+- `/ship` : ship workflow automatisé (merge → tests → review → changelog → PR)
+- `/qa` : QA testing systématique avec health score (full/quick/regression)
+- `/plan-review` : review CEO/Founder en 3 modes (Expansion/Hold/Reduction)
+- `/retro` : rétrospective engineering (sessions, streaks, tendances)
+- Review checklist externalisée dans `.claude/knowledge/review-checklist.md`
+
+### v4.0.0
 
 **Multi-Agent Architecture**
 
-- `/feature` réécrit : orchestrateur multi-agent (Explore → Plan → Code+Tests // → Review ×3 //)
-- `/auto-feature` réécrit : même workflow en mode RALPH autonome
+- `/dev` (ex-`/feature`) : orchestrateur multi-agent (Explore → Plan → Code+Tests // → Review ×3 //)
+- `/auto-dev` (ex-`/auto-feature`) : même workflow en mode RALPH autonome
 - `/pr-review` réécrit : 3 agents review en parallèle
 - `code-implementer` slimmed (336→100 lignes) : agent worker sans orchestration
 - `test-runner` slimmed (376→170 lignes) : agent worker, 9 knowledge refs préservés
@@ -1335,7 +1406,7 @@ docs/                                # Output documents
 
 ### v3.3.0
 
-**Task System automatique dans /feature**
+**Task System automatique dans /dev**
 
 - `implementation-planner` crée automatiquement des Tasks si 2+ étapes
 - `code-implementer` met à jour les Tasks (in_progress → completed)

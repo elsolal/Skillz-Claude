@@ -320,18 +320,18 @@
 **Solutions:**
 1. **Augmenter le timeout** :
    ```
-   /auto-feature #123 --timeout 3h
+   /auto-dev #123 --timeout 3h
    ```
 
 2. **Découper la tâche** :
    ```
-   /auto-feature #123-part1 --max 20
-   /auto-feature #123-part2 --max 20
+   /auto-dev #123-part1 --max 20
+   /auto-dev #123-part2 --max 20
    ```
 
 3. **Passer en mode manuel** :
    ```
-   /feature #123
+   /dev #123
    # Valider manuellement chaque étape
    ```
 
@@ -369,7 +369,7 @@
 1. **Utiliser la commande exacte** :
    ```
    /discovery
-   /feature #123
+   /dev #123
    /auto-loop "prompt"
    ```
 

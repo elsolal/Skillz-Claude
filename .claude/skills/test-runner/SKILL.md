@@ -1,6 +1,6 @@
 ---
 name: test-runner
-description: Écrit et exécute les tests pour valider l'implémentation. Priorités P0-P3, risk-based. Utilisé comme agent worker depuis /feature ou en standalone.
+description: Écrit et exécute les tests pour valider l'implémentation. Priorités P0-P3, risk-based. Utilisé comme agent worker depuis /dev ou en standalone.
 model: opus
 context: fork
 allowed-tools:

@@ -84,7 +84,7 @@ Je vais t'accompagner dans la structuration de ton projet/feature.
 - [ ] Stories créées → Issues #YY, #ZZ
 - [ ] Liens partagés
 
-→ Prêt pour: /feature #XX
+→ Prêt pour: /dev #XX
 ```
 
 ---

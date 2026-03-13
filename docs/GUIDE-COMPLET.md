@@ -92,7 +92,7 @@ description: Effectue une revue de code en 3 passes (correctness, readability, p
 - Actions explicites de l'utilisateur
 - Raccourcis avec paramètres
 
-**Exemple :** `/feature #123` lance tout le workflow EPCT+R
+**Exemple :** `/dev #123` lance tout le workflow EPCT+R
 
 #### Subagents (Pour parallélisation)
 

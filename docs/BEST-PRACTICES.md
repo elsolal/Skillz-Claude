@@ -33,12 +33,12 @@ Pour les gros projets, utiliser plusieurs instances :
 Préférer plusieurs petites tâches à une grosse :
 ```bash
 # ❌ Éviter
-/auto-feature #big-feature --max 100
+/auto-dev #big-feature --max 100
 
 # ✅ Préférer
-/auto-feature #feature-part1 --max 30
-/auto-feature #feature-part2 --max 30
-/auto-feature #feature-part3 --max 30
+/auto-dev #feature-part1 --max 30
+/auto-dev #feature-part2 --max 30
+/auto-dev #feature-part3 --max 30
 ```
 
 ---

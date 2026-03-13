@@ -340,7 +340,7 @@ gh issue create --title "[STORY-001] Titre" --body "..." --label "story"
 ---
 
 **Prochaine étape ?**
-- [F] Lancer `/feature #YY` pour implémenter la première story
+- [F] Lancer `/dev #YY` pour implémenter la première story
 - [V] Voir les issues sur GitHub
 - [C] Créer les stories de l'Epic suivante
 ```
@@ -399,7 +399,7 @@ Après publication sur GitHub, proposer automatiquement :
 
 **Recommandation :**
 
-→ 🚀 **Lancer `/feature #YY` ?** (implémenter la première story P0)
+→ 🚀 **Lancer `/dev #YY` ?** (implémenter la première story P0)
 
 ---
 
@@ -412,6 +412,6 @@ Après publication sur GitHub, proposer automatiquement :
 
 ## Transitions
 
-- **Vers Feature** : "Lance `/feature #XX` pour implémenter"
+- **Vers Dev** : "Lance `/dev #XX` pour implémenter"
 - **Retour Architect** : "Besoin de clarifier l'architecture"
 - **Retour PRD** : "Besoin de préciser les requirements"

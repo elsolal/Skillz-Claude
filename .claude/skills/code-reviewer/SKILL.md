@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Revue de code en 3 passes (Correctness, Readability, Performance). Peut tourner en standalone (séquentiel) ou comme agent parallèle depuis /feature.
+description: Revue de code en 3 passes (Correctness, Readability, Performance). Peut tourner en standalone (séquentiel) ou comme agent parallèle depuis /dev.
 model: opus
 context: fork
 allowed-tools:
@@ -19,6 +19,8 @@ knowledge:
   patterns:
     - ../../knowledge/testing/error-handling.md
     - ../../knowledge/testing/feature-flags.md
+  checklist:
+    - ../../knowledge/review-checklist.md
 ---
 
 # Code Reviewer
@@ -26,7 +28,7 @@ knowledge:
 ## Mode d'utilisation
 
 - **Standalone** (`/code-reviewer`) : 3 passes séquentielles, corrections entre chaque passe
-- **Multi-agent** (depuis `/feature`) : chaque passe tourne en agent indépendant parallèle
+- **Multi-agent** (depuis `/dev`) : chaque passe tourne en agent indépendant parallèle
 
 ## Severity Classification
 

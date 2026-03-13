@@ -39,7 +39,7 @@ description: Fix rapide sans passer par tout le workflow EPCT+R. Pour les petits
 │     - Corrections de lint/types                                             │
 │                                                                             │
 │  ❌ Pas pour :                                                              │
-│     - Nouvelles features (utiliser /feature)                                │
+│     - Nouvelles features (utiliser /dev)                                    │
 │     - Refactoring important (utiliser /refactor)                            │
 │     - Changements architecturaux                                            │
 │                                                                             │
@@ -66,9 +66,9 @@ npm run lint && npm run typecheck && npm test
 
 ## Règles Quick Fix
 
-- ⛔ **Max 3 fichiers** - Si plus, utiliser `/feature`
-- ⛔ **Max 50 lignes modifiées** - Si plus, utiliser `/feature`
-- ⛔ **Pas de nouvelle dépendance** - Si besoin, utiliser `/feature`
+- ⛔ **Max 3 fichiers** - Si plus, utiliser `/dev`
+- ⛔ **Max 50 lignes modifiées** - Si plus, utiliser `/dev`
+- ⛔ **Pas de nouvelle dépendance** - Si besoin, utiliser `/dev`
 - ✅ **Toujours vérifier lint/types** après le fix
 - ✅ **Commit atomique** avec message clair
 

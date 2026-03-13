@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v4.0 Installer
+# D-EPCT+R Workflow v5.0 Installer
 # Install Claude Code skills + RALPH Mode + 54 Knowledge Files + Templates
-# 21 skills, 16 commands, 18 templates, 4 agent compatibility layers
+# 21 skills, 20 commands, 18 templates, 4 agent compatibility layers
 #
 # Usage:
 #   # Fresh install
@@ -56,13 +56,13 @@ TARGET_DOCS="$TARGET_DIR/docs"
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
 if [ "$UPDATE_MODE" = true ]; then
-echo "║             D-EPCT+R Workflow v4.0 Updater                            ║"
+echo "║             D-EPCT+R Workflow v5.0 Updater                            ║"
 else
-echo "║             D-EPCT+R Workflow v4.0 Installer                          ║"
+echo "║             D-EPCT+R Workflow v5.0 Installer                          ║"
 fi
 echo "║                                                                       ║"
 echo "║   SKILLS:       21 (Planning, Design, Dev, Security, Figma)            ║"
-echo "║   COMMANDS:     16 (Manuel + RALPH + Utilitaires)                     ║"
+echo "║   COMMANDS:     20 (Manuel + RALPH + Ship/QA/Retro)                   ║"
 echo "║   TEMPLATES:    18 (CI/CD, Git Hooks, DevContainer, GitHub)           ║"
 echo "║   KNOWLEDGE:    54 fichiers (testing, workflows, security, figma)     ║"
 echo "╚═══════════════════════════════════════════════════════════════════════╝"
@@ -301,7 +301,7 @@ for skill_dir in "$SOURCE_CLAUDE/skills"/*; do
 done
 
 # Copy commands
-echo -e "${GREEN}📁 Installing commands (16)...${NC}"
+echo -e "${GREEN}📁 Installing commands (20)...${NC}"
 for cmd_file in "$SOURCE_CLAUDE/commands"/*.md; do
     if [ -f "$cmd_file" ]; then
         cmd_name=$(basename "$cmd_file")
@@ -600,7 +600,7 @@ echo -e "╚══════════════════════�
 echo ""
 echo -e "${CYAN}Updated components:${NC}"
 echo -e "   ${CYAN}🔄 Skills (21)${NC}"
-echo -e "   ${CYAN}🔄 Commands (16)${NC}"
+echo -e "   ${CYAN}🔄 Commands (20)${NC}"
 echo -e "   ${CYAN}🔄 Hooks${NC}"
 echo -e "   ${CYAN}🔄 Knowledge Base (54 files)${NC}"
 echo -e "   ${CYAN}🔄 Templates (18 files)${NC}"
@@ -657,14 +657,21 @@ echo "    Multi-IA:  multi-mind (6 IA debate system)"
 echo ""
 echo -e "${BLUE}  Commands - Mode Manuel:${NC}"
 echo "    /discovery           Planning avec validation"
-echo "    /feature #123        Dev avec validation"
+echo "    /dev #123            Dev avec validation"
+echo "    /ship                Ship: merge → tests → review → PR"
 echo ""
 echo -e "${MAGENTA}  Commands - Mode RALPH (autonome):${NC}"
 echo "    /auto-loop \"prompt\"  Boucle générique"
 echo "    /auto-discovery      Planning autonome"
-echo "    /auto-feature #123   Dev autonome"
+echo "    /auto-dev #123       Dev autonome"
 echo "    /cancel-ralph        Arrêter la boucle"
 echo "    /resume-ralph        Reprendre session"
+echo ""
+echo -e "${BLUE}  Commands - Ship & QA:${NC}"
+echo "    /ship                Ship workflow automatisé"
+echo "    /qa                  QA testing + health score"
+echo "    /plan-review         Review CEO/Founder"
+echo "    /retro               Rétrospective engineering"
 echo ""
 echo -e "${BLUE}  Commands - Utilitaires:${NC}"
 echo "    /status              État du projet"
@@ -685,17 +692,17 @@ echo "  claude"
 echo ""
 echo -e "  ${BLUE}# Mode Manuel (validation humaine)${NC}"
 echo "  /discovery"
-echo "  /feature #123"
+echo "  /dev #123"
 echo ""
 echo -e "  ${MAGENTA}# Mode RALPH (autonome)${NC}"
 echo "  /auto-discovery \"Je veux créer une app de todo\""
-echo "  /auto-feature #123 --max 50"
+echo "  /auto-dev #123 --max 50"
 echo ""
 if [ "$UPDATE_MODE" != true ]; then
 echo -e "${CYAN}Workflow:${NC}"
 echo ""
 echo "  Planning:  🧠 Brainstorm → 📋 PRD → 🏗️ Architecture → 📝 Stories"
-echo "  Dev:       🔍 Explore → 📝 Plan → 💻 Code+Tests (//) → 🔄 Review ×3 (//)"
+echo "  Dev:       🔍 Explore → 📝 Plan → 💻 Code+Tests (//) → 🔄 Review ×3 (//) → 🚀 Ship"
 echo ""
 echo -e "${CYAN}Documentation:${NC}"
 echo ""

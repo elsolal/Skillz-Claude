@@ -22,7 +22,7 @@ simple-api/
 
 ```bash
 # Méthode 1 : Feature directe (recommandé pour projets simples)
-/feature "API REST Todo List"
+/dev "API REST Todo List"
 
 # Méthode 2 : Quick fix pour petits ajustements
 /quick-fix "ajouter endpoint DELETE /todos/:id"

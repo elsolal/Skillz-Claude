@@ -90,7 +90,7 @@ Basé sur l'état actuel :
 ```bash
 # Continuer le workflow
 /discovery          # Si pas de planning
-/feature #XX        # Si stories prêtes
+/dev #XX            # Si stories prêtes
 
 # Utilitaires
 /docs all           # Générer la documentation

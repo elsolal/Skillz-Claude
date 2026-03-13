@@ -1,18 +1,18 @@
 ---
-description: Lance le workflow multi-agent pour implémenter une feature. Explore → Plan → Code+Tests parallèles → Review ×3 parallèle → Commit+PR.
+description: Lance le workflow multi-agent pour développer une feature. Explore → Plan → Code+Tests // → Review ×3 // → Ship. Usage: /dev [issue] ou /dev "description"
 ---
 
-# Feature Implementation: $ARGUMENTS
+# Dev: Feature Implementation — $ARGUMENTS
 
 ## Workflow Multi-Agent
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│  EXPLORE       PLAN         IMPLEMENT          REVIEW        FINALIZE   │
-│  (natif)     (natif)      (2 agents //)     (3 agents //)              │
+│  EXPLORE       PLAN         IMPLEMENT          REVIEW         SHIP      │
+│  (natif)     (natif)      (2 agents //)     (3 agents //)    (/ship)   │
 │                                                                         │
-│  Agent    →  Plan Mode  →  ┌─ Code Agent  →  ┌─ Correctness  → Commit  │
-│  Explore     + Tasks       └─ Test Agent     ├─ Readability     + PR   │
+│  Agent    →  Plan Mode  →  ┌─ Code Agent  →  ┌─ Correctness  → /ship  │
+│  Explore     + Tasks       └─ Test Agent     ├─ Readability            │
 │                                               └─ Performance            │
 │                                                                         │
 │  [STOP]      [STOP]         [STOP]             [STOP]        [STOP]    │
@@ -110,10 +110,11 @@ Synthétiser les 3 rapports. Corriger les issues 🔴 Critical.
 
 ---
 
-## Phase 5: FINALIZE
+## Phase 5: SHIP
 
 1. Vérifier que tous les tests passent après corrections review
-2. Proposer : **[C] Commit** | **[P] Commit + PR** | **[R] Réviser encore**
+2. Proposer : **[S] /ship** (merge main, tests, review, changelog, PR) | **[C] Commit seulement** | **[R] Réviser encore**
+3. Si l'utilisateur choisit [S], lancer le workflow `/ship` automatiquement
 
 ---
 

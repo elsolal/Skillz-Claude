@@ -1,8 +1,8 @@
 ---
-description: Implémente une feature GitHub en mode RALPH autonome avec multi-agent parallèle (Explore → Plan → Code+Tests // → Review ×3 //).
+description: Développe une feature GitHub en mode RALPH autonome avec multi-agent parallèle (Explore → Plan → Code+Tests // → Review ×3 // → Ship). Usage: /auto-dev #123
 ---
 
-# Auto-Feature - RALPH Mode
+# Auto-Dev - RALPH Mode
 
 **Session ID:** ${CLAUDE_SESSION_ID}
 
@@ -10,7 +10,7 @@ description: Implémente une feature GitHub en mode RALPH autonome avec multi-ag
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│                     AUTO-FEATURE (RALPH MODE)                           │
+│                      AUTO-DEV (RALPH MODE)                              │
 ├──────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  EXPLORE    →  PLAN     →  IMPLEMENT      →  REVIEW         → DONE     │
@@ -29,7 +29,7 @@ description: Implémente une feature GitHub en mode RALPH autonome avec multi-ag
 | Session | `${CLAUDE_SESSION_ID}` |
 | Max iterations | **50** |
 | Timeout | **2h** |
-| Completion promise | **"FEATURE COMPLETE"** |
+| Completion promise | **"DEV COMPLETE"** |
 | Logs | `docs/ralph-logs/${CLAUDE_SESSION_ID}.md` |
 
 ## Exécution automatique
@@ -132,13 +132,13 @@ Le loop considère la feature "COMPLETE" quand :
   "active": true,
   "iteration": 1,
   "maxIterations": 50,
-  "completionPromise": "FEATURE COMPLETE",
-  "originalPrompt": "AUTO-FEATURE: Implement $ARGUMENTS using multi-agent workflow",
+  "completionPromise": "DEV COMPLETE",
+  "originalPrompt": "AUTO-DEV: Implement $ARGUMENTS using multi-agent workflow",
   "startTime": [TIMESTAMP],
   "timeoutSeconds": 7200,
   "logEnabled": true,
   "sessionId": "${CLAUDE_SESSION_ID}",
-  "mode": "auto-feature"
+  "mode": "auto-dev"
 }
 ```
 

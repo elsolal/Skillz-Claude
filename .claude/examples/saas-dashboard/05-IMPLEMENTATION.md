@@ -14,13 +14,13 @@
 # - Stories créées + Readiness Check 15/15
 
 # Implémentation par Epic
-/auto-feature #epic-1-auth --max 30
+/auto-dev #epic-1-auth --max 30
 # Sortie après 18 itérations: "FEATURE COMPLETE"
 
-/auto-feature #epic-2-core --max 50
+/auto-dev #epic-2-core --max 50
 # Sortie après 42 itérations: "FEATURE COMPLETE"
 
-/auto-feature #epic-3-billing --max 30
+/auto-dev #epic-3-billing --max 30
 # Sortie après 22 itérations: "FEATURE COMPLETE"
 ```
 

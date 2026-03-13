@@ -1,6 +1,6 @@
 ---
 name: code-implementer
-description: Implémente du code en respectant les conventions du projet. Utilisé comme agent worker depuis /feature ou en standalone.
+description: Implémente du code en respectant les conventions du projet. Utilisé comme agent worker depuis /dev ou en standalone.
 model: opus
 context: fork
 allowed-tools:

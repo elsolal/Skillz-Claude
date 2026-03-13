@@ -7,7 +7,7 @@
 
 ---
 
-# D-EPCT+R v4.0 — Instructions de travail
+# D-EPCT+R v5.0 — Instructions de travail
 
 ## Quel workflow utiliser ?
 
@@ -15,10 +15,14 @@
 Utilisateur dit...                    → Workflow
 ─────────────────────────────────────────────────
 "j'ai une idée / on pourrait..."      → /discovery (ou /auto-discovery)
-"implémente l'issue #XX"              → /feature #XX (ou /auto-feature #XX)
+"implémente l'issue #XX"              → /dev #XX (ou /auto-dev #XX)
 "fix ce bug / ce truc est cassé"      → /quick-fix "desc"
 "refactorise ce fichier"              → /refactor <file>
 "review cette PR"                     → /pr-review #123
+"review mon plan/PRD"                 → /plan-review <doc>
+"ship cette branche"                  → /ship [branch]
+"teste cette app"                     → /qa [url]
+"retro de la session"                 → /retro [--since 7d]
 "génère la doc"                       → /docs [type]
 "crée un nouveau projet"              → /init [template]
 "importe ce design Figma"             → /figma-to-code <url>
@@ -34,17 +38,17 @@ Mode LIGHT (petit scope) : `PRD simplifié → Stories → GitHub`
 
 Le mode est auto-détecté. UX/UI sont optionnels et auto-triggered si pertinent.
 
-### Feature (développement multi-agent)
+### Dev (développement multi-agent)
 
 ```
-EXPLORE (Agent Explore) → PLAN (Plan Mode) → IMPLEMENT (2 agents //) → REVIEW (3 agents //) → FINALIZE
+EXPLORE (Agent Explore) → PLAN (Plan Mode) → IMPLEMENT (2 agents //) → REVIEW (3 agents //) → SHIP
 ```
 
 Les phases Code+Tests et Review ×3 tournent en **agents parallèles** pour aller plus vite.
 
 ### Mode RALPH (autonome)
 
-Préfixer avec `auto-` : `/auto-loop`, `/auto-discovery`, `/auto-feature`.
+Préfixer avec `auto-` : `/auto-loop`, `/auto-discovery`, `/auto-dev`.
 Options : `--max N`, `--timeout Xh`, `--promise "TEXT"`
 Logger chaque itération dans `docs/ralph-logs/`.
 
@@ -58,10 +62,16 @@ Logger chaque itération dans `docs/ralph-logs/`.
 /auto-discovery "idée"      # Planning autonome
 
 # Développement
-/feature [issue]            # Implémentation multi-agent guidée
-/auto-feature #123          # Implémentation multi-agent autonome
+/dev [issue]                # Implémentation multi-agent guidée
+/auto-dev #123              # Implémentation multi-agent autonome
 /quick-fix "desc"           # Fix rapide sans workflow
 /refactor <file>            # Refactoring ciblé
+
+# Ship & QA
+/ship [branch]              # Ship: merge → tests → review → changelog → PR
+/qa [url]                   # QA systématique: health score, screenshots, rapport
+/plan-review <doc>          # Review CEO/Founder: challenge prémisses, 3 modes
+/retro [--since 7d]         # Rétrospective: sessions, streaks, tendances
 
 # Utilitaires
 /status                     # État du projet
@@ -84,6 +94,7 @@ Logger chaque itération dans `docs/ralph-logs/`.
 
 # RALPH
 /auto-loop "prompt"         # Boucle autonome générique
+/auto-dev #123              # Dev autonome (alias RALPH)
 /cancel-ralph               # Arrêter RALPH
 /resume-ralph [session-id]  # Reprendre une session
 ```

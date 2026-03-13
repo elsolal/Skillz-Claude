@@ -38,9 +38,9 @@ saas-dashboard/
 # - Stories (15+ avec Readiness Check)
 
 # Mode RALPH pour chaque Epic avec verbose
-/auto-feature #epic-1 --max 50 --verbose
-/auto-feature #epic-2 --max 50 --verbose
-/auto-feature #epic-3 --max 50 --verbose
+/auto-dev #epic-1 --max 50 --verbose
+/auto-dev #epic-2 --max 50 --verbose
+/auto-dev #epic-3 --max 50 --verbose
 ```
 
 ## Particularités de cet exemple
@@ -88,9 +88,9 @@ Avec `--verbose`, les logs sont sauvegardés dans :
 ```
 docs/ralph-logs/
 ├── auto-discovery-2024-01-20-143022.md
-├── auto-feature-epic-1-2024-01-21-091500.md
-├── auto-feature-epic-2-2024-01-22-140000.md
-└── auto-feature-epic-3-2024-01-23-100000.md
+├── auto-dev-epic-1-2024-01-21-091500.md
+├── auto-dev-epic-2-2024-01-22-140000.md
+└── auto-dev-epic-3-2024-01-23-100000.md
 ```
 
 ---

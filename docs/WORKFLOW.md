@@ -47,7 +47,7 @@ d-epct-workflow/
     │
     ├── 📁 commands/                      ← Commandes /slash
     │   ├── 📄 discovery.md               ← /discovery
-    │   └── 📄 feature.md                 ← /feature
+    │   └── 📄 feature.md                 ← /dev
     │
     └── 📁 skills/                        ← Skills auto-déclenchés
         ├── 📁 pm-discovery/
@@ -156,17 +156,17 @@ claude
 # → Epic #42 + Stories #43, #44, #45
 
 # 8. Lancer l'implémentation d'une story
-/feature #43
+/dev #43
 ```
 
 ### Scénario 2 : Tu as déjà une issue GitHub
 
 ```bash
 # Directement lancer l'implémentation
-/feature https://github.com/ton-org/ton-repo/issues/123
+/dev https://github.com/ton-org/ton-repo/issues/123
 
 # Ou avec juste le numéro (si tu es dans le bon repo)
-/feature #123
+/dev #123
 ```
 
 ### Scénario 3 : Juste utiliser un skill spécifique
@@ -427,5 +427,5 @@ Dis-le à Claude :
 
 - **v1.0.0** - Version initiale
   - 5 skills : pm-discovery, github-issue-reader, code-implementer, test-runner, code-reviewer
-  - 2 commands : /discovery, /feature
+  - 2 commands : /discovery, /dev
   - Documentation complète
