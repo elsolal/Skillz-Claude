@@ -1,24 +1,25 @@
 ---
-description: Lance le workflow de planning complet en mode RALPH autonome (Brainstorm → PRD → Architecture → Stories). L'IA travaille seule jusqu'à avoir créé toutes les issues GitHub.
+description: Lance le workflow de planning complet en mode RALPH autonome (Brainstorm → PRD → Architecture → Stories). L'orchestrateur garde tout le contexte et travaille seul jusqu'à avoir créé toutes les issues GitHub.
 ---
 
-# Auto-Discovery - RALPH Mode 🔄
+# Auto-Discovery — RALPH Mode
 
 **Session ID:** ${CLAUDE_SESSION_ID}
 
-## Mode RALPH + Planning activé
-
-Je vais exécuter **tout le workflow de planning en autonome** :
+## Architecture Orchestrateur + RALPH
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    AUTO-DISCOVERY (RALPH MODE)                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  🧠 Brainstorm ──→ 📋 PRD ──→ 🏗️ Architecture ──→ 📝 Stories ──→ GitHub     │
-│       AUTO          AUTO          AUTO              AUTO         AUTO       │
+│  ORCHESTRATEUR PRINCIPAL (TOI) — garde tout le contexte                     │
 │                                                                             │
-│  ⚠️ Pas de validation intermédiaire - Full autonome                         │
+│  Écoute → Brainstorm → [UX] → PRD → [UI] → Architecture → Stories → GitHub│
+│   AUTO      AUTO        AUTO   AUTO   AUTO     AUTO          AUTO     AUTO │
+│                                                                             │
+│  Pas de validation intermédiaire — Full autonome                           │
+│  Seule la publication GitHub est dispatchée en subagent                    │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -28,58 +29,76 @@ Je vais exécuter **tout le workflow de planning en autonome** :
 | Paramètre | Valeur |
 |-----------|--------|
 | Session | `${CLAUDE_SESSION_ID}` |
-| Max iterations | **30** (planning = plus d'étapes) |
+| Max iterations | **30** |
 | Timeout | **1h** |
 | Completion promise | **"DISCOVERY COMPLETE"** |
 | Logs | `docs/ralph-logs/${CLAUDE_SESSION_ID}.md` |
-| Verbose | OFF (use `--verbose` to enable) |
 
-## Ce que je vais faire automatiquement
+## Exécution automatique
 
-### Phase 1: Analyse & Mode Detection
-- Analyser le scope de ton besoin
-- Détecter automatiquement FULL vs LIGHT
+**Principe clé :** TOI, l'orchestrateur principal, tu gardes tout le contexte à travers TOUTES les phases. Tu ne forks JAMAIS vers un skill. Tu suis le process directement. Tu dispatches uniquement la création d'issues GitHub via subagent.
+
+### Phase 1: Écoute & Analyse
+- Analyser le besoin de `$ARGUMENTS`
+- Détecter automatiquement FULL vs LIGHT (score ≥ 3 critères = FULL)
+- Pas de STOP, valider automatiquement
 
 ### Phase 2: Brainstorm (si FULL)
-- Explorer les directions possibles
-- Choisir la plus pertinente
+- Charger techniques : `Read .claude/knowledge/brainstorming/brain-techniques.csv`
+- Choisir les techniques adaptées au contexte (mode AI-Recommended)
+- Générer 20-30 idées (mode autonome = plus concis qu'interactif)
+- Synthétiser : top 5 idées, direction choisie
+- Évaluer scores UX/UI pour décider des phases optionnelles
+- Sauvegarder : `docs/planning/brainstorms/BRAINSTORM-{slug}-{date}.md`
+- Référence : `.claude/skills/idea-brainstorm/SKILL.md`
 
-### Phase 3: PRD
-- Poser les questions (et y répondre avec le contexte)
-- Rédiger le PRD complet
-- Sauvegarder dans `docs/planning/prd/`
+### Phase 3: UX Design (si score UX ≥ 4)
+- Personas, user journeys, wireframes textuels
+- Sauvegarder : `docs/planning/ux/UX-{slug}.md`
+- Référence : `.claude/skills/ux-designer/SKILL.md`
 
-### Phase 4: Architecture (si FULL)
-- Analyser le codebase existant
-- Proposer le stack technique
-- Sauvegarder dans `docs/planning/architecture/`
+### Phase 4: PRD
+- Tu as tout le contexte (brainstorm + UX) — pas besoin de relire les fichiers
+- Rédiger le PRD complet (FULL) ou simplifié (LIGHT)
+- Sauvegarder : `docs/planning/prd/PRD-{slug}.md`
+- Référence : `.claude/skills/pm-prd/SKILL.md`
+- Knowledge : `.claude/knowledge/workflows/prd-template.md`, `domain-complexity.csv`
 
-### Phase 5: Stories
-- Découper en Epics
-- Créer les User Stories
-- Sauvegarder dans `docs/stories/`
+### Phase 5: UI Design (si score UI ≥ 3)
+- Design system, composants, guidelines visuelles
+- Sauvegarder : `docs/planning/ui/UI-{slug}.md`
+- Référence : `.claude/skills/ui-designer/SKILL.md`
 
-### Phase 6: Publication GitHub
-- Créer les issues Epic
-- Créer les issues Stories
-- Lier les issues entre elles
+### Phase 6: Architecture (si FULL)
+- Tu as TOUT le contexte — architecturer directement
+- Analyser le codebase existant, proposer le stack, data model, APIs
+- Sauvegarder : `docs/planning/architecture/ARCH-{slug}.md`
+- Référence : `.claude/skills/architect/SKILL.md`
 
-## Output attendu
+### Phase 7: Stories
+- Découper en Epics + User Stories (INVEST, Given/When/Then)
+- Implementation Readiness Check
+- Sauvegarder : `docs/stories/EPIC-{num}-{slug}/`
+- Référence : `.claude/skills/pm-stories/SKILL.md`
 
-À la fin du loop, tu auras :
-- 📄 `docs/planning/prd/PRD-xxx.md`
-- 📄 `docs/planning/architecture/ARCH-xxx.md` (si mode FULL)
-- 📁 `docs/stories/EPIC-xxx/` avec les stories
-- 🐙 Issues GitHub créées et liées
+### Phase 8: Publication GitHub (subagent)
+- Dispatcher un subagent via `SendMessage(run_in_background: true)` pour créer les issues
+- Prompt complet avec tous les titres, bodies, labels
+- Au retour : confirmer les issues créées
 
----
+## Critères de succès automatiques
 
-## 📊 Métriques RALPH
+Le loop considère la discovery "COMPLETE" quand :
+- Mode détecté et phases appropriées exécutées
+- Documents générés et sauvegardés
+- Stories découpées avec estimations
+- Readiness Check score ≥ 13/15
+- Issues GitHub créées
 
-Le log inclut automatiquement les métriques suivantes :
+## Métriques RALPH
 
 ```markdown
-## 📊 Métriques Discovery
+## Métriques Discovery
 
 | Métrique | Valeur |
 |----------|--------|
@@ -97,30 +116,29 @@ Le log inclut automatiquement les métriques suivantes :
 | UI Design | [X]m | ✅/⏭️ |
 | Architecture | [X]m | ✅/⏭️ |
 | Stories | [X]m | ✅ |
-| GitHub | [X]m | ✅ |
+| GitHub (subagent) | [X]m | ✅ |
 
 ### Documents générés
 | Type | Fichier | Status |
 |------|---------|--------|
-| Brainstorm | `BRAINSTORM-xxx.md` | ✅/❌ |
-| UX Design | `UX-xxx.md` | ✅/⏭️ |
-| PRD | `PRD-xxx.md` | ✅ |
-| UI Design | `UI-xxx.md` | ✅/⏭️ |
-| Architecture | `ARCH-xxx.md` | ✅/⏭️ |
-| Stories | `EPIC-xxx/` | ✅ |
+| Brainstorm | BRAINSTORM-xxx.md | ✅/⏭️ |
+| UX Design | UX-xxx.md | ✅/⏭️ |
+| PRD | PRD-xxx.md | ✅ |
+| UI Design | UI-xxx.md | ✅/⏭️ |
+| Architecture | ARCH-xxx.md | ✅/⏭️ |
+| Stories | EPIC-xxx/ | ✅ |
 
 ### Issues GitHub
 | Type | Count | Numéros |
 |------|-------|---------|
 | Epics | [X] | #[nums] |
 | Stories | [X] | #[nums] |
+```
 
-### Auto-corrections
-| Type | Count |
-|------|-------|
-| Questions résolues auto | [X] |
-| Modes ajustés | [X] |
-| Retours phases | [X] |
+## Arrêt manuel
+
+```bash
+/cancel-ralph
 ```
 
 ## Arguments supportés
@@ -131,28 +149,9 @@ Le log inclut automatiquement les métriques suivantes :
 | `--timeout Xh` | 1h | Timeout global |
 | `--verbose` | false | Mode debug avec logs détaillés |
 
-## Mode Verbose
-
-Avec `--verbose`, chaque étape affiche :
-- État du contexte chargé
-- Décisions prises et pourquoi
-- Temps passé par phase
-- Problèmes rencontrés et solutions
-
-```bash
-# Exemple avec verbose
-/auto-discovery "Mon idée de projet" --verbose
-```
-
-## Arrêt manuel
-
-```bash
-/cancel-ralph
-```
-
 ---
 
-## Démarrage 🚀
+## Démarrage
 
 **Besoin à traiter :** $ARGUMENTS
 
@@ -165,7 +164,7 @@ Avec `--verbose`, chaque étape affiche :
   "maxIterations": 30,
   "completionPromise": "DISCOVERY COMPLETE",
   "originalPrompt": "AUTO-DISCOVERY: $ARGUMENTS",
-  "startTime": [TIMESTAMP],
+  "startTime": "[TIMESTAMP]",
   "timeoutSeconds": 3600,
   "logEnabled": true,
   "sessionId": "${CLAUDE_SESSION_ID}",
@@ -173,12 +172,6 @@ Avec `--verbose`, chaque étape affiche :
 }
 ```
 
-**🚀 Auto-Discovery démarré - Mode RALPH**
-
 Je commence l'analyse de ton besoin : **$ARGUMENTS**
 
----
-
-## Phase 1: Analyse du besoin
-
-Je vais d'abord comprendre ce que tu veux construire et détecter le mode approprié (FULL ou LIGHT)...
+Phase 1: Analyse du scope...

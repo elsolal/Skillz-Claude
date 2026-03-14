@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ============================================================
-# D-EPCT+R Workflow v5.0 Installer
+# D-EPCT+R Workflow v5.1 Installer
 # Install Claude Code skills + RALPH Mode + 54 Knowledge Files + Templates
 # 21 skills, 20 commands, 18 templates, 4 agent compatibility layers
 #
@@ -56,9 +56,9 @@ TARGET_DOCS="$TARGET_DIR/docs"
 echo -e "${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════════════════╗"
 if [ "$UPDATE_MODE" = true ]; then
-echo "║             D-EPCT+R Workflow v5.0 Updater                            ║"
+echo "║             D-EPCT+R Workflow v5.1 Updater                            ║"
 else
-echo "║             D-EPCT+R Workflow v5.0 Installer                          ║"
+echo "║             D-EPCT+R Workflow v5.1 Installer                          ║"
 fi
 echo "║                                                                       ║"
 echo "║   SKILLS:       21 (Planning, Design, Dev, Security, Figma)            ║"
@@ -147,7 +147,7 @@ else
 fi
 
 if [ "$UPDATE_MODE" != true ] && [ "$MERGE_MODE" != true ]; then
-    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v4.0 to $TARGET_DIR...${NC}"
+    echo -e "${BLUE}📦 Installing D-EPCT+R workflow v5.1 to $TARGET_DIR...${NC}"
 fi
 echo ""
 
@@ -581,6 +581,18 @@ else
     echo -e "   ${GREEN}✅ CLAUDE.md${NC}"
 fi
 
+# Copy CHANGELOG.md to project root
+if [ -f "$SOURCE_CLAUDE/../CHANGELOG.md" ]; then
+    if [ "$UPDATE_MODE" = true ] || [ ! -f "$TARGET_DIR/CHANGELOG.md" ]; then
+        cp "$SOURCE_CLAUDE/../CHANGELOG.md" "$TARGET_DIR/"
+        if [ "$UPDATE_MODE" = true ]; then
+            echo -e "   ${CYAN}🔄 CHANGELOG.md${NC}"
+        else
+            echo -e "   ${GREEN}✅ CHANGELOG.md${NC}"
+        fi
+    fi
+fi
+
 # Create .gitkeep files to preserve empty directories
 touch "$TARGET_DOCS/planning/brainstorms/.gitkeep"
 touch "$TARGET_DOCS/planning/ux/.gitkeep"
@@ -701,8 +713,8 @@ echo ""
 if [ "$UPDATE_MODE" != true ]; then
 echo -e "${CYAN}Workflow:${NC}"
 echo ""
-echo "  Planning:  🧠 Brainstorm → 📋 PRD → 🏗️ Architecture → 📝 Stories"
-echo "  Dev:       🔍 Explore → 📝 Plan → 💻 Code+Tests (//) → 🔄 Review ×3 (//) → 🚀 Ship"
+echo "  Planning:  🧠 Brainstorm → 📋 PRD → 🏗️ Architecture → 📝 Stories (orchestrateur garde le contexte)"
+echo "  Dev:       🔍 Explore → 📝 Plan (orchestrateur) → 💻 Code+Tests (subagents //) → 🔄 Review ×3 (subagents //) → 🚀 Ship"
 echo ""
 echo -e "${CYAN}Documentation:${NC}"
 echo ""

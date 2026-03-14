@@ -3,7 +3,6 @@ name: database-designer
 description: Conçoit des schémas de base de données avec ERD, migrations, indexes et optimisations. Utiliser pour les projets avec persistence, quand on définit des modèles, ou quand l'utilisateur dit "database", "schema", "tables", "migrations". Peut être déclenché après PRD ou Architecture.
 model: opus
 context: fork
-agent: Plan
 allowed-tools:
   - Read
   - Glob

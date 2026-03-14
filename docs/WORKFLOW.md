@@ -17,7 +17,7 @@
 Un ensemble de **Skills** et **Commands** pour Claude Code qui automatise ton workflow de développement :
 
 ```
-DISCOVERY → EXPLORE → PLAN → CODE+TESTS (//) → REVIEW ×3 (//)
+DISCOVERY → EXPLORE → PLAN (orchestrateur) → CODE+TESTS (subagents //) → REVIEW ×3 (subagents //)
 ```
 
 ### Pourquoi Skills plutôt qu'Agents ?
@@ -182,7 +182,7 @@ claude
 # → Déclenche code-reviewer
 
 > Aide-moi à planifier l'implémentation de cette feature
-# → Plan Mode (natif)
+# → L'orchestrateur planifie directement (pas de Plan Mode)
 ```
 
 ---
@@ -267,50 +267,45 @@ claude
 - [ ] Given X, when Y, then Z
 ```
 
-#### 📋 EXPLORE (github-issue-reader + Agent Explore)
+#### 📋 EXPLORE (subagent Explore)
 
 **Objectif** : Comprendre le contexte avant de coder.
 
 **Ce que fait Claude** :
-1. Lit et parse l'issue GitHub
-2. Extrait les requirements
+1. Dispatche un subagent Explore via `SendMessage`
+2. Le subagent lit et parse l'issue GitHub
 3. Analyse l'architecture du projet
 4. Identifie les fichiers à modifier
-5. Note les patterns existants à respecter
+5. Retourne une synthèse structurée à l'orchestrateur
 
-#### 📝 PLAN (Plan Mode natif)
+#### 📝 PLAN (orchestrateur principal)
 
 **Objectif** : Créer un plan d'implémentation validé.
 
-**Ce que fait Claude** :
+**Ce que fait Claude** (l'orchestrateur garde le contexte et planifie directement) :
 1. Décompose en étapes atomiques
-2. Définit l'ordre des tâches
+2. Définit l'ordre des tâches et les fichiers impactés
 3. Identifie les risques
-4. Propose des critères de validation par étape
+4. Prépare les prompts complets et autonomes pour les subagents d'implémentation
 
-#### 💻 CODE (code-implementer)
+#### 💻 CODE + 🧪 TESTS (2 subagents parallèles)
 
-**Objectif** : Implémenter selon le plan.
-
-**Ce que fait Claude** :
-1. Implémente étape par étape
-2. Respecte les conventions du projet
-3. Montre le diff après chaque modification
-4. Attend ta validation avant l'étape suivante
-
-#### 🧪 TEST (test-runner)
-
-**Objectif** : Valider que le code fonctionne.
+**Objectif** : Implémenter et tester en parallèle.
 
 **Ce que fait Claude** :
-1. Écrit les tests unitaires
-2. Écrit les tests d'intégration
-3. Exécute les tests
-4. Vérifie la coverage
+1. Dispatche 2 subagents en parallèle via `SendMessage(run_in_background: true)`
+2. **Subagent Code** : implémente selon le plan, lint/types obligatoires
+3. **Subagent Tests** : écrit les tests P0-P3 risk-based
+4. L'orchestrateur vérifie les résultats au retour
 
-#### 🔍 REVIEW ×3 (code-reviewer)
+#### 🔍 REVIEW ×3 (3 subagents parallèles)
 
-**Objectif** : Optimiser le code en 3 passes.
+**Objectif** : Valider le code avec 3 reviews spécialisées en parallèle.
+
+**Ce que fait Claude** :
+1. Dispatche 3 subagents review en parallèle via `SendMessage(run_in_background: true)`
+2. Chaque subagent a un focus spécifique
+3. L'orchestrateur synthétise les rapports et corrige les issues critiques
 
 | Pass | Focus | Questions |
 |------|-------|-----------|

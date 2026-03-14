@@ -3,7 +3,6 @@ name: figma-setup
 description: Configure Code Connect dans un projet pour mapper les composants Figma vers le code existant. Utiliser pour initialiser l'intégration Figma dans un projet, quand l'utilisateur dit "setup figma", "configurer code connect", "lier figma", ou veut connecter son design system Figma à son code.
 model: opus
 context: fork
-agent: Plan
 allowed-tools:
   - Read
   - Write

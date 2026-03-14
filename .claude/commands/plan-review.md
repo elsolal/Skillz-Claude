@@ -154,6 +154,6 @@ For each: what test covers it? Happy path? Failure path? Edge case?
 
 ## Démarrage
 
-Le plan à reviewer est dans le **Plan Mode actuel** ou décrit par l'utilisateur.
+Le plan à reviewer est celui fourni par l'utilisateur (document, description, ou plan d'implémentation en cours).
 
 Je commence par le **Pre-Review System Audit**...

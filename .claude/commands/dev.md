@@ -1,5 +1,5 @@
 ---
-description: Lance le workflow multi-agent pour développer une feature. Explore → Plan → Code+Tests // → Review ×3 // → Ship. Usage: /dev [issue] ou /dev "description"
+description: Lance le workflow multi-agent pour développer une feature. Explore → Plan (orchestrateur) → Code+Tests (subagents //) → Review ×3 (subagents //) → Ship. Usage: /dev [issue] ou /dev "description"
 ---
 
 # Dev: Feature Implementation — $ARGUMENTS
@@ -8,105 +8,180 @@ description: Lance le workflow multi-agent pour développer une feature. Explore
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│  EXPLORE       PLAN         IMPLEMENT          REVIEW         SHIP      │
-│  (natif)     (natif)      (2 agents //)     (3 agents //)    (/ship)   │
+│  EXPLORE        PLAN            IMPLEMENT          REVIEW        SHIP   │
+│  (subagent)   (orchestrateur)  (subagents //)    (subagents //)  (/ship)│
 │                                                                         │
-│  Agent    →  Plan Mode  →  ┌─ Code Agent  →  ┌─ Correctness  → /ship  │
-│  Explore     + Tasks       └─ Test Agent     ├─ Readability            │
-│                                               └─ Performance            │
+│  Subagent  →  L'orchestrateur →  ┌─ Code Agent  →  ┌─ Correctness  →  │
+│  Explore      garde le contexte  └─ Test Agent     ├─ Readability     │
+│               et planifie                           └─ Performance     │
 │                                                                         │
-│  [STOP]      [STOP]         [STOP]             [STOP]        [STOP]    │
+│  [STOP]       [STOP]              [STOP]             [STOP]     [STOP] │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
+
+**Principe clé :** L'orchestrateur principal (TOI) gardes tout le contexte. Tu ne délègues JAMAIS la planification. Tu dispatches uniquement l'exécution (code, tests, reviews) via des subagents.
 
 ---
 
 ## Phase 1: EXPLORE
 
-Utiliser **Agent Explore** (natif) pour comprendre le codebase :
+Lancer un **subagent Explore** pour comprendre le codebase :
 
-1. Lancer un agent `subagent_type: Explore` avec comme prompt :
-   - "Analyse le codebase pour comprendre comment implémenter **$ARGUMENTS**. Identifie : architecture, fichiers impactés, patterns existants, dépendances, risques."
-2. Récupérer et lire l'issue GitHub si `$ARGUMENTS` contient un numéro d'issue
-3. Synthétiser : requirements, fichiers à modifier, patterns à suivre
+1. Utiliser `SendMessage` pour dispatcher un subagent avec comme prompt :
+   - "Analyse le codebase pour comprendre comment implémenter **$ARGUMENTS**. Identifie : architecture, fichiers impactés, patterns existants, dépendances, risques. Retourne une synthèse structurée."
+2. Récupérer et lire l'issue GitHub si `$ARGUMENTS` contient un numéro d'issue (`gh issue view`)
+3. Quand le subagent revient : synthétiser requirements, fichiers à modifier, patterns à suivre
 
-**⏸️ CHECKPOINT 1** — Présenter la synthèse. Validation avant de planifier.
+**STOP CHECKPOINT 1** — Présenter la synthèse. Validation avant de planifier.
 
 ---
 
-## Phase 2: PLAN
+## Phase 2: PLAN (orchestrateur = TOI)
 
-Utiliser **Plan Mode** (natif) :
+**PAS de Plan Mode, PAS de subagent.** C'est TOI, l'orchestrateur principal, qui planifies directement.
 
-1. Entrer en Plan Mode (`EnterPlanMode`)
-2. Créer un plan d'implémentation avec étapes atomiques
+Tu as tout le contexte de la Phase 1. Avec ce contexte :
+
+1. Créer un plan d'implémentation avec étapes atomiques
+2. Pour chaque étape, définir :
+   - **Quoi** : description précise de ce qu'il faut faire
+   - **Où** : fichiers à créer/modifier (chemins absolus)
+   - **Comment** : pattern à suivre, références au code existant
+   - **Contraintes** : ce que le subagent ne doit PAS toucher
 3. Si **2+ étapes** → créer des Tasks (`TaskCreate`) pour tracking
-4. Faire valider le plan
+4. Préparer les prompts des subagents de Phase 3 (chaque prompt doit être COMPLET et AUTONOME)
 
-**⏸️ CHECKPOINT 2** — Validation du plan avant implémentation.
+**STOP CHECKPOINT 2** — Validation du plan avant implémentation.
 
 ---
 
-## Phase 3: IMPLEMENT (2 agents parallèles)
+## Phase 3: IMPLEMENT (2 subagents parallèles)
 
-Lancer **2 agents en parallèle** dans un seul message :
+Dispatcher **2 subagents en parallèle** via `SendMessage` dans un seul message :
 
-### Agent 1 : Code
+### Subagent 1 : Code
 ```
-Agent(subagent_type: "general-purpose", mode: "auto")
-Prompt: "Implémente le plan validé. Respecte les conventions du projet.
-Vérifie lint + types après chaque modification.
+SendMessage(run_in_background: true)
+Prompt: "Tu es un développeur senior. Implémente les changements suivants :
+
+[PLAN DÉTAILLÉ avec fichiers, patterns, contraintes]
+
+Règles :
+- Respecte les conventions du projet (CLAUDE.md)
+- Vérifie lint + types après chaque modification
+- Ne touche PAS aux fichiers hors scope
+- Résume ce que tu as fait à la fin
+
 Knowledge refs: .claude/knowledge/testing/error-handling.md, feature-flags.md"
 ```
 
-### Agent 2 : Tests
+### Subagent 2 : Tests
 ```
-Agent(subagent_type: "general-purpose", mode: "auto")
-Prompt: "Écris les tests pour la feature. Priorités P0-P3, risk-based.
+SendMessage(run_in_background: true)
+Prompt: "Tu es un Test Architect. Écris les tests pour la feature suivante :
+
+[DESCRIPTION FEATURE + FICHIERS IMPLÉMENTÉS]
+
+Règles :
+- Priorités P0-P3, risk-based
+- Pattern Arrange-Act-Assert
+- Naming: should_[comportement]_when_[condition]
+- Pas de hard waits, pas de flaky
+- Résume ce que tu as fait à la fin
+
 Knowledge refs: .claude/knowledge/testing/test-levels-framework.md,
 test-priorities-matrix.md, test-quality.md, data-factories.md,
 fixture-architecture.md, network-first.md, component-tdd.md,
 test-healing-patterns.md, selector-resilience.md"
 ```
 
-> **Note :** Si la feature est simple (1 étape), les 2 agents peuvent être fusionnés en un seul.
+> **Note :** Si la feature est simple (1 seule étape), les 2 subagents peuvent être fusionnés en un seul.
 
-**⏸️ CHECKPOINT 3** — Vérifier que code + tests passent. Validation.
+Quand les 2 subagents reviennent :
+1. Vérifier qu'il n'y a pas de conflits de fichiers
+2. Vérifier que les tests passent (`npm test` ou équivalent)
+3. Résoudre les problèmes si nécessaire
+
+**STOP CHECKPOINT 3** — Vérifier que code + tests passent. Validation.
 
 ---
 
-## Phase 4: REVIEW (3 agents parallèles)
+## Phase 4: REVIEW (3 subagents parallèles)
 
-Lancer **3 agents review en parallèle** dans un seul message :
+Dispatcher **3 subagents review en parallèle** via `SendMessage` dans un seul message :
 
-### Agent Correctness
+### Subagent Correctness
 ```
-Agent(subagent_type: "general-purpose")
-Prompt: "Review Pass 1 - CORRECTNESS. Vérifie : logique métier, edge cases, bugs,
-types, failles sécurité. Classifie : 🔴 Critical, 🟡 Medium, 🟢 Minor.
+SendMessage(run_in_background: true)
+Prompt: "Tu es un reviewer expert en correctness. Review les changements suivants :
+
+[git diff des fichiers modifiés]
+
+**Focus CORRECTNESS :**
+- Logique métier correcte
+- Edge cases gérés (null, undefined, empty, boundary)
+- Pas de bugs, race conditions, data loss
+- Types corrects, pas de any non justifié
+- Failles de sécurité (injection, XSS, auth bypass)
+- Tests couvrent les changements
+
+Classifie chaque issue :
+- 🔴 Critical : bugs, failles sécurité, data loss → Fix obligatoire
+- 🟡 Medium : performance, code smells → Fix recommandé
+- 🟢 Minor : style, nommage → Nice-to-have
+
+Output : table Sévérité | Fichier | Ligne | Issue | Suggestion
+
 Knowledge: .claude/knowledge/testing/error-handling.md, risk-governance.md,
 probability-impact.md"
 ```
 
-### Agent Readability
+### Subagent Readability
 ```
-Agent(subagent_type: "general-purpose")
-Prompt: "Review Pass 2 - READABILITY. Vérifie : nommage, taille des fonctions,
-commentaires utiles, structure logique, DRY, abstractions.
+SendMessage(run_in_background: true)
+Prompt: "Tu es un reviewer expert en lisibilité. Review les changements suivants :
+
+[git diff des fichiers modifiés]
+
+**Focus READABILITY :**
+- Nommage clair et cohérent (verbNoun fonctions, noun variables)
+- Fonctions de taille raisonnable (< 20 lignes)
+- Commentaires utiles (logique complexe uniquement)
+- Structure logique, early return
+- Pas de code dupliqué (DRY)
+- Abstractions appropriées (pas d'over-engineering)
+
+Output : table Type | Fichier | Suggestion | Impact
+
 Knowledge: .claude/knowledge/testing/test-quality.md, nfr-criteria.md"
 ```
 
-### Agent Performance
+### Subagent Performance
 ```
-Agent(subagent_type: "general-purpose")
-Prompt: "Review Pass 3 - PERFORMANCE. Vérifie : O(n²) évitables, re-renders,
-queries optimisées, memory leaks, lazy loading, caching.
+SendMessage(run_in_background: true)
+Prompt: "Tu es un reviewer expert en performance. Review les changements suivants :
+
+[git diff des fichiers modifiés]
+
+**Focus PERFORMANCE :**
+- Opérations O(n²) évitables
+- Re-renders inutiles (si React/frontend)
+- Queries optimisées (si DB) — N+1, missing indexes
+- Memory leaks (event listeners, subscriptions)
+- Lazy loading si pertinent
+- Caching si pertinent
+
+Output : table Type | Impact estimé | Effort | Suggestion
+
 Knowledge: .claude/knowledge/testing/nfr-criteria.md"
 ```
 
-Synthétiser les 3 rapports. Corriger les issues 🔴 Critical.
+Quand les 3 subagents reviennent :
+1. **Synthétiser** les 3 rapports en un rapport consolidé
+2. **Corriger** les issues 🔴 Critical (toi-même, pas un subagent — tu as le contexte)
+3. **Relancer les tests** après corrections
 
-**⏸️ CHECKPOINT 4** — Présenter le résumé review. Validation.
+**STOP CHECKPOINT 4** — Présenter le résumé review consolidé. Validation.
 
 ---
 

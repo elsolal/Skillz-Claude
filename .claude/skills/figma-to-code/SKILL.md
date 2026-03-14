@@ -3,7 +3,6 @@ name: figma-to-code
 description: Génère du code à partir d'une sélection Figma en utilisant les composants existants et Code Connect. Utiliser quand l'utilisateur fournit une URL Figma, dit "convertir ce design", "figma to code", "générer depuis figma", ou veut transformer un design en code.
 model: opus
 context: fork
-agent: Plan
 allowed-tools:
   - Read
   - Write

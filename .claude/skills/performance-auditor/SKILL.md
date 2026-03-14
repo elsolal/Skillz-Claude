@@ -3,7 +3,6 @@ name: performance-auditor
 description: Audit de performance du code et de l'application. Analyse Lighthouse, bundle size, Core Web Vitals, et optimisations. Utiliser après l'implémentation, avant une release, ou quand l'utilisateur dit "performance", "slow", "optimize", "bundle size".
 model: opus
 context: fork
-agent: Plan
 allowed-tools:
   - Read
   - Glob

@@ -3,7 +3,6 @@ name: api-designer
 description: Conçoit des APIs REST/GraphQL avec OpenAPI spec, versioning, et documentation. Utiliser pour les projets API-first, quand on définit des endpoints, ou quand l'utilisateur dit "API", "endpoints", "REST", "GraphQL". Peut être déclenché après PRD ou Architecture.
 model: opus
 context: fork
-agent: Plan
 allowed-tools:
   - Read
   - Glob

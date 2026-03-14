@@ -2,8 +2,6 @@
 name: pm-stories
 description: Crée des Epics et User Stories à partir du PRD et de l'Architecture, puis les publie sur GitHub Issues. Utiliser après l'architecture (mode FULL) ou après le PRD (mode LIGHT), quand l'utilisateur dit "stories", "user stories", "epics", "issues", "découper en tâches", ou veut passer à l'implémentation.
 model: opus
-context: fork
-agent: Plan
 allowed-tools:
   - Read
   - Grep

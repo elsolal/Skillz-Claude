@@ -31,20 +31,23 @@ Utilisateur dit...                    → Workflow
 "le composant est différent en prod"  → skill figma-design-code-sync
 ```
 
-### Discovery (planning)
+### Discovery (planning — orchestrateur)
 
-Mode FULL (gros scope) : `Brainstorm → [UX] → PRD → [UI] → Architecture → Stories → GitHub`
-Mode LIGHT (petit scope) : `PRD simplifié → Stories → GitHub`
+```
+ORCHESTRATEUR garde tout le contexte → Brainstorm → [UX] → PRD → [UI] → Architecture → Stories → GitHub (subagent)
+```
 
+Mode FULL (gros scope) : toutes les phases. Mode LIGHT (petit scope) : PRD → Stories → GitHub.
 Le mode est auto-détecté. UX/UI sont optionnels et auto-triggered si pertinent.
+Seule la publication GitHub est dispatchée en subagent (travail mécanique).
 
 ### Dev (développement multi-agent)
 
 ```
-EXPLORE (Agent Explore) → PLAN (Plan Mode) → IMPLEMENT (2 agents //) → REVIEW (3 agents //) → SHIP
+EXPLORE (subagent) → PLAN (orchestrateur) → IMPLEMENT (2 subagents //) → REVIEW (3 subagents //) → SHIP
 ```
 
-Les phases Code+Tests et Review ×3 tournent en **agents parallèles** pour aller plus vite.
+L'orchestrateur principal garde tout le contexte et planifie. Les phases Code+Tests et Review ×3 sont dispatchées en **subagents parallèles** via `SendMessage`.
 
 ### Mode RALPH (autonome)
 
@@ -105,8 +108,8 @@ Logger chaque itération dans `docs/ralph-logs/`.
 
 ### Toujours
 
-- Explorer le codebase AVANT de planifier (Agent Explore natif)
-- Planifier AVANT de coder (sauf fix trivial) — utiliser Plan Mode natif
+- Explorer le codebase AVANT de planifier (subagent Explore)
+- Planifier AVANT de coder (sauf fix trivial) — l'orchestrateur principal planifie directement
 - Valider le plan avec l'utilisateur en mode manuel
 - Utiliser TaskCreate si 2+ étapes d'implémentation
 - Lint + types OK à chaque étape de code

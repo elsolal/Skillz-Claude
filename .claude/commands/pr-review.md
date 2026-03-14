@@ -1,5 +1,5 @@
 ---
-description: Review une Pull Request GitHub avec 3 agents parallèles (Correctness, Readability, Performance). Usage: /pr-review #123 ou URL.
+description: Review une Pull Request GitHub avec 3 subagents parallèles (Correctness, Readability, Performance). Usage: /pr-review #123 ou URL.
 ---
 
 # PR Review (Multi-Agent)
@@ -14,46 +14,76 @@ description: Review une Pull Request GitHub avec 3 agents parallèles (Correctne
 
 ---
 
-## Review parallèle (3 agents)
+## Review parallèle (3 subagents)
 
-Lancer **3 agents en parallèle** dans un seul message :
+Dispatcher **3 subagents en parallèle** via `SendMessage` dans un seul message :
 
-### Agent 1 : Correctness
+### Subagent 1 : Correctness
 ```
-Agent(subagent_type: "general-purpose")
-Prompt: "Review PR - Pass CORRECTNESS.
+SendMessage(run_in_background: true)
+Prompt: "Tu es un reviewer expert en correctness. Review cette PR.
+
 Diff fourni : [diff]
-Vérifie : logique métier, edge cases, bugs, types, failles sécurité, tests couvrent les changements.
+
+**Focus CORRECTNESS :**
+- Logique métier correcte
+- Edge cases gérés (null, undefined, empty, boundary)
+- Pas de bugs, race conditions, data loss
+- Types corrects
+- Failles de sécurité (injection, XSS, auth bypass)
+- Tests couvrent les changements
+
 Classifie chaque issue : 🔴 Critical | 🟡 Medium | 🟢 Minor
-Knowledge: .claude/knowledge/testing/error-handling.md, risk-governance.md, probability-impact.md
-Output : table Sévérité | Fichier | Ligne | Issue | Suggestion"
+Output : table Sévérité | Fichier | Ligne | Issue | Suggestion
+
+Knowledge: .claude/knowledge/testing/error-handling.md, risk-governance.md, probability-impact.md"
 ```
 
-### Agent 2 : Readability
+### Subagent 2 : Readability
 ```
-Agent(subagent_type: "general-purpose")
-Prompt: "Review PR - Pass READABILITY.
+SendMessage(run_in_background: true)
+Prompt: "Tu es un reviewer expert en lisibilité. Review cette PR.
+
 Diff fourni : [diff]
-Vérifie : nommage clair, fonctions raisonnables, commentaires utiles, structure logique, DRY, abstractions.
-Knowledge: .claude/knowledge/testing/test-quality.md, nfr-criteria.md
-Output : table Type | Fichier | Suggestion | Impact"
+
+**Focus READABILITY :**
+- Nommage clair et cohérent
+- Fonctions de taille raisonnable
+- Commentaires utiles (logique complexe uniquement)
+- Structure logique, early return
+- Pas de code dupliqué (DRY)
+- Abstractions appropriées
+
+Output : table Type | Fichier | Suggestion | Impact
+
+Knowledge: .claude/knowledge/testing/test-quality.md, nfr-criteria.md"
 ```
 
-### Agent 3 : Performance
+### Subagent 3 : Performance
 ```
-Agent(subagent_type: "general-purpose")
-Prompt: "Review PR - Pass PERFORMANCE.
+SendMessage(run_in_background: true)
+Prompt: "Tu es un reviewer expert en performance. Review cette PR.
+
 Diff fourni : [diff]
-Vérifie : O(n²) évitables, re-renders, queries optimisées, memory leaks, lazy loading.
-Knowledge: .claude/knowledge/testing/nfr-criteria.md
-Output : table Type | Impact | Effort | Suggestion"
+
+**Focus PERFORMANCE :**
+- O(n²) évitables
+- Re-renders inutiles (si frontend)
+- Queries optimisées (si DB) — N+1, missing indexes
+- Memory leaks (event listeners, subscriptions)
+- Lazy loading si pertinent
+- Caching si pertinent
+
+Output : table Type | Impact | Effort | Suggestion
+
+Knowledge: .claude/knowledge/testing/nfr-criteria.md"
 ```
 
 ---
 
 ## Synthèse
 
-Après les 3 agents, produire le rapport consolidé :
+Après les 3 subagents, produire le rapport consolidé :
 
 ```markdown
 ## PR Review: #[NUM] - [Titre]
@@ -85,4 +115,4 @@ Après les 3 agents, produire le rapport consolidé :
 
 **PR à reviewer :** $ARGUMENTS
 
-Je récupère les infos de la PR puis lance les 3 agents review en parallèle...
+Je récupère les infos de la PR puis lance les 3 subagents review en parallèle...

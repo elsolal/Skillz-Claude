@@ -1,5 +1,5 @@
 ---
-description: Développe une feature GitHub en mode RALPH autonome avec multi-agent parallèle (Explore → Plan → Code+Tests // → Review ×3 // → Ship). Usage: /auto-dev #123
+description: Développe une feature GitHub en mode RALPH autonome avec multi-agent parallèle (Explore → Plan orchestrateur → Code+Tests // → Review ×3 // → Ship). Usage: /auto-dev #123
 ---
 
 # Auto-Dev - RALPH Mode
@@ -13,11 +13,12 @@ description: Développe une feature GitHub en mode RALPH autonome avec multi-age
 │                      AUTO-DEV (RALPH MODE)                              │
 ├──────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│  EXPLORE    →  PLAN     →  IMPLEMENT      →  REVIEW         → DONE     │
-│  Agent         Plan        ┌─ Code Agent     ┌─ Correctness            │
-│  Explore       Mode        └─ Test Agent     ├─ Readability            │
-│  (AUTO)       (AUTO)        (PARALLEL)       └─ Performance            │
-│                                               (PARALLEL)               │
+│  EXPLORE    →  PLAN          →  IMPLEMENT      →  REVIEW       → DONE  │
+│  Subagent      Orchestrateur    ┌─ Code Agent     ┌─ Correctness       │
+│  Explore       (TOI, ici)       └─ Test Agent     ├─ Readability       │
+│  (AUTO)        PAS de Plan      (SUBAGENTS //)    └─ Performance       │
+│                Mode                                (SUBAGENTS //)      │
+│                                                                         │
 │  Pas de validation intermédiaire - Full autonome                       │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
@@ -34,26 +35,41 @@ description: Développe une feature GitHub en mode RALPH autonome avec multi-age
 
 ## Exécution automatique
 
-### Phase 1: EXPLORE (Agent Explore natif)
-- Lire et parser l'issue GitHub
-- Lancer Agent Explore pour analyser le codebase
+### Phase 1: EXPLORE (Subagent)
+- Lire et parser l'issue GitHub (`gh issue view`)
+- Dispatcher un subagent Explore via `SendMessage` pour analyser le codebase
 - Identifier fichiers à modifier, patterns, risques
+- Récupérer la synthèse du subagent
 
-### Phase 2: PLAN (Plan Mode natif)
-- Entrer en Plan Mode, créer le plan
+### Phase 2: PLAN (Orchestrateur = TOI)
+- **PAS de Plan Mode, PAS de subagent** — TOI tu planifies directement
+- Tu as tout le contexte de Phase 1
+- Créer le plan d'implémentation avec étapes atomiques
+- Pour chaque étape : quoi, où (chemins absolus), comment, contraintes
 - TaskCreate si 2+ étapes
+- Préparer les prompts COMPLETS et AUTONOMES pour les subagents
 - Valider automatiquement (pas de STOP)
 
-### Phase 3: IMPLEMENT (2 agents parallèles)
-- **Agent Code** : Implémenter selon le plan, lint/types obligatoires
-- **Agent Tests** : Écrire tests P0-P3, risk-based
-- Les 2 agents tournent en parallèle
+### Phase 3: IMPLEMENT (2 subagents parallèles)
+- **Subagent Code** via `SendMessage(run_in_background: true)` :
+  - Prompt COMPLET avec plan, fichiers, patterns, contraintes
+  - Lint/types obligatoires après chaque modification
+- **Subagent Tests** via `SendMessage(run_in_background: true)` :
+  - Prompt COMPLET avec description feature et fichiers impactés
+  - Priorités P0-P3, risk-based
+- Les 2 subagents tournent en parallèle
+- Au retour : vérifier conflits, lancer tests
 
-### Phase 4: REVIEW (3 agents parallèles)
-- **Correctness** : Bugs, logique, sécurité
-- **Readability** : Nommage, structure, DRY
-- **Performance** : Optimisations
-- Corriger automatiquement les issues 🔴 Critical
+### Phase 4: REVIEW (3 subagents parallèles)
+- **Subagent Correctness** via `SendMessage(run_in_background: true)` :
+  - Bugs, logique, sécurité, edge cases
+  - Classifie : 🔴 Critical | 🟡 Medium | 🟢 Minor
+- **Subagent Readability** via `SendMessage(run_in_background: true)` :
+  - Nommage, structure, DRY, abstractions
+- **Subagent Performance** via `SendMessage(run_in_background: true)` :
+  - O(n²), re-renders, queries, memory leaks, caching
+- Corriger automatiquement les issues 🔴 Critical (TOI, pas un subagent)
+- Relancer les tests après corrections
 
 ### Phase 5: FINALIZE
 - Vérifier tous les tests passent
@@ -65,7 +81,7 @@ description: Développe une feature GitHub en mode RALPH autonome avec multi-age
 Le loop considère la feature "COMPLETE" quand :
 - Code implémenté selon le plan
 - Tous les tests passent
-- 3 passes de review effectuées
+- 3 passes de review effectuées via subagents
 - Aucune issue 🔴 Critical restante
 
 ## Métriques RALPH
@@ -82,10 +98,10 @@ Le loop considère la feature "COMPLETE" quand :
 ### Temps par phase
 | Phase | Durée | Status |
 |-------|-------|--------|
-| Explore | [X]m | ? |
-| Plan | [X]m | ? |
-| Code + Tests (parallel) | [X]m | ? |
-| Review ×3 (parallel) | [X]m | ? |
+| Explore (subagent) | [X]m | ? |
+| Plan (orchestrateur) | [X]m | ? |
+| Code + Tests (subagents //) | [X]m | ? |
+| Review ×3 (subagents //) | [X]m | ? |
 
 ### Code Metrics
 | Métrique | Valeur |
