@@ -2,6 +2,43 @@
 
 All notable changes to the D-EPCT+R Workflow are documented in this file.
 
+## v5.3.0 (2026-04-02)
+
+**Official Figma Skills + ElevenLabs & Remotion Pipeline**
+
+### Figma skills migration to official figma/mcp-server-guide
+- Replaced 4 custom Figma skills with 7 official ones from Figma's own [mcp-server-guide](https://github.com/figma/mcp-server-guide/tree/main/skills):
+  - `figma-use` — mandatory prerequisite for all `use_figma` calls (Plugin API rules, gotchas, pre-flight checklist)
+  - `figma-implement-design` — Figma to production code with 1:1 visual fidelity (replaces `figma-to-code`)
+  - `figma-generate-design` — build/update screens from design system components (replaces `figma-designer`)
+  - `figma-generate-library` — build full design systems in Figma: tokens, components, docs (replaces `figma-design-system`)
+  - `figma-code-connect` — parserless Code Connect templates (replaces `figma-setup`)
+  - `figma-create-design-system-rules` — generate CLAUDE.md/AGENTS.md rules for Figma-to-code workflows (new)
+  - `figma-create-new-file` — create new Figma files via MCP (new)
+- Kept `figma-design-code-sync` (custom, no official equivalent)
+- Downloaded 30+ reference files (gotchas, patterns, API reference, variable patterns, etc.) and 9 helper scripts
+- Downloaded full Plugin API typings (`plugin-api-standalone.d.ts`, 450KB) for grep-based type lookup
+- Removed legacy `knowledge/figma/` directory (3 files superseded by skill references)
+
+### New skills: ElevenLabs + Remotion
+- `elevenlabs` — comprehensive voice AI skill covering TTS (API + CLI), music generation, sound effects, batch pipeline, voice settings. Includes 3 reference files.
+- `remotion` — React video creation with 40 official rule files from remotion-dev/skills (animations, audio, captions, charts, 3D, FFmpeg, transitions, text animations, etc.) + cloud rendering via inference.sh + full ElevenLabs→Remotion voiceover pipeline
+
+### Pipeline enabled
+```
+Script → ElevenLabs API → Audio files → Remotion → Video
+```
+
+### Files changed
+- New: 8 Figma skill directories with SKILL.md + references/ + scripts/
+- New: `.claude/skills/elevenlabs/` (SKILL.md + 3 references)
+- New: `.claude/skills/remotion/` (SKILL.md + 40 rules + 3 TSX assets)
+- Removed: `figma-designer/`, `figma-to-code/`, `figma-design-system/`, `figma-setup/`, `knowledge/figma/`
+- Updated: `install.sh` (skill count 22→28, new skill listings)
+- Updated: `README.md`, `CHANGELOG.md`
+
+---
+
 ## v5.2.0 (2026-03-19)
 
 **Design System Documenter + Frontend-Aware Dev Workflow**

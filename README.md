@@ -181,9 +181,9 @@ Merges main, runs tests, pre-landing review, generates changelog, creates PR.
 | Command | Description |
 |---------|-------------|
 | `/ds-doc [--figma url]` | Document design system in CLAUDE.md (scan + Figma links) |
-| `/figma-setup [url]` | Configure Code Connect |
-| `/figma-to-code <url>` | Generate code from Figma |
 | `/supabase-security <url>` | Full Supabase security audit |
+
+> Figma skills are now triggered automatically via descriptions — no slash commands needed. See [Skills](#skills-28) section.
 
 ### RALPH (autonomous mode)
 
@@ -199,7 +199,7 @@ Stop: `/cancel-ralph` | Resume: `/resume-ralph [session-id]`
 
 ---
 
-## Skills (22)
+## Skills (28)
 
 ### Planning Phase
 
@@ -218,12 +218,27 @@ Stop: `/cancel-ralph` | Resume: `/resume-ralph [session-id]`
 |-------|------|-------------|
 | `ux-designer` | User experience | Personas, user journeys, wireframes |
 | `ui-designer` | Design system | Tokens, components, Figma import |
-| `figma-setup` | Code Connect config | Mappings, publication |
-| `figma-to-code` | Code generation | Figma URL → code with mapped components |
-| `figma-designer` | Design in Figma | Create designs via MCP Console |
-| `figma-design-system` | DS management | Tokens, audit, code→Figma, drift detection |
-| `figma-design-code-sync` | Design-code sync | Bidirectional component sync |
 | `ds-doc` | DS documenter | Scan project → CLAUDE.md + components/CLAUDE.md with Figma links |
+
+### Figma Integration (8 skills — official from figma/mcp-server-guide)
+
+| Skill | Role | Key Features |
+|-------|------|-------------|
+| `figma-use` | **Mandatory prereq** | Plugin API rules, gotchas, pre-flight checklist — load before every `use_figma` call |
+| `figma-implement-design` | Figma → Code | 7-step workflow: design context → screenshot → assets → translate → validate |
+| `figma-generate-design` | Code → Figma | Build screens from design system components, variables, styles |
+| `figma-generate-library` | Build DS in Figma | Multi-phase: tokens → file structure → components → QA (20-100+ use_figma calls) |
+| `figma-code-connect` | Code Connect | Parserless .figma.js templates mapping Figma components to code |
+| `figma-create-design-system-rules` | DS rules | Generate CLAUDE.md/AGENTS.md rules for Figma-to-code workflows |
+| `figma-create-new-file` | Create files | Create new Figma design or FigJam files via MCP |
+| `figma-design-code-sync` | Bidirectional sync | Detect drift between Figma components and code counterparts |
+
+### Audio & Video Pipeline
+
+| Skill | Role | Key Features |
+|-------|------|-------------|
+| `elevenlabs` | Voice AI | TTS (70+ languages, 22+ voices), music generation, sound effects, batch pipeline |
+| `remotion` | React video | 40 rule files, animations, captions, transitions, ElevenLabs→Remotion voiceover pipeline |
 
 ### Development Phase
 
@@ -276,7 +291,7 @@ Stop: `/cancel-ralph` | Resume: `/resume-ralph [session-id]`
 │   ├── auto-dev.md                  # /auto-dev (RALPH)
 │   ├── ship.md, qa.md, ...          # Ship & QA commands
 │   └── ...
-├── skills/                          # 22 skills
+├── skills/                          # 28 skills
 │   ├── idea-brainstorm/
 │   ├── pm-prd/
 │   ├── architect/
@@ -284,16 +299,17 @@ Stop: `/cancel-ralph` | Resume: `/resume-ralph [session-id]`
 │   ├── code-implementer/            # Agent worker
 │   ├── test-runner/                 # Agent worker
 │   ├── code-reviewer/               # Parallel-ready
-│   ├── figma-*/                     # Figma integration (3 skills)
+│   ├── figma-*/                     # Figma integration (8 skills from figma/mcp-server-guide)
+│   ├── elevenlabs/                  # TTS, music, SFX (3 references)
+│   ├── remotion/                    # React video (40 rules + 3 assets)
 │   ├── ds-doc/                      # Design system documenter
 │   └── ...
-├── knowledge/                       # 51 files
+├── knowledge/                       # 48 files
 │   ├── testing/                     # 32 files (levels, priorities, fixtures...)
 │   ├── workflows/                   # 10 files (templates, patterns, estimation)
 │   ├── brainstorming/               # Techniques CSV (61 techniques)
 │   ├── multi-mind/                  # Agent personalities, debate templates
-│   ├── supabase-security/           # 7 audit files
-│   └── figma/                       # Code Connect, MCP, tokens
+│   └── supabase-security/           # 7 audit files
 └── templates/
     ├── github-actions/              # CI/CD templates
     ├── github/                      # PR & issue templates
@@ -322,7 +338,7 @@ Progressive loading based on complexity:
 | **advanced** | If complex | `fixture-architecture.md` |
 | **debugging** | If problem | `test-healing-patterns.md` |
 
-51 files across testing (32), workflows (10), brainstorming (1), multi-mind (2), supabase-security (7), figma (3).
+48 files across testing (32), workflows (10), brainstorming (1), multi-mind (2), supabase-security (7). Figma references are now bundled inside skills.
 
 ---
 
