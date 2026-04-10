@@ -61,6 +61,21 @@ Le loop s'arrête quand :
 2. 🔢 **Max iterations** atteint
 3. ⏱️ **Timeout** dépassé
 
+## Quand utiliser /auto-loop vs /loop vs /schedule
+
+| | RALPH (`/auto-loop`) | `/loop` (natif) | `/schedule` (cloud) |
+|---|---|---|---|
+| **Mécanisme** | Stop hook — empêche Claude de s'arrêter tant que la promise n'est pas trouvée | Session scheduler — relance un prompt toutes les X min | Cron cloud — tourne sur l'infra Anthropic |
+| **Durée de vie** | Jusqu'à completion, max iterations, ou timeout | Meurt quand Claude Code ferme | Survit au laptop fermé, tourne 24/7 |
+| **Accès local** | ✅ Fichiers non commités, état local du checkout | ✅ Session courante | ❌ Clone frais du repo (état GitHub uniquement) |
+| **Best for** | Implémenter une feature complète, refactoring profond, migration | Monitoring : vérifier un deploy, watcher CI, polling | Récurrent non-local : audit quotidien, PR review, doc sync, triage CI |
+| **Métriques/Logs** | ✅ Logs structurés dans `docs/ralph-logs/` | ❌ Pas de logging natif | ✅ Logs sur le web Anthropic |
+
+**Règle simple :**
+- "Continue jusqu'à done" → **RALPH** (`/auto-loop`)
+- "Vérifie toutes les X minutes" → **`/loop`**
+- "Fais ça tous les jours à 8h, même si je dors" → **`/schedule`**
+
 ## Arguments supportés
 
 | Argument | Default | Description |

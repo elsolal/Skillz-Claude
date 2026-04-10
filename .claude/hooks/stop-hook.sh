@@ -30,6 +30,13 @@ if [ "$ACTIVE" != "true" ]; then
     exit 0
 fi
 
+# Cross-platform timestamp formatting (macOS uses -r, Linux uses -d @)
+if date -r 0 '+%s' >/dev/null 2>&1; then
+    format_ts() { date -r "$1" '+%Y-%m-%d %H:%M:%S'; }
+else
+    format_ts() { date -d "@$1" '+%Y-%m-%d %H:%M:%S'; }
+fi
+
 # Get current timestamp
 CURRENT_TIME=$(date +%s)
 
@@ -45,7 +52,7 @@ log_iteration() {
         if [ ! -f "$LOG_FILE" ]; then
             echo "# RALPH Session: $SESSION_ID" > "$LOG_FILE"
             echo "" >> "$LOG_FILE"
-            echo "**Started:** $(date -d @$START_TIME '+%Y-%m-%d %H:%M:%S')" >> "$LOG_FILE"
+            echo "**Started:** $(format_ts "$START_TIME")" >> "$LOG_FILE"
             echo "**Prompt:** $ORIGINAL_PROMPT" >> "$LOG_FILE"
             echo "**Max Iterations:** $MAX_ITERATIONS" >> "$LOG_FILE"
             echo "**Timeout:** ${TIMEOUT_SECONDS}s" >> "$LOG_FILE"
