@@ -41,33 +41,57 @@ description: Diagnostic complet de l'install Skillz-Claude. Vérifie symlinks pr
 
 Pour chaque provider (`.gemini`, `.codex`, `.opencode`, `.agents`) qui existe sous `~/` :
 
+**Patterns valides** :
+- **Single-symlink** : `~/.gemini/skills -> ~/.claude/skills` (tout le dossier est un lien)
+- **Per-skill-symlinks** : `~/.codex/skills/` est un dossier réel qui contient des symlinks `<skill-name> -> ~/.claude/skills/<skill-name>` (1 symlink par skill)
+- **Independent real dir** : `~/.agents/skills/` est un dossier réel avec ses propres skills (ex: `find-skills/` qui n'existe pas dans `~/.claude/skills/`)
+
+**Pattern cassé** : `~/.X/skills/skills -> ../.claude/skills` — nested broken symlink causé par `ln -sf` dans un dossier existant.
+
 ```bash
 for provider in .gemini .codex .opencode .agents; do
   dir="$HOME/$provider"
   [ -d "$dir" ] || continue
 
-  # Check skills/ existe et résout
   link="$dir/skills"
+
+  # Case 1: direct symlink
   if [ -L "$link" ]; then
     target=$(readlink "$link")
     if [ -e "$link" ]; then
-      echo "OK   | $provider/skills → $target"
+      count=$(ls "$link" 2>/dev/null | wc -l | tr -d ' ')
+      echo "OK   | $provider/skills → $target ($count skills)"
     else
       echo "FAIL | $provider/skills → $target (BROKEN)"
-    fi
-  elif [ -d "$link" ]; then
-    # C'est un dossier réel — vérifier s'il contient un nested skills/skills
-    if [ -L "$link/skills" ] && [ ! -e "$link/skills" ]; then
-      echo "FAIL | $provider/skills/ is a real dir with broken nested symlink"
       echo "       FIX: rm -rf $link && ln -s $HOME/.claude/skills $link"
-    else
-      echo "WARN | $provider/skills/ is a real dir (not a symlink)"
     fi
+
+  # Case 2: real directory
+  elif [ -d "$link" ]; then
+    # 2a. Nested broken symlink (the bug we want to catch)
+    if [ -L "$link/skills" ] && [ ! -e "$link/skills" ]; then
+      echo "FAIL | $provider/skills/skills → $(readlink $link/skills) (BROKEN nested)"
+      echo "       FIX: rm $link/skills  (keep $link/ for independent content)"
+    else
+      # 2b. Per-skill symlinks pattern (Codex-style) — count valid symlinks
+      sym_count=$(find "$link" -maxdepth 1 -type l 2>/dev/null | wc -l | tr -d ' ')
+      real_count=$(find "$link" -maxdepth 1 -type d -not -name "$(basename $link)" -not -name ".*" 2>/dev/null | wc -l | tr -d ' ')
+      total=$((sym_count + real_count))
+      if [ "$sym_count" -gt 5 ]; then
+        echo "OK   | $provider/skills/ real dir, $sym_count per-skill symlinks (Codex pattern)"
+      elif [ "$real_count" -gt 0 ]; then
+        echo "OK   | $provider/skills/ real dir, $real_count independent skills (own content)"
+      else
+        echo "WARN | $provider/skills/ real dir, empty or unclear pattern"
+      fi
+    fi
+
+  # Case 3: missing entirely
   else
     echo "WARN | $provider/skills missing entirely"
   fi
 
-  # Check knowledge/ idem
+  # Knowledge check (same pattern, simpler)
   link="$dir/knowledge"
   if [ -L "$link" ] && [ -e "$link" ]; then
     echo "OK   | $provider/knowledge → $(readlink $link)"
@@ -77,7 +101,10 @@ for provider in .gemini .codex .opencode .agents; do
 done
 ```
 
-**Si `--fix`** : recréer les symlinks cassés avec chemin absolu `~/.claude/skills`.
+**Si `--fix`** :
+- Single-symlink cassé → recréer avec chemin absolu `~/.claude/skills`
+- Nested broken symlink → `rm` du symlink cassé uniquement (garde le dossier parent intact)
+- Ne jamais supprimer un dossier réel qui contient du contenu indépendant (.agents/skills/find-skills/)
 
 ### 2. Manifest drift
 
