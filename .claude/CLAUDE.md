@@ -31,6 +31,11 @@ Utilisateur dit...                    → Workflow
 "crée/audite le design system"        → skill figma-design-system
 "le composant est différent en prod"  → skill figma-design-code-sync
 "quel style frontend / anti-slop"     → skill taste-router (puis taste-skill / soft-skill / etc.)
+"audite cette UI / trouve le slop"    → skill taste-critic
+"audite l'accessibilité"              → skill a11y-enforcer
+"écris la copy de cette landing"      → skill landing-copy
+"améliore les empty states / errors"  → skill product-microcopy
+"design une UI de chat / copilot"     → skill ai-native-ui
 ```
 
 ### Discovery (planning — orchestrateur)
@@ -106,6 +111,13 @@ Logger chaque itération dans `docs/ralph-logs/`.
 # redesign-skill            # Audit + upgrade UI existante
 # output-skill              # Anti-flemme, force complétion
 # stitch-skill              # Workflow Google Stitch (DESIGN.md)
+
+# Design audit & enforcement (gates de qualité) :
+# taste-critic              # Miroir des taste-skills : détecte le slop (P0-P3) — branche /pr-review pass 4
+# a11y-enforcer             # WCAG 2.2 AA — branche /pr-review pass 5, gate /ship si Grade D/F
+# landing-copy              # Copy landing premium (H1 mesurable, anti-corporate)
+# product-microcopy         # Empty states, errors, tooltips, confirmations
+# ai-native-ui              # Patterns AI-UI invariants (states, tool calls, citations, composer)
 
 # Sécurité
 /supabase-security <url>    # Audit Supabase

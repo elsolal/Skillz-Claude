@@ -2,6 +2,59 @@
 
 All notable changes to the D-EPCT+R Workflow are documented in this file.
 
+## v5.10.0 (2026-04-22)
+
+**Design discipline layer — taste-critic + a11y-enforcer + ai-native-ui + copy paire**
+
+### Why
+v5.9.0 a livré la **génération** de bon goût (9 taste-skills + taste-router). Manquait la **détection** : un design peut être généré avec `soft-skill` puis dérivé pendant l'implémentation, sans rien pour le rattraper. Et même un design pixel-perfect tombe à plat avec du copy générique ou bloque les utilisateurs handicapés. Cette release ferme la boucle.
+
+Inspiré de l'arbitrage Codex×Claude qui a priorisé : audit > génération de territoires neufs > copy granulaire.
+
+### Added (5 nouveaux skills)
+
+#### Audit & enforcement
+- **`taste-critic`** — Miroir symétrique des 9 taste-skills. Audit en 8 catégories (typography, spacing, hierarchy, motion, color, copy, density, composition) avec sévérité P0-P3, localisation file:line, et fix concret référencé à la règle source. Branché en pass 4 de `/pr-review` et dans `/qa`.
+- **`a11y-enforcer`** — Audit WCAG 2.2 AA systématique : contrastes, ARIA, keyboard nav, focus order (incl. WCAG 2.2 nouveaux : Focus Not Obscured 2.4.11, Target Size 2.5.8), forms, semantic HTML. Output structuré séparant auto-fixables et manual review. Compliance score + grade. Risque légal réel (EAA EU 2025, ADA US, AODA Canada).
+
+#### Nouveau territoire design
+- **`ai-native-ui`** — Patterns invariants pour interfaces AI : 7 message states (pending/thinking/streaming/done/errored/interrupted/superseded), tool call lifecycle, inline citations, multi-modal composer, reasoning disclosure, permission gates avec memory, streaming UX, error recovery typé. Framework-agnostic, scope serré sur les invariants stables (pas de fashion-driven).
+
+#### Copy granulaire (pas un writer généraliste flou)
+- **`landing-copy`** — Hero / value props / social proof / CTA hierarchy / FAQ / pricing copy. Bannit explicitement Discover/Amazing/Leverage/Empower/Solutions. Patterns Julian Shapiro / Stripe / Linear / Cal.com.
+- **`product-microcopy`** — Empty states, errors typés (validation/system/permission/rate-limit), tooltips, confirmations destructives (utilise actions concrètes pas OK/Cancel), success toasts, loading states adaptés à la durée, onboarding ≤3 steps. Bannit Oops/Awesome/Just/Sorry-excessif.
+
+### Changed
+- **`/pr-review`** — Détection auto du scope UI dans le diff. Si UI changé → ajoute pass 4 (Design via taste-critic) + pass 5 (A11y via a11y-enforcer). 3 passes classiques en code-only, 5 passes en UI-touched.
+- **`CLAUDE.md`** — 5 nouvelles routes dans le tableau workflow + section Design enrichie avec catégories distinctes (génération / audit & enforcement).
+
+### Roadmap arbitrée (Codex × Claude consensus)
+1. ✅ taste-critic (audit miroir, ROI immédiat sur tous les projets)
+2. ✅ a11y-enforcer (compliance + UX réel, plus haut que copy en priorité)
+3. ✅ ai-native-ui (territoire stratégique durable, plus que liquid-glass éphémère)
+4. ✅ landing-copy + product-microcopy (paire granulaire, pas writer généraliste flou)
+5. 🟡 data-viz-tufte (à venir si dashboards récurrents)
+
+**Pas créés (decision)** :
+- liquid-glass : trop tendance, mieux comme dial dans `taste-skill` (futur)
+- marketing-conversion : à intégrer comme couche de critères dans `ui-designer` ou `landing-copy`
+- mobile-native-hig : à reporter tant que pas de mobile natif récurrent
+
+### Workflow combiné
+```
+Brief produit
+  → taste-router (recommande direction + dials)
+  → taste-skill / soft-skill / etc. (génère)
+  → landing-copy + product-microcopy (en parallèle, copy)
+  → ai-native-ui (si AI app)
+  → /dev (implémentation)
+  → /pr-review (5 passes : Correctness / Readability / Perf / Design / A11y)
+  → /qa (regression + design score)
+  → /ship (gate si Grade D/F design ou a11y)
+```
+
+---
+
 ## v5.9.0 (2026-04-22)
 
 **Taste Skills — Anti-slop frontend direction (9 skills + router)**
